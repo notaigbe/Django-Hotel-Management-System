@@ -1,0 +1,81 @@
+{% load static %}
+<header class="site-header js-site-header">
+      <div class="container-fluid">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="row align-items-center">
+          <div class="col-6 col-lg-4 site-logo" data-aos="fade"><a href="{% url 'index' %}"><img src="{% static 'assets/images/canlee-logo.png' %}" class="img-fluid" width="30%"></a></div>
+          <div class="col-6 col-lg-8">
+            <div class="site-menu-toggle js-site-menu-toggle"  data-aos="fade">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <!-- END menu-toggle -->
+
+            <div class="site-navbar js-site-navbar">
+              <nav role="navigation">
+                <div class="container">
+                  <div class="row full-height align-items-center">
+                    <div class="col-md-6 mx-auto">
+                      <ul class="list-unstyled menu">
+                          {% if not page %}
+                        <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% elif page == 'rooms' %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% elif page == 'about' %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% elif page == 'events' %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% elif page == 'contact' %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% elif page == 'reservation' %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                          {% endif %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- END head -->
