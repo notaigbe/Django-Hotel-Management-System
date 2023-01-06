@@ -105,7 +105,7 @@
                 <img src="{% static 'assets/images/apartment-2/livingroom-1.png' %}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
               </figure>
               <div class="p-3 text-center room-info">
-                <h2>{{ room.roomType }}</h2>
+                <h2>{{ room.get_roomType_display }}</h2>
                 <span
                         class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }}/ per night</span>
               </div>

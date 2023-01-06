@@ -30,7 +30,7 @@ class Room(models.Model):
     offerType = models.CharField(max_length=20, choices=ORDER_TYPES, default='order-1')
 
     def __str__(self):
-        return str(self.roomType)
+        return str(self.get_roomType_display())
 
 
 class Booking(models.Model):

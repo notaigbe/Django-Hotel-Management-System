@@ -80,7 +80,7 @@
                 <img src="{% static 'assets/images/apartment-2/livingroom-1.png' %}" alt="Free website template" class="img-fluid mb-3">
               </figure>
               <div class="p-3 text-center room-info">
-                <h2>{{ room.roomType }}</h2>
+                <h2>{{ room.get_roomType_display }}</h2>
                 <span
                         class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }} / per night</span>
               </div>
@@ -110,7 +110,7 @@
                 <span class="d-block mb-4"><span class="display-4 text-primary"><sup><del
                         style="text-decoration-style: double;">N</del></sup>{{ room.offer|intcomma }}</span> <span
                         class="text-uppercase letter-spacing-2">/ per night</span> </span>
-                <h2 class="mb-4">{{ room.roomType }}</h2>
+                <h2 class="mb-4">{{ room.get_roomType_display }}</h2>
                 <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
                 <p><a href="#" class="btn btn-primary text-white">Book Now</a></p>
               </div>
@@ -123,7 +123,7 @@
                         style="text-decoration-style: double;">N</del></sup>{{ room.offer|intcomma }}</span>
                     <span
                         class="text-uppercase letter-spacing-2">/ per night</span> </span>
-                <h2 class="mb-4">{{ room.roomType }}</h2>
+                <h2 class="mb-4">{{ room.get_roomType_display }}</h2>
                 <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
                 <p><a href="#" class="btn btn-primary text-white">Book Now</a></p>
               </div>
