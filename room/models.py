@@ -8,11 +8,12 @@ from accounts.models import Guest
 
 class Room(models.Model):
     ROOM_TYPES = (
-        ('King', 'King'),
-        ('Luxury', 'Luxury'),
-        ('Normal', 'Normal'),
-        ('Economy', 'Economy'),
-
+        ('1', 'Apartment 1'),
+        ('2', 'Apartment 2'),
+        ('3', 'Apartment 3'),
+        ('4', 'Apartment 4'),
+        ('5', 'Apartment 5'),
+        ('6', 'Single Room'),
     )
     ORDER_TYPES = (
         ('order-1', 'ORDER 1'),
