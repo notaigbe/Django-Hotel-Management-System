@@ -102,7 +102,7 @@
           <div class="col-md-6 col-lg-4" data-aos="fade-up">
             <a href="{% url 'view-room' room.roomType %}" class="room">
               <figure class="img-wrap">
-                <img src="{% static 'assets/images/apartment-2/livingroom-1.png' %}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
+                <img src="{{ room.image.url }}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
               </figure>
               <div class="p-3 text-center room-info">
                 <h2>{{ room.get_roomType_display }}</h2>

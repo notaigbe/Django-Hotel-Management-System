@@ -67,6 +67,13 @@
                         <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
                         <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
                         <li class="active"><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
+                        {% else %}
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li class="active"><a href="{% url 'inner-page' 'rooms' %}">Rooms</a></li>
+                        <li><a href="{% url 'inner-page' 'about' %}">About</a></li>
+                        <li><a href="{% url 'inner-page' 'events' %}">Events</a></li>
+                        <li><a href="{% url 'inner-page' 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'inner-page' 'reservation' %}">Reservation</a></li>
                           {% endif %}
                       </ul>
                     </div>

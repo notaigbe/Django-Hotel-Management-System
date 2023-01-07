@@ -22,7 +22,7 @@
         </div>
 
         <div class="site-block-half d-block d-lg-flex bg-white" data-aos="fade" data-aos-delay="100">
-          <a href="#" class="image d-block bg-image-2" style="background-image: url({% static 'assets/images/apartment-2/livingroom-1.png' %});"></a>
+          <a href="#" class="image d-block bg-image-2" style="background-image: url({{ room.image.url }});"></a>
           <div class="text">
             <span class="d-block mb-4"><span class="display-4 text-primary"><sup><del style="text-decoration-style: double">N</del></sup>{{ room.price|intcomma }}</span> <span class="text-uppercase letter-spacing-2">/ per night</span> </span>
             <h2 class="mb-4">{{ room.get_roomType_display }} Room</h2>

@@ -18,7 +18,7 @@ class Reservation(models.Model):
     endDate = models.DateField()
 
     def __str__(self):
-        return str(self.room.roomType) + " " + str(self.name)
+        return str(self.room.get_roomType_display) + " " + str(self.name)
 
     def length_of_stay(self):
         duration = 0

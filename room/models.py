@@ -28,6 +28,8 @@ class Room(models.Model):
     statusEndDate = models.DateField(null=True, blank=True)
     offer = models.FloatField(default=0)
     offerType = models.CharField(max_length=20, choices=ORDER_TYPES, default='order-1')
+    image = models.ImageField(upload_to='media/canlee/rooms', blank=True,
+                                           null=True, default='Normal.jpg')
 
     def __str__(self):
         return str(self.get_roomType_display())
