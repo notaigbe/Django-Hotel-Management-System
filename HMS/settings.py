@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'canlee-inn.onrender.com', 'canleeservicesltd.ng', 'www.canleeservicesltd.ng']
+ALLOWED_HOSTS = ['127.0.0.1', 'canlee-inn.onrender.com', 'canleeservicesltd.ng', 'www.canleeservicesltd.ng', 'localhost']
 
 # Application definition
 
@@ -177,3 +177,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'info@gnotable.ng'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+
+SECURE_SSL_REDIRECT = True

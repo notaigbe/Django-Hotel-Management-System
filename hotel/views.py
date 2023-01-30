@@ -19,11 +19,11 @@ from .forms import *
 
 @login_required(login_url='login')
 def home(request):
-    role = str(request.user.groups.all()[0])
-    if role != "guest":
-        return redirect("employee-profile", pk=request.user.id)
-    else:
-        return redirect("guest-profile", pk=request.user.id)
+    # role = str(request.user.groups.all()[0])
+    # if role != "guest":
+    return redirect("employee-profile", pk=request.user.id)
+    # else:
+    #     return redirect("guest-profile", pk=request.user.id)
 
 
 @login_required(login_url='login')

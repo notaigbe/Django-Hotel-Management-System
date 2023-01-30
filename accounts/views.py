@@ -22,7 +22,7 @@ from .forms import *
 
 def register_page(request):
     form = CreateUserForm()
-    if request.user.is_authenticated:
+    if str(request.user.groups.all()[0]) == 'guest':
         return redirect('home')
     else:
         if request.method == 'POST':
@@ -50,7 +50,7 @@ def register_page(request):
 
                 messages.success(
                     request, 'Guest account created successfully for ' + username)
-                user = authenticate(request, username=username, password=password)
+                # user = authenticate(request, username=username, password=password)
 
                 return redirect('login')
 
@@ -316,7 +316,7 @@ def employee_details(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
 
-    tempUser = User.objects.get(id=pk)
+    tempUser = User.objects.get(id=request.user.id)
     employee = Employee.objects.get(user=tempUser)
     tasks = Task.objects.filter(employee=employee)
     context = {

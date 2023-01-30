@@ -119,6 +119,7 @@ def reservation(request):
                             endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
                         )
                         guest.save()
+
                         # room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
                         # room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
                         # room.save()
