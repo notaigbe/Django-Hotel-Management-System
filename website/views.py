@@ -25,6 +25,7 @@ def inner_page(request, page):
     # role = str(request.user.groups.all()[0])
     # path = role + "/"
     rooms = Room.objects.all()
+    title = ""
     if page == 'about':
         title = 'About Us'
     elif page == 'contact':
@@ -34,8 +35,8 @@ def inner_page(request, page):
     elif page == 'reservation':
         title = 'Reservation'
         # form = reservationForm()
-    elif page == 'rooms':
-        title = 'Rooms'
+    elif page == 'apartments':
+        title = 'Apartments'
     return render(request, f"website/{page}.html", {'page': page, 'title': title, 'rooms': rooms})
 
 

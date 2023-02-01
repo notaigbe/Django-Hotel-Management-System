@@ -92,7 +92,7 @@ def rooms(request):
                 "price": request.POST.get("price"),
                 "type": request.POST.get("type")
             }
-            return render(request, path + "rooms.html", context)
+            return render(request, path + "apartments.html", context)
 
     context = {
         "role": role,
@@ -100,7 +100,7 @@ def rooms(request):
         'fd': firstDayStr,
         'ld': lastDateStr
     }
-    return render(request, path + "rooms.html", context)
+    return render(request, path + "apartments.html", context)
 
 
 @login_required(login_url='login')

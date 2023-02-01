@@ -30,8 +30,8 @@ class Room(models.Model):
     offerType = models.CharField(max_length=20, choices=ORDER_TYPES, default='order-1')
     image = models.ImageField(upload_to='media/rooms', blank=True,
                                            null=True, default='Normal.jpg')
-    description_p1 = models.CharField(max_length=255, null=True, blank=True)
-    description_p2 = models.CharField(max_length=255, null=True, blank=True)
+    description_p1 = models.TextField(max_length=500, null=True, blank=True)
+    description_p2 = models.TextField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return str(self.get_roomType_display())
