@@ -43,8 +43,8 @@ def inner_page(request, page):
 def view_room(request, room):
     room = Room.objects.get(roomType=room)
     print(room)
-    title = room.roomType
-    page = room.roomType
+    title = room.name
+    page = room.name
 
     return render(request, f"website/room-single.html", {'page': page, 'title': title, 'room': room})
 
@@ -59,13 +59,13 @@ def check_available(request):
         print(len(available))
         if len(available) == 1:
             messages.info(
-                request, f"There is {len(available)} room available for the selected dates")
+                request, f"There is {len(available)} apartment/room available for the selected dates")
         elif len(available) < 1:
             messages.info(
-                request, f"There are no rooms available for the selected dates")
+                request, f"There are no apartments/rooms available for the selected dates")
         else:
             messages.info(
-                request, f"There are {len(available)} rooms available for the selected dates")
+                request, f"There are {len(available)} apartments/rooms available for the selected dates")
     return redirect('index')
 
 
@@ -131,10 +131,10 @@ def reservation(request):
                             # room.save()
                             messages.info(
                                 request,
-                                f"The {request.POST.get('room')} room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
+                                f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
                         else:
                             messages.info(
-                                request, f"The {request.POST.get('room')} room is unavailable for the dates selected")
+                                request, f"The {request.POST.get('room')} apartment/room is unavailable for the dates selected")
                     else:
                         print('Reservation function empty')
                         guest = Reservation(
@@ -152,7 +152,7 @@ def reservation(request):
                         # room.save()
                         messages.info(
                             request,
-                            f"The {request.POST.get('room')} room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
+                            f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
 
             else:
 
@@ -170,11 +170,11 @@ def reservation(request):
                 # room.save()
                 messages.info(
                     request,
-                    f"The {request.POST.get('room')} room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
+                    f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
 
         else:
             messages.error(
-                request, f"The {request.POST.get('room')} room doesn't exist in the database")
+                request, f"The {request.POST.get('room')} apartment/room doesn't exist in the database")
 
         return redirect(inner_page, page='reservation')
 
@@ -196,7 +196,7 @@ def contact(request):
         message['Body'] = "\n".join(body.values())
         message['Subject'] = 'Message from Website visitor'
         message['From'] = 'info@gnotable.ng'
-        message['To'] = 'admin@canleeservicesltd.ng'
+        message['To'] = 'info.canleeservices@gmail.com'
 
         try:
             send_mail(message['Subject'], message['Body'], message['From'], [message['To']], fail_silently=False)

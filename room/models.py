@@ -8,22 +8,22 @@ from accounts.models import Guest
 
 class Room(models.Model):
     ROOM_TYPES = (
-        ('1', 'Apartment 1'),
-        ('2', 'Apartment 2'),
-        ('3', 'Apartment 3'),
-        ('4', 'Apartment 4'),
-        ('5', 'Apartment 5'),
-        ('6', 'Single Room'),
+        ('1', '3 Bedroom'),
+        ('2', '2 Bedroom'),
+        ('3', '1 Bedroom'),
+        ('4', 'Single Room'),
     )
     ORDER_TYPES = (
         ('order-1', 'ORDER 1'),
         ('order-2', 'ORDER 2'),
     )
+    name = models.CharField(max_length=20, unique=True)
     number = models.IntegerField(primary_key=True)
     capacity = models.SmallIntegerField()
     numberOfBeds = models.SmallIntegerField()
     roomType = models.CharField(max_length=20, choices=ROOM_TYPES)
     price = models.FloatField()
+    caution_fee = models.FloatField(default=0)
     statusStartDate = models.DateField(null=True, blank=True)
     statusEndDate = models.DateField(null=True, blank=True)
     offer = models.FloatField(default=0)
@@ -34,7 +34,7 @@ class Room(models.Model):
     description_p2 = models.TextField(max_length=500, null=True, blank=True)
 
     def __str__(self):
-        return str(self.get_roomType_display())
+        return str(self.name)
 
 
 class Booking(models.Model):

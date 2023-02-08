@@ -102,12 +102,13 @@
         <div class="row">
           {% for room in rooms %}
           <div class="col-md-6 col-lg-4" data-aos="fade-up">
-            <a href="{% url 'view-room' room.roomType %}" class="room">
+            <a href="{% url 'view-room' room.name %}" class="room">
               <figure class="img-wrap">
                 <img src="{{ room.image.url }}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
               </figure>
               <div class="p-3 text-center room-info">
-                <h2>{{ room.get_roomType_display }}</h2>
+                <h2>{{ room.name }}</h2>
+                <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }}</span><br>
                 <span
                         class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }}/ per night</span>
               </div>
