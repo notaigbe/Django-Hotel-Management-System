@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 
 from accounts.models import Guest
+
+
 # Create your models here.
 
 
@@ -29,7 +31,7 @@ class Room(models.Model):
     offer = models.FloatField(default=0)
     offerType = models.CharField(max_length=20, choices=ORDER_TYPES, default='order-1')
     image = models.ImageField(upload_to='media/rooms', blank=True,
-                                           null=True, default='Normal.jpg')
+                              null=True, default='Normal.jpg')
     description_p1 = models.TextField(max_length=500, null=True, blank=True)
     description_p2 = models.TextField(max_length=500, null=True, blank=True)
 
@@ -52,7 +54,7 @@ class Booking(models.Model):
 
 
 class Dependants(models.Model):
-    booking = models.ForeignKey(Booking,   null=True, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
     def str(self):
@@ -60,7 +62,7 @@ class Dependants(models.Model):
 
 
 class Refund(models.Model):
-    guest = models.ForeignKey(Guest,   null=True, on_delete=models.CASCADE)
+    guest = models.ForeignKey(Guest, null=True, on_delete=models.CASCADE)
     reservation = models.ForeignKey(Booking, on_delete=models.CASCADE)
     reason = models.TextField()
 
@@ -76,7 +78,7 @@ class RoomServices(models.Model):
     )
 
     curBooking = models.ForeignKey(
-        Booking,   null=True, on_delete=models.CASCADE)
+        Booking, null=True, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     createdDate = models.DateField(default=timezone.now)
     servicesType = models.CharField(max_length=20, choices=SERVICES_TYPES)

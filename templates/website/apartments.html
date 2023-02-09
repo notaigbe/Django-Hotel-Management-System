@@ -92,26 +92,22 @@
         </div>
       </div>
     </section>
-    
+
+    {% for room in rooms %}
+    {% if room.offer > 0 %}
     <section class="section bg-light">
 
       <div class="container">
         <div class="row justify-content-center text-center mb-5">
           <div class="col-md-7">
             <h2 class="heading" data-aos="fade">Great Offers</h2>
-            <p data-aos="fade" style="font-size: 18px">Experience luxury living at its finest with [Apartment Name]. This spacious apartment features
-              two bedrooms ensuite, livingroom and fully furnished kitchen with store. With its modern décor and comfortable
-              furnishings, [Apartment Name] offers a welcoming and relaxing atmosphere for your stay.</p>
+            <p data-aos="fade" style="font-size: 18px">{{ room.description_p1 }}</p>
 
-            <p data-aos="fade" style="font-size: 18px">The apartment features a fully equipped kitchen, complete with all the appliances and utensils
-              you'll need to prepare meals. The comfortable livingroom includes a smart TV and plenty of seating, making it the
-              perfect place to relax and unwind after a long day. The bedrooms are well furnished, with comfortable beds and
-              quality linens to ensure a great night's sleep.</p>
+            <p data-aos="fade" style="font-size: 18px">{{ room.description_p2}}</p>
 <!--            <p data-aos="fade">[Insert additional amenities, such as a balcony, fitness center, etc.]</p>-->
           </div>
         </div>
-        {% for room in rooms %}
-          {% if room.offer > 0 %}
+
             {% if room.offerType == 'order-1' %}
             <div class="site-block-half d-block d-lg-flex bg-white" data-aos="fade" data-aos-delay="100">
               <a href="{% url 'view-room' room.roomType %}" class="image d-block bg-image-2" style="background-image: url({% static 'assets/images/img_1.jpg' %});"></a>
@@ -138,11 +134,11 @@
               </div>
             </div>
             {% endif %}
-          {% endif %}
-        {% endfor %}
 
 
       </div>
     </section>
+      {% endif %}
+      {% endfor %}
     </body>
     {% endblock %}
