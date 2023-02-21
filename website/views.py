@@ -41,7 +41,7 @@ def inner_page(request, page):
 
 
 def view_room(request, room):
-    room = Room.objects.get(roomType=room)
+    room = Room.objects.get(name=room)
     print(room)
     title = room.name
     page = room.name
@@ -101,11 +101,11 @@ def check_availability(fd, ed):
 def reservation(request):
     if request.method == 'POST':
         print(datetime.strptime(request.POST.get('startDate'), '%d %B, %Y'))
-        cur_room = Room.objects.get(roomType=request.POST.get("room"))
+        cur_room = Room.objects.get(name=request.POST.get("room"))
         print(cur_room)
 
-        if len(Room.objects.filter(roomType=request.POST.get("room"))) != 0:
-            room = Room.objects.get(roomType=request.POST.get('room'))
+        if len(Room.objects.filter(name=request.POST.get("room"))) != 0:
+            room = Room.objects.get(name=request.POST.get('room'))
             bookingList = Reservation.objects.filter(room=room)
             ed = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
             fd = datetime.strptime(request.POST.get('endDate'),

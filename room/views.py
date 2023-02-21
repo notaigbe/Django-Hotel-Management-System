@@ -19,6 +19,8 @@ from .forms import *
 
 
 
+# The role corresponds to a folder containing the templates for a particular type of user. The role determines the
+# permissions a user may have. The various roles are admin, staff, guest, manager, receptionist
 @ login_required(login_url='login')
 def rooms(request):
     role = str(request.user.groups.all()[0])

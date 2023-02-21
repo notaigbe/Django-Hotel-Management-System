@@ -83,7 +83,9 @@
                 <h2>{{ room.name }}</h2>
                 <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }}</span><br>
                 <span
-                        class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }} / per night</span>
+                        class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }} / per night</span><br>
+                <span
+                        class="text-uppercase letter-spacing-1 text-black">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (refundable)</span>
               </div>
             </a>
           </div>
@@ -114,7 +116,10 @@
               <div class="text">
                 <span class="d-block mb-4"><span class="display-4 text-primary"><sup><del
                         style="text-decoration-style: double;">N</del></sup>{{ room.offer|intcomma }}</span> <span
-                        class="text-uppercase letter-spacing-2">/ per night</span> </span>
+                        class="text-uppercase letter-spacing-2">/ per night</span> </span><br>
+                <span class="d-block mb-4"><span class="display-4 text-black">Caution Fee: <sup><del
+                        style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }}</span> <span
+                        class="text-uppercase letter-spacing-2"> (refundable)</span> </span>
                 <h2 class="mb-4">{{ room.get_roomType_display }}</h2>
                 <p style="font-size: 18px">{{ room.description_p1 }}</p>
                 <p><a href="#" class="btn btn-primary text-white">Book Now</a></p>

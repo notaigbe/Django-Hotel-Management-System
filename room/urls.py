@@ -14,13 +14,11 @@ urlpatterns = [
 
     path('add-room/', add_room, name="add-room"),
 
-
     path('room-profile/<str:id>/', room_profile, name="room-profile"),
     path('room-edit/<str:pk>/', room_edit, name="room-edit"),
-
 
     path('booking-make/', booking_make, name="booking-make"),
     path('refunds/', refunds, name="refunds"),
     path('deleteBooking/<str:pk>/', deleteBooking, name="deleteBooking"),
 
-    ]
+]

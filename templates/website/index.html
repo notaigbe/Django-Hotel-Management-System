@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block context %}
-  <body>
+
 {% include 'incs/header.html' %}
 {% include 'incs/home-page-hero.html' %}
 
@@ -110,7 +110,9 @@
                 <h2>{{ room.name }}</h2>
                 <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }}</span><br>
                 <span
-                        class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }}/ per night</span>
+                        class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }}/ per night</span><br>
+                <span
+                        class="text-uppercase letter-spacing-1 text-black">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (Refundable)</span>
               </div>
             </a>
           </div>
@@ -391,8 +393,7 @@
     </section>
     
     <!-- END section -->
-<!--    {% include 'incs/testimonials.html' %}-->
-    
+
 
     <!--<section class="section blog-post-entry bg-light">
       <div class="container">
@@ -441,5 +442,3 @@
 
     {% endblock %}
 
-  </body>
-</html>
