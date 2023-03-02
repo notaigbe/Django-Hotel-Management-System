@@ -17,11 +17,13 @@ import random
 from room.models import *
 from hotel.models import *
 from .forms import *
+
+
 # Create your views here.
 
 
 def register_page(request):
-    form = CreateUserForm()
+    form = CreateUserForm(initial={'password1': 'guest_password', 'password2': 'guest_password'})
     if str(request.user.groups.all()[0]) == 'guest':
         return redirect('home')
     else:
@@ -39,7 +41,7 @@ def register_page(request):
 
                 user = form.save()
                 username = form.cleaned_data.get('email')
-                password = form.cleaned_data.get('password')
+                password = form.cleaned_data.get('password1')
 
                 group = Group.objects.get(name="guest")
                 user.groups.add(group)
@@ -52,7 +54,7 @@ def register_page(request):
                     request, 'Guest account created successfully for ' + username)
                 # user = authenticate(request, username=username, password=password)
 
-                return redirect('login')
+                return redirect("guest-profile", pk=user.id)
 
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
@@ -144,7 +146,7 @@ def guests(request):
             topList.append(Guest.objects.get(id=t.get("guest")))
 
     bookings = Booking.objects.all()
-    fd = datetime.combine(date.today()-timedelta(days=30), datetime.min.time())
+    fd = datetime.combine(date.today() - timedelta(days=30), datetime.min.time())
     ld = datetime.combine(date.today(), datetime.min.time())
     guests = []
 
@@ -327,7 +329,7 @@ def employee_details(request, pk):
     return render(request, path + "employee-profile.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def employee_details_edit(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -356,7 +358,7 @@ def employee_details_edit(request, pk):
     return render(request, path + "employee-edit.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def guest_edit(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -428,17 +430,17 @@ def tasks(request):
             return redirect("tasks")
 
         if "filter" in request.POST:
-            if(request.POST.get("id") != ""):
+            if (request.POST.get("id") != ""):
                 tasks = tasks.filter(id=request.POST.get("id"))
 
-            if(request.POST.get("desc") != ""):
+            if (request.POST.get("desc") != ""):
                 tasks = tasks.filter(
                     description__contains=request.POST.get("desc"))
 
-            if(request.POST.get("fd") != ""):
+            if (request.POST.get("fd") != ""):
                 tasks = tasks.filter(startTime__gte=request.POST.get("fd"))
 
-            if(request.POST.get("ed") != ""):
+            if (request.POST.get("ed") != ""):
                 tasks = tasks.filter(endTime__lte=request.POST.get("ed"))
 
             context = {

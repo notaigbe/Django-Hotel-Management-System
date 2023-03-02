@@ -1,8 +1,8 @@
 <div class="container py-5 clearfix">
     <div id="messages">
-        {% for m in messages %}
-        <div class="alert alert-{{m.tags}}">
-            {{m}}
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+            {{message}}
         </div>
         {% endfor %}
     </div>
@@ -44,11 +44,8 @@
                         <button type="submit" name="dateFilter" class="btn btn-warning w-100">Filter</button>
                     </div>
                 </div>
-
             </form>
         </div>
-
-
     </div>
 
     <table class="table table-hover table-striped">
@@ -80,7 +77,7 @@
                 <td>{{ room.number }}</td>
                 <td>{{ room.capacity }}</td>
                 <td>{{ room.numberOfBeds }}</td>
-                <td>{{ room.roomType }}</td>
+                <td>{{ room.get_roomType_display }}</td>
                 <td>{{ room.price }}</td>
 
                 {% if role != "guest" %}
@@ -89,13 +86,13 @@
                 {% if role == 'manager' or role == 'admin' %}<td> <a href="{% url 'room-edit' room.number %}"
                         class="btn btn-sm btn-primary w-100">Edit&nbsp;Room</a></td> {% endif %}
                 {% endif %}
-                {% if role == "guest" or role == "receptionist" %}
+                {% if role == "guest" or role == "receptionist" or role == "admin" %}
                 <td>
                     <form action="{% url 'booking-make' %}" method="POST">
                         {% csrf_token %}
-                        <input type="hidden" value="{{ room }}" name="roomid">
-                        <input type="date" value="{{fd}}" name="fd" class="d-none">
-                        <input type="date" value="{{ld}}" name="ld" class="d-none">
+                        <input type="hidden" value="{{ room.number }}" name="roomid">
+                        <input type="date" value="{{fd}}" name="fd" class="form-control">
+                        <input type="date" value="{{ld}}" name="ld" class="form-control">
                         <button type="submit" name="book" id="book" class="btn btn-sm btn-primary px-3">Book</button>
                     </form>
                 </td>

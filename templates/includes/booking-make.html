@@ -1,17 +1,17 @@
 <div class="container">
 
     <div class="row py-5 h5">
-        <p>You are currently trying to book This room:
+        <p>Book this room:
             <br>
             Between {{fd}} - {{ld}}
             <br>
-            Room Number : {{ room.number }}
+            Apartment Name : {{ room.name }}
             <br>
             Room capacity : {{ room.capacity }}
             <br>
             Number of beds in the room : {{ room.numberOfBeds }}
             <br>
-            Room Type : {{ room.roomType }}
+            Room Type : {{ room.get_roomType_display }}
             <br>
             Room price : {{ room.price }}
             <br>
@@ -24,12 +24,12 @@
     <form action="" method="POST">
         {% csrf_token %}
         <div class=row>
-            <input type="hidden" value="{{ room }}" name="roomid">
+            <input type="hidden" value="{{ room.number }}" name="roomid">
             <input type="date" value="{{ fd }}" name="fd" class="d-none">
             <input type="date" value="{{ ld }}" name="ld" class="d-none">
             {% if room.capacity > 1 %}
             <div class="col-6">
-                <h4>Add Dependee</h4>
+                <h4>Add Dependant</h4>
                 <input type="text" class="form-control d-inline" name="depName">
                 <button type="submit" name="add"
                     class="form-control btn btn-sm btn-outline-success px-3 d-inline">Add</button>
@@ -37,16 +37,16 @@
 
             <div class="col-6">
                 <ul id="myList" class="list-group">
-                    <h4>List Of Dependees</h4>
-                    {% for n in names %}
-                    <li class="list-group-item">{{n}}<input type="hidden" name="name{{forloop.counter}}" value="{{n}}">
+                    <h4>List of Dependants</h4>
+                    {% for name in names %}
+                    <li class="list-group-item">{{name}}<input type="hidden" name="name{{forloop.counter}}" value="{{n}}">
                     </li>
                     {% endfor %}
                 </ul>
             </div>
             {% endif %}
 
-            {% if role == "receptionist" %}
+            {% if role == "receptionist" or role == 'admin' %}
 
             <label for="exampleFormControlSelect1">Select A Guest
             </label>

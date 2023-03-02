@@ -31,18 +31,9 @@
                         <label for="item-quantity"><b>Room Type</b></label>
                         <select name="roomType" required="" id="id_roomType"
                             class="form-control border border-secondary">
-
-                            <option value="King" {% if room.roomType == 'King' %} selected {% endif %}>King</option>
-
-                            <option value="Luxury" {% if room.roomType == 'Luxury' %} selected {% endif %}>Luxury
-                            </option>
-
-                            <option value="Normal" {% if room.roomType == 'Normal' %} selected {% endif %}>Normal
-                            </option>
-
-                            <option value="Economic" {% if room.roomType == 'Economic' %} selected {% endif %}>Economic
-                            </option>
-
+                            {% for room in rooms %}
+                            <option value="{{ room.roomType }}">{{ room.get_roomType_display }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <button type="submit" name="submit" class="btn btn-outline-success float-right">Save

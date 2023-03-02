@@ -12,7 +12,7 @@ class Reservation(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     phoneNumber = PhoneNumberField()
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='reservation')
     dateOfReservation = models.DateField(default=timezone.now)
     startDate = models.DateField()
     endDate = models.DateField()

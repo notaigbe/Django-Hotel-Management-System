@@ -13,6 +13,7 @@ from datetime import datetime, date, timedelta
 import random
 # Create your views here.
 from accounts.models import *
+from website.models import Reservation
 from .models import *
 from hotel.models import *
 from .forms import *
@@ -144,12 +145,14 @@ def room_profile(request, id):
     bookings = Booking.objects.filter(roomNumber=tempRoom)
     guests = Guest.objects.all()
     bookings2 = Booking.objects.all()
+    rooms = Room.objects.all()
     context = {
         "role": role,
         "bookings": bookings,
         "room": tempRoom,
         "guests": guests,
-        "bookings2": bookings2
+        "bookings2": bookings2,
+        "rooms": rooms
     }
 
     if request.method == "POST":
@@ -194,11 +197,13 @@ def room_edit(request, pk):
 
     room = Room.objects.get(number=pk)
     form1 = editRoom(instance=room)
+    rooms = Room.objects.all()
 
     context = {
         "role": role,
         "room": room,
-        "form1": form1
+        "form1": form1,
+        "rooms": rooms
     }
 
     if request.method == 'POST':
@@ -324,6 +329,7 @@ def bookings(request):
     path = role + "/"
 
     bookings = Booking.objects.all()
+    reservations = Reservation.objects.all()
     # calculating total for every booking:
     totals = {}  # <booking : total>
     for booking in bookings:
@@ -367,6 +373,7 @@ def bookings(request):
                 "role": role,
                 'bookings': bookings,
                 'totals': totals,
+                'reservations': reservations,
                 "name": request.POST.get("name"),
                 "number": request.POST.get("number"),
                 "rez": request.POST.get("rez"),
@@ -379,6 +386,7 @@ def bookings(request):
     context = {
         "role": role,
         'bookings': bookings,
+        'reservations': reservations,
         'totals': totals
     }
     return render(request, path + "bookings.html", context)
@@ -393,7 +401,9 @@ def booking_make(request):
     guests = Guest.objects.all()  # we pass this to context
     names = []
     if request.method == 'POST':
+        print(f'date={request.POST.get("fd")}')
         if request.POST.get("fd") == "" or request.POST.get("ld") == "":
+            print('empty date range')
             return redirect("rooms")
 
         start_date = datetime.strptime(

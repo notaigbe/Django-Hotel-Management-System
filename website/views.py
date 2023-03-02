@@ -126,9 +126,9 @@ def reservation(request):
                             )
                             guest.save()
 
-                            # room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
-                            # room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                            # room.save()
+                            room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
+                            room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                            room.save()
                             messages.info(
                                 request,
                                 f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
@@ -147,9 +147,9 @@ def reservation(request):
                         )
                         guest.save()
 
-                        # room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
-                        # room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                        # room.save()
+                        room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
+                        room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                        room.save()
                         messages.info(
                             request,
                             f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
@@ -165,9 +165,9 @@ def reservation(request):
                     endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
                 )
                 guest.save()
-                # room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
-                # room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                # room.save()
+                room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
+                room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                room.save()
                 messages.info(
                     request,
                     f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")

@@ -20,8 +20,14 @@ class CreateUserForm(UserCreationForm):
     widgets = {'username': TextInput(
         attrs={'class': "form-control w-100 p-2", 'readonly': 'readonly', 'placeholder': 'Username',
                'hidden': 'hidden'
-               })
-    }
+               }),'password1': TextInput(
+        attrs={'class': "form-control w-100 p-2", 'readonly': 'readonly', 'placeholder': 'Enter Password',
+
+               }),'password2': TextInput(
+        attrs={'class': "form-control w-100 p-2", 'readonly': 'readonly', 'placeholder': 'Re-enter Password',
+
+               }),
+               }
 
 
 class CreateEmployeeForm(ModelForm):

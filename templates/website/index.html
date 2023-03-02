@@ -3,8 +3,8 @@
 {% load humanize %}
 {% block context %}
 
-{% include 'incs/header.html' %}
-{% include 'incs/home-page-hero.html' %}
+{% include 'includes/header.html' %}
+{% include 'includes/home-page-hero.html' %}
 
     <section class="section bg-light pb-0"  >
       <div class="container">
@@ -103,17 +103,18 @@
           {% for room in rooms %}
           <div class="col-md-6 col-lg-4" data-aos="fade-up">
             <a href="{% url 'view-room' room.name %}" class="room">
-              <figure class="img-wrap">
-                <img src="{{ room.image.url }}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
-              </figure>
-              <div class="p-3 text-center room-info">
-                <h2>{{ room.name }}</h2>
-                <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }}</span><br>
+              <div class="p-3 text-center room-info bg-dark">
+                <h2 class="text-primary">{{ room.name }}</h2>
+                <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }} APARTMENT</span><br>
                 <span
                         class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }}/ per night</span><br>
                 <span
-                        class="text-uppercase letter-spacing-1 text-black">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (Refundable)</span>
+                        class="text-uppercase letter-spacing-1 text-white">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (Refundable)</span>
               </div>
+              <figure class="img-wrap">
+                <img src="{{ room.image.url }}" alt="assets/images/normal.jpg" class="img-fluid mb-3">
+              </figure>
+
             </a>
           </div>
           {% endfor %}
@@ -203,12 +204,12 @@
         <div class="row justify-content-center text-center mb-5">
           <div class="col-md-8">
             <h2 class="heading text-white" data-aos="fade">Our In-house Bar</h2>
-            <p class="text-white" data-aos="fade" data-aos-delay="100" style="font-size: 18px">Our bar offers a welcoming and stylish atmosphere,
-              where you can enjoy a drink with friends or colleagues after a long day. With a range of cocktails, wines,
-              beers, and non-alcoholic beverages, there is something for everyone.</p>
+            <p class="text-white" data-aos="fade" data-aos-delay="100" style="font-size: 18px">Our in-house bar is stocked with assorted local and
+              international brands, including wines, spirits, beverages, alcoholic bitters, etc. in a calm and stylish atmosphere,
+              where you can enjoy a drink with friends or colleagues after a long day.</p>
           </div>
         </div>
-        <div class="food-menu-tabs" data-aos="fade">
+        <!--<div class="food-menu-tabs" data-aos="fade">
           <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
             <li class="nav-item">
               <a class="nav-link active letter-spacing-2" id="mains-tab" data-toggle="tab" href="#wines" role="tab" aria-controls="wines" aria-selected="true">Wines</a>
@@ -280,7 +281,7 @@
               </div>
               
 
-            </div> <!-- .tab-pane -->
+            </div> &lt;!&ndash; .tab-pane &ndash;&gt;
 
             <div class="tab-pane fade text-left" id="beers" role="tabpanel" aria-labelledby="beers-tab">
               <div class="row">
@@ -337,7 +338,7 @@
                   </div>
                 </div>
               </div>
-            </div> <!-- .tab-pane -->
+            </div> &lt;!&ndash; .tab-pane &ndash;&gt;
 
             <div class="tab-pane fade text-left" id="spirits" role="tabpanel" aria-labelledby="spirits-tab">
               <div class="row">
@@ -386,9 +387,9 @@
                   </div>
                 </div>
               </div>
-            </div> <!-- .tab-pane -->
+            </div> &lt;!&ndash; .tab-pane &ndash;&gt;
           </div>
-        </div>
+        </div>-->
       </div>
     </section>
     

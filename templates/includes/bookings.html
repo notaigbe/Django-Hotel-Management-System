@@ -24,7 +24,7 @@
                             class="form-control border border-secondary"></th>
                     <th>End Day<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
                     </th>
-                    <th class="pb-5">Number of Dependees</th>
+                    <th class="pb-5">Number of Dependants</th>
                     <th class="pb-5">Total amount</th>
                     <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
                 </form>
@@ -33,23 +33,23 @@
 
         </thead>
         <tbody>
-            {% for b in bookings %}
+            {% for booking in bookings %}
             <tr>
-                <td><a href="{% url 'room-profile' b.roomNumber.number %}">{{b.roomNumber.number}}</a></td>
-                <td><a href="{% url 'guest-profile' b.guest.user.id %}">{{b.guest.user.first_name}}</a></td>
-                <td>{{ b.dateOfReservation }}</td>
-                <td>{{ b.startDate }}</td>
-                <td>{{ b.endDate }}</td>
-                <td>{{ b.numOfDep }}</td>
+                <td><a href="{% url 'room-profile' booking.roomNumber.number %}">{{booking.roomNumber.number}}</a></td>
+                <td><a href="{% url 'guest-profile' booking.guest.user.id %}">{{booking.guest.user.first_name}}</a></td>
+                <td>{{ booking.dateOfReservation }}</td>
+                <td>{{ booking.startDate }}</td>
+                <td>{{ booking.endDate }}</td>
+                <td>{{ booking.numOfDep }}</td>
                 <td>
                     {% for key, value in totals.items %}
-                    {% if key == b %}
+                    {% if key == booking %}
                     {{ value }}
                     {% endif %}
                     {% endfor %}
                 </td>
                 {% if role == "admin" or role == 'manager' %}
-                <td> <a href="{% url 'deleteBooking' b.id %}"
+                <td> <a href="{% url 'deleteBooking' booking.id %}"
                         class="btn btn-sm btn-outline-danger">Delete&nbsp;Booking</a></td>
                 {% endif %}
             </tr>

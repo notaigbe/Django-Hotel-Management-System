@@ -80,7 +80,7 @@
                 </div>
                 <div class="d-flex justify-content-center form_container">
 
-                    <form method="POST" action="">
+                    <form method="POST">
                         {% csrf_token %}
 
                         <div class="form-group mb-3">
@@ -154,8 +154,8 @@
         form_fields[1].placeholder = 'First Name..';
         form_fields[2].placeholder = 'Last Name..';
         form_fields[3].placeholder = 'Email..';
-        form_fields[5].placeholder = 'Enter password...';
-        form_fields[6].placeholder = 'Re-enter Password...';
+        form_fields[5].value = 'guest_password';
+        form_fields[6].value = 'guest_password';
         form_fields[7].value = form_fields[3].value;
 
 
