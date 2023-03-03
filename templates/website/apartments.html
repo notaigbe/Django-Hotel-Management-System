@@ -77,12 +77,13 @@
           <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up">
             <a href="{% url 'view-room' room.roomType %}" class="room">
               <div class="p-3 text-center room-info bg-dark">
-                <h2>{{ room.name }}</h2>
-                <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }}</span><br>
+                <h2 class="text-primary">{{ room.name }}</h2>
+                <hr>
+                <span class="text-uppercase letter-spacing-1">{{ room.get_roomType_display }} APARTMENT</span><br>
                 <span
                         class="text-uppercase letter-spacing-1"><sup><del style="text-decoration-style: double;">N</del></sup>{{ room.price|intcomma }} / per night</span><br>
                 <span
-                        class="text-uppercase letter-spacing-1 text-black">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (refundable)</span>
+                        class="text-uppercase letter-spacing-1 text-white">Caution Fee: <sup><del style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }} (refundable)</span>
               </div>
               <figure class="img-wrap">
                 <img src="{{ room.image.url }}" alt="Free website template" class="img-fluid mb-3">
