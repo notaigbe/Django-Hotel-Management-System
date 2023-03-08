@@ -179,3 +179,4 @@ EMAIL_HOST_USER = 'info@gnotable.ng'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 SECURE_SSL_REDIRECT = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

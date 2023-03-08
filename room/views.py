@@ -138,10 +138,10 @@ def add_room(request):
 
 
 @login_required(login_url='login')
-def room_profile(request, id):
+def room_profile(request, _id):
     role = str(request.user.groups.all()[0])
     path = role + "/"
-    tempRoom = Room.objects.get(number=id)
+    tempRoom = Room.objects.get(name=_id)
     bookings = Booking.objects.filter(roomNumber=tempRoom)
     guests = Guest.objects.all()
     bookings2 = Booking.objects.all()
@@ -439,7 +439,9 @@ def booking_make(request):
                         d = Dependants(booking=curbooking,
                                       name=request.POST.get(nameid))
                         d.save()
-            return redirect("payment")
+
+            messages.success(request, "Successful Booking")
+            return redirect("rooms")
 
     context = {
         "fd": request.POST.get("fd"),

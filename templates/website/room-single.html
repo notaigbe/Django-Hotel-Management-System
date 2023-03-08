@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block context %}
-  <body>
+
 
     {% include 'includes/header.html' %}
 
@@ -16,7 +16,7 @@
           <div class="col-md-7">
             <h2 class="heading" data-aos="fade">{{ room.name }}</h2>
             <span data-aos="fade">{{ room.get_roomType_display }}</span>
-            <p data-aos="fade" style="font-size: 18px">{{ room.description_p1 }}</p>
+            <p data-aos="fade" style="font-size: 22px">{{ room.description_p1 }}</p>
           </div>
         </div>
 
@@ -26,8 +26,8 @@
             <span class="d-block mb-4"><span class="display-4 text-primary"><sup><del style="text-decoration-style: double">N</del></sup>{{ room.price|intcomma }}</span> <span class="text-uppercase letter-spacing-2">/ per night</span> </span>
             <span class="d-block mb-4"><span class="h3 text-black"><sup><del style="text-decoration-style: double">N</del></sup>{{ room.caution_fee|intcomma }}</span> <span class="text-uppercase letter-spacing-2">(Refundable Caution Fee)</span> </span>
             <h2 class="mb-4">{{ room.name }}</h2>
-            <span data-aos="fade">{{ room.get_roomType_display }}</span>
-            <p style="font-size: 18px">{{ room.description_p2 }}</p>
+            <span data-aos="fade">{{ room.get_roomType_display }} APARTMENT</span>
+            <p style="font-size: 22px">{{ room.description_p2 }}</p>
             <p><a href="{% url 'inner-page' 'reservation' %}#next" class="btn btn-primary text-white">Book Now</a></p>
           </div>
         </div>
@@ -36,5 +36,3 @@
     </section>
 
 {% endblock %}
-  </body>
-</html>

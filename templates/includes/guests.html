@@ -5,7 +5,7 @@
 
         <div class="col-sm-12 col-md-12 col-lg-5 mb-4">
             <h2>Guest List</h2>
-            <span class="text-muted">This list include guests who has a booking between these days</span>
+            <span class="text-muted">This list includes guests who have bookings between these days</span>
         </div>
 
 
@@ -15,7 +15,7 @@
                 <div class="row">
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">First Date</label>
+                        <label for="f_day" class="col-form-label">First Date</label>
                         <div class="">
                             <input class="form-control" type="date"
                                 value="{{fd.year}}-{% if fd.month < 10 %}0{{fd.month}}{% else %}{{fd.month}}{% endif %}-{% if fd.day < 10 %}0{{fd.day}}{% else %}{{fd.day}}{% endif %}"
@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">Last Date</label>
+                        <label for="l_day" class="col-form-label">Last Date</label>
                         <div class="">
                             <input class="form-control" type="date"
                                 value="{{ld.year}}-{% if ld.month < 10 %}0{{ld.month}}{% else %}{{ld.month}}{% endif %}-{% if ld.day < 10 %}0{{ld.day}}{% else %}{{ld.day}}{% endif %}"
@@ -48,19 +48,19 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>ID<input type="number" name="id" min="0" value="{{id}}"
+                    <th class="text-white">ID<input type="number" name="id" min="0" value="{{id}}"
                             class="form-control border border-secondary">
                     </th>
-                    <th>Name<input type="text" name="name" value="{{name}}"
+                    <th class="text-white">Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
-                    <th>Email<input type="text" name="email" value="{{email}}"
+                    <th class="text-white">Email<input type="text" name="email" value="{{email}}"
                             class="form-control border border-secondary"></th>
-                    <th>Phone Number<input type="number" name="number" min="0" value="{{number}}"
+                    <th class="text-white">Phone Number<input type="number" name="number" min="0" value="{{number}}"
                             class="form-control border border-secondary">
                     </th>
-                    <th>Number of Bookings</th>
-                    <th>Total Day on Hotel</th>
-                    <th>Total Day for Last Booking</th>
+                    <th class="text-white">Number of Bookings</th>
+                    <th class="text-white">Lodging Total</th>
+                    <th class="text-white">Last Lodging Total</th>
                     <th><button type="submit" name="filterGuest" class="btn btn-warning w-100">Filter</button></th>
                 </form>
 
@@ -94,20 +94,20 @@
                 {% csrf_token %}
                 <input type="number" name="top" min="0" value="{{topLimit}}" class="d-inline rounded h4"
                     style="width: 65px;">
-                People With The Most Booking
+                People With The Most Bookings
             </form>
 
         </div>
         <table class="table table-hover table-striped">
             <thead class="bg-secondary rounded">
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Number of Bookings</th>
-                    <th>Total Day on Hotel</th>
-                    <th>Total Day for Last Booking</th>
+                    <th class="text-white">ID</th>
+                    <th class="text-white">Name</th>
+                    <th class="text-white">Email</th>
+                    <th class="text-white">Phone Number</th>
+                    <th class="text-white">Number of Bookings</th>
+                    <th class="text-white">Lodging Total</th>
+                    <th class="text-white">Last Lodging Total</th>
                     <th></th>
                 </tr>
 

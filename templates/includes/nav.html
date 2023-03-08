@@ -1,9 +1,9 @@
 <!--Admin Navbar-->
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg py-3 " role="navigation">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg" role="navigation">
     <div class="container">
         <a href="" class="navbar-brand">
 
-            <h2 class="text-capitalize">
+            <h2 class="text-capitalize text-light">
                 {{ request.user.first_name }} {{ request.user.last_name }} -
                 <small>
                     {{ role }}
@@ -16,7 +16,6 @@
 
         <div class="collapse navbar-collapse" id="navbarTags">
             <ul class="navbar-nav ml-auto">
-
 
                 <li class="nav-item dropdown p-2">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

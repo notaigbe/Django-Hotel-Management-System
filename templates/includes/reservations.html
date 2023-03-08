@@ -12,19 +12,19 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>Room Number<input type="number" min="0" name="number" value="{{number}}"
+                    <th class="text-white">Room Number<input type="number" min="0" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
-                    <th>Guest Name<input type="text" name="name" value="{{name}}"
+                    <th class="text-white">Guest Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
-                    <th>Date of Reservation<input type="date" name="rez" value="{{rez}}"
+                    <th class="text-white">Date of Reservation<input type="date" name="rez" value="{{rez}}"
                             class="form-control border border-secondary"></th>
-                    <th>Start Day<input type="date" name="fd" value="{{fd}}"
+                    <th class="text-white">Start Day<input type="date" name="fd" value="{{fd}}"
                             class="form-control border border-secondary"></th>
-                    <th>End Day<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
+                    <th class="text-white">End Day<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
                     </th>
-                    <th class="pb-5">Phone</th>
-                    <th class="pb-5">Total amount</th>
-                    <th class="pb-5">Total amount</th>
+                    <th class="pb-5 text-white">Phone</th>
+                    <th class="pb-5 text-white">Total amount</th>
+                    <th class="pb-5 text-white">Total amount</th>
                     <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
                 </form>
             </tr>

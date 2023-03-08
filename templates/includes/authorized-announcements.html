@@ -13,17 +13,17 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>ID<input type="number" name="id" value="{{id}}" class="form-control border border-secondary">
+                    <th class="text-white">ID<input type="number" name="id" value="{{id}}" class="form-control border border-secondary">
                     </th>
 
-                    <th>Content<input type="text" name="content" value="{{content}}"
+                    <th class="text-white">Content<input type="text" name="content" value="{{content}}"
                             class="form-control border border-secondary"></th>
 
 
-                    <th>Sender Name<input type="text" name="name" value="{{name}}"
+                    <th class="text-white">Sender Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
 
-                    <th>Announced Date<input type="date" class="form-control border border-secondary" name="date"
+                    <th class="text-white">Announced Date<input type="date" class="form-control border border-secondary" name="date"
                             value="{{date}}"></th>
                     <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
 

@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block context %}
-  <body>
+
     {% include 'includes/header.html' %}
     {% include 'includes/inner-page-hero.html' %}
 
@@ -105,9 +105,9 @@
         <div class="row justify-content-center text-center mb-5">
           <div class="col-md-7">
             <h2 class="heading" data-aos="fade">Great Offers</h2>
-            <p data-aos="fade" style="font-size: 18px">{{ room.description_p1 }}</p>
+            <p data-aos="fade" style="font-size: 22px">{{ room.description_p1 }}</p>
 
-            <p data-aos="fade" style="font-size: 18px">{{ room.description_p2}}</p>
+            <p data-aos="fade" style="font-size: 22px">{{ room.description_p2}}</p>
 <!--            <p data-aos="fade">[Insert additional amenities, such as a balcony, fitness center, etc.]</p>-->
           </div>
         </div>
@@ -122,8 +122,8 @@
                 <span class="d-block mb-4"><span class="display-4 text-black">Caution Fee: <sup><del
                         style="text-decoration-style: double;">N</del></sup>{{ room.caution_fee|intcomma }}</span> <span
                         class="text-uppercase letter-spacing-2"> (refundable)</span> </span>
-                <h2 class="mb-4">{{ room.get_roomType_display }}</h2>
-                <p style="font-size: 18px">{{ room.description_p1 }}</p>
+                <h2 class="mb-4">{{ room.get_roomType_display }} Apartment</h2>
+                <p style="font-size: 22px">{{ room.description_p1 }}</p>
                 <p><a href="#" class="btn btn-primary text-white">Book Now</a></p>
               </div>
             </div>
@@ -135,8 +135,8 @@
                         style="text-decoration-style: double;">N</del></sup>{{ room.offer|intcomma }}</span>
                     <span
                         class="text-uppercase letter-spacing-2">/ per night</span> </span>
-                <h2 class="mb-4">{{ room.get_roomType_display }}</h2>
-                <p style="font-size: 18px">{{ room.description_p1 }}</p>
+                <h2 class="mb-4">{{ room.get_roomType_display }} Apartment</h2>
+                <p style="font-size: 22px">{{ room.description_p1 }}</p>
                 <p><a href="#" class="btn btn-primary text-white">Book Now</a></p>
               </div>
             </div>
@@ -147,5 +147,5 @@
     </section>
       {% endif %}
       {% endfor %}
-    </body>
+
     {% endblock %}
