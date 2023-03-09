@@ -12,7 +12,10 @@
                     <span class="font-weight-normal">{{employee.user.first_name}} {{employee.user.last_name}}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_first_name"
-                        value="{{employee.user.first_name}} {{employee.user.last_name}}" name="first_name">
+                        value="{{employee.user.first_name}}" name="first_name">
+                    <br>
+                    <input type="text" class="form-control border border-secondary" id="id_last_name"
+                        value="{{employee.user.last_name}}" name="last_name">
                     {% endif %}
                 </div>
 

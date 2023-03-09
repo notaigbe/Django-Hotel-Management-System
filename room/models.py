@@ -50,6 +50,9 @@ class Booking(models.Model):
     def __str__(self):
         return str(self.roomNumber) + " " + str(self.guest)
 
+    class Meta:
+        unique_together = ('startDate', 'endDate', 'roomNumber')
+
 
 class Dependants(models.Model):
     booking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE)

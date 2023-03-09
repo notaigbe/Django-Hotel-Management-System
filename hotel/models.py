@@ -55,6 +55,9 @@ class Bills(models.Model):
     def __str__(self):
         return str(self.guest) + " " + str(self.summary) + " " + str(self.totalAmount)
 
+    class Meta:
+        verbose_name_plural = 'Bills'
+
 
 class FoodMenu(models.Model):
     startDate = models.DateField()
@@ -78,7 +81,8 @@ class Storage(models.Model):
         ('Kitchen', 'kitchen'),
         ('Cleaning', 'cleaning'),
         ('Electronic', 'Electronic'),
-        ('Textile ', 'textile '),
+        ('Linen', 'linen'),
+        ('Drinks', 'drinks'),
         ('Other', 'other'),
     )
     itemName = models.CharField(max_length=100)
