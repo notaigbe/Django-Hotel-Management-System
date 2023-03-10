@@ -27,9 +27,9 @@
 
                         {% if role == 'admin' %}
 
-                        <a class="dropdown-item" href="{% url 'guests'%}">Guests</a>
-                        <a class="dropdown-item" href="{% url 'employees'%}">Employees</a>
-                        <a class="dropdown-item" href="{% url 'events'%}">Events</a>
+                        <a class="dropdown-item" href="{% url 'guests' %}">Guests</a>
+                        <a class="dropdown-item" href="{% url 'employees' %}">Employees</a>
+                        <a class="dropdown-item" href="{% url 'events' %}">Events</a>
                         <a class="dropdown-item" href="{% url 'bookings' %}">Bookings</a>
                         <a class="dropdown-item" href="{% url 'rooms' %}">Rooms</a>
                         <a class="dropdown-item" href="{% url 'room-services' %}">Room Services</a>
@@ -51,31 +51,35 @@
 
                         {% elif role == 'manager' %}
 
-                        <a class="dropdown-item" href="{% url 'guests'%}">Guests</a>
-                        <a class="dropdown-item" href="{% url 'employees'%}">Employees</a>
-                        <a class="dropdown-item" href="{% url 'events'%}">Events</a>
+                        <a class="dropdown-item" href="{% url 'guests' %}">Guests</a>
+                        <a class="dropdown-item" href="{% url 'employees' %}">Employees</a>
+                        <a class="dropdown-item" href="{% url 'events' %}">Events</a>
                         <a class="dropdown-item" href="{% url 'bookings' %}">Bookings</a>
                         <a class="dropdown-item" href="{% url 'rooms' %}">Rooms</a>
                         <a class="dropdown-item" href="{% url 'room-services' %}">Room Services</a>
                         <a class="dropdown-item" href="{% url 'announcements' %}">Announcements</a>
                         <a class="dropdown-item" href="{% url 'storage' %}">Storage</a>
+                        <a class="dropdown-item" href="{% url 'drinks' %}">Drinks</a>
+                        <a class="dropdown-item" href="{% url 'sales' %}">Sales</a>
                         <a class="dropdown-item" href="{% url 'refunds' %}">Refunds</a>
 
 
                         {% elif role == 'receptionist' %}
 
-                        <a class="dropdown-item" href="{% url 'guests'%}">Guests Information</a>
-                        <a class="dropdown-item" href="{% url 'rooms'%}">Room Information</a>
-                        <a class="dropdown-item" href="{% url 'events'%}">Event Information</a>
+                        <a class="dropdown-item" href="{% url 'guests' %}">Guests Information</a>
+                        <a class="dropdown-item" href="{% url 'rooms' %}">Room Information</a>
+                        <a class="dropdown-item" href="{% url 'events' %}">Event Information</a>
                         <a class="dropdown-item" href="{% url 'bookings' %}">Booking Information</a>
                         <a class="dropdown-item" href="{% url 'announcements'%}">Announcements</a>
 
                         {% elif role == 'staff' %}
 
-                        <a class="dropdown-item" href="{% url 'tasks'%}">My Tasks</a>
-                        <a class="dropdown-item" href="{% url 'announcements'%}">Announcements</a>
-                        <a class="dropdown-item" href="{% url 'food-menu'%}">Food Menu</a>
-                        <a class="dropdown-item" href="{% url 'storage'%}">Storage</a>
+                        <a class="dropdown-item" href="{% url 'tasks' %}">My Tasks</a>
+                        <a class="dropdown-item" href="{% url 'announcements' %}">Announcements</a>
+                        <a class="dropdown-item" href="{% url 'food-menu' %}">Food Menu</a>
+                        <a class="dropdown-item" href="{% url 'storage' %}">Storage</a>
+                        <a class="dropdown-item" href="{% url 'drinks' %}">Drinks</a>
+                        <a class="dropdown-item" href="{% url 'sales' %}">Sales</a>
 
                         {% endif %}
 

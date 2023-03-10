@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from .views import home, events, announcements, storage, payment, verify, deleteStorage, deleteFoodMenu, food_menu, \
-    food_menu_edit, createEvent, deleteEvent, deleteAnnouncement, error, event_profile, event_edit
+    food_menu_edit, createEvent, deleteEvent, deleteAnnouncement, error, event_profile, event_edit, drinks, deleteDrink, \
+    sales
 
 urlpatterns = [
     path('backoffice/', home, name="home"),
@@ -11,10 +12,13 @@ urlpatterns = [
     path('announcements/', announcements, name="announcements"),
 
     path('storage/', storage, name="storage"),
+    path('drinks/', drinks, name="drinks"),
+    path('sales/', sales, name="sales"),
     path('payment/', payment, name="payment"),
     path('verify/', verify, name="verify"),
 
     path('deleteStorage/<str:pk>/', deleteStorage, name="deleteStorage"),
+    path('deleteDrink/<str:pk>/', deleteDrink, name="deleteDrink"),
     path('deleteFoodMenu/<str:pk>/', deleteFoodMenu, name="deleteFoodMenu"),
     path('food-menu/', food_menu, name="food-menu"),
     path('food-menu/<str:pk>/', food_menu_edit, name="food-menu-edit"),

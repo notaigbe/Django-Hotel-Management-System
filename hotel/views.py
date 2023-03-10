@@ -146,7 +146,7 @@ def deleteEvent(request, pk):
     return render(request, path + "deleteEvent.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def event_profile(request, id):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -162,7 +162,7 @@ def event_profile(request, id):
     return render(request, path + "event-profile.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def event_edit(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -185,7 +185,7 @@ def event_edit(request, pk):
     return render(request, path + "event-edit.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def announcements(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -256,7 +256,7 @@ def deleteAnnouncement(request, pk):
     return render(request, path + "deleteAnnouncement.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def storage(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -269,14 +269,14 @@ def storage(request):
     if request.method == "POST":
         if 'add' in request.POST:
             item = Storage(itemName=request.POST.get("itemName"), itemType=request.POST.get(
-                "itemType"), quantitiy=request.POST.get("quantitiy"))
+                "itemType"), quantity=request.POST.get("quantity"))
             item.save()
             storage = Storage.objects.all()
 
         elif 'save' in request.POST:
             id = request.POST.get("id")
             storages = Storage.objects.get(id=id)
-            storages.quantitiy = request.POST.get("quantitiy")
+            storages.quantity = request.POST.get("quantity")
             storages.save()
 
         if "filter" in request.POST:
@@ -380,7 +380,7 @@ def food_menu_edit(request, pk):
     return render(request, path + "food-menu-edit.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def error(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -444,6 +444,7 @@ def payment(request):
 
         # do something ???
         return render(request, path + "/verify.html", context)
+
     if role == "guest":
         send(request, request.user.guest, code)
     elif role == "receptionist":
@@ -474,3 +475,112 @@ def verify(request):
 
     }
     return render(request, path + "verify.html", context)
+
+
+@login_required(login_url='login')
+def drinks(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    drinks = Drink.objects.all()
+    alldrinks = Drink.objects.all()
+    context = {
+        "role": role,
+        'drinks': drinks
+    }
+    if request.method == "POST":
+        if 'add' in request.POST:
+            item = Drink(brand=request.POST.get("drink_brand"), drinkType=request.POST.get(
+                "drinkType"), price=request.POST.get("price"), initial_stock=request.POST.get("initial-stock"))
+            item.save()
+            drinks = Drink.objects.all()
+
+        elif 'save' in request.POST:
+            id = request.POST.get("id")
+            drinks = Drink.objects.get(id=id)
+            drinks.quantity = request.POST.get("quantity")
+            drinks.price = request.POST.get("price")
+            drinks.initial_stock = request.POST.get("initial-stock")
+            drinks.topup_stock = request.POST.get("topup-stock")
+            drinks.save()
+            drinks = Drink.objects.all()
+        if "filter" in request.POST:
+            # if request.POST.get("id") != "":
+            #     drinks = drinks.filter(
+            #         id__contains=request.POST.get("id"))
+
+            if request.POST.get("drink_brand") != "":
+                drinks = drinks.filter(
+                    brand__contains=request.POST.get("drink_brand"))
+                alldrinks = Drink.objects.all()
+
+            if request.POST.get("type") != "":
+                drinks = drinks.filter(
+                    drinkType__contains=request.POST.get("type"))
+                alldrinks = Drink.objects.all()
+
+        context = {
+            "role": role,
+            "drinks": drinks,
+            "alldrinks": alldrinks,
+            "id": request.POST.get("id"),
+            "brand": request.POST.get("drink_brand"),
+            "type": request.POST.get("type"),
+            "q": request.POST.get("q"),
+
+        }
+        return render(request, path + "drinks.html", context)
+
+    return render(request, path + "drinks.html", context)
+
+
+@login_required(login_url='login')
+def deleteDrink(request, pk):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    drink = Drink.objects.get(id=pk)
+    if request.method == "POST":
+        drink.delete()
+        return redirect('drinks')
+
+    context = {
+        "role": role,
+        'drink': drink
+
+    }
+    return render(request, path + "deleteDrinks.html", context)
+
+
+@login_required(login_url='login')
+def sales(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+    form = SalesForm()
+    drinks = Drink.objects.all()
+    context = {
+        "form": form,
+        "role": role,
+        'drinks': drinks
+    }
+    if request.method == "POST":
+        form = SalesForm(request.POST)
+        print('Posted')
+        if form.is_valid():
+            print('Validated')
+            form.save()
+            messages.success(request, "Sales info saved")
+
+        context = {
+            "form": form,
+            "role": role,
+            "drinks": drinks,
+            "id": request.POST.get("id"),
+            "brand": request.POST.get("drink_brand"),
+            "type": request.POST.get("type"),
+            "q": request.POST.get("q"),
+
+        }
+        return render(request, path + "sales.html", context)
+
+    return render(request, path + "sales.html", context)

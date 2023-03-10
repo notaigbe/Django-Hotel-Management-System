@@ -87,7 +87,72 @@ class Storage(models.Model):
     )
     itemName = models.CharField(max_length=100)
     itemType = models.CharField(max_length=20, choices=ITEM_TYPES)
-    quantitiy = models.IntegerField()
+    quantity = models.IntegerField()
 
     def __str__(self):
         return str(self.itemName)
+
+
+class Drink(models.Model):
+    DRINK_TYPES = (
+        ('wine', 'Wine'),
+        ('beer', 'Beer'),
+        ('bitters', 'Bitters'),
+        ('soft', 'Soft Drinks'),
+        ('spirit', 'Spirit'),
+        ('water', 'Water'),
+        ('other', 'Other'),
+    )
+    brand = models.CharField(max_length=50)
+    drinkType = models.CharField(max_length=20, choices=DRINK_TYPES)
+    price = models.FloatField()
+    initial_stock = models.IntegerField()
+    topup_stock = models.IntegerField(default=0)
+    total_stock = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=0)
+    total_sales = models.FloatField(default=0)
+
+    def __str__(self):
+        return str(self.brand)
+
+    @property
+    def get_total_stock(self):
+        initial = int(self.initial_stock)
+        topup = int(self.topup_stock)
+        total = initial + topup
+        return total
+
+    def save(self, *args, **kwargs):
+        try:
+            self.total_stock = self.get_total_stock
+            if self.quantity == 0:
+                self.quantity = self.initial_stock
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
+
+class Sales(models.Model):
+    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
+    amount = models.FloatField()
+    quantity = models.IntegerField()
+    sales_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.item)
+
+    def save(self, *args, **kwargs):
+        try:
+            stock = Drink.objects.get(brand=self.item.brand)
+            if stock.quantity > 0:
+                stock.quantity -= self.quantity
+            else:
+                stock.quantity = stock.total_stock - self.quantity
+            stock.total_sales += stock.price * self.quantity
+            stock.save()
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Sales"

@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="shadow-lg p-3">
+        <div class="mt-5 pt-4">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row mt-5">
+                <div class="col-6">
+
+                    <div class="form-group">
+                        <!--<label for="item-brand"><b>Brand: </b></label>
+                        <input type="text" class="form-control border border-secondary"
+                            value="{{drink.brand}}" id="item-brand" name="item-brand">-->
+                        {{ form.item }}
+                    </div>
+
+                    <div class="form-group">
+                       <!-- <label for="item-price"><b>Price: </b></label>
+                        <input type="number" min="0" step="0.01" class="form-control border border-secondary"
+                            value="{{drink.price}}" id="item-price" name="item-price">-->
+                        {{ form.amount }}
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+
+                    <div class="form-group ">
+                        <!--<label for="item-quantity"><b>Quantity : </b></label>
+                        <input type="number" min="1" class="form-control border border-secondary"
+                            id="item-quantity" name="item-quantity">-->
+                        {{ form.quantity }}
+                    </div>
+
+                    <!--<div class="form-group">
+                        <label for="drink-type"><b>Room Type</b></label>
+                        <select name="drink-type" required="" id="drink-type"
+                            class="form-control border border-secondary">
+                            {% for drink in drinks %}
+                            <option value="{{ drink.drinkType }}">{{ drink.get_drinkType_display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>-->
+                    <button type="submit" name="submit" class="btn btn-outline-success float-right">Save</button>
+                </div>
+
+            </div>
+        </form>
+        <br>
+
+    </div>
+</div>

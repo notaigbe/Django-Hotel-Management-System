@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <th class="text-white">Item ID <input type="number" name="id" value="{{id}}"
                             class="form-control border border-secondary"></th>
-                    <th class="text-white">Item Name <input type="name" name="name" value="{{name}}"
+                    <th class="text-white">Item Name <input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Type <input type="text" name="type" value="{{type}}"
                             class="form-control border border-secondary"></th>
@@ -26,20 +26,20 @@
         </thead>
         <tbody>
 
-            {% for s in storage %}
+            {% for item in storage %}
             <tr>
-                <td>{{s.id}}</td>
-                <td>{{s.itemName}}</td>
-                <td>{{s.itemType}}</td>
+                <td>{{item.id}}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.itemType}}</td>
 
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <td><input type="number" step="1" value="{{s.quantitiy}}" name="quantitiy"></td>
-                    <td><input type="hidden" step="1" value="{{s.id}}" name="id"></td>
+                    <td><input type="number" step="1" value="{{item.quantity}}" name="quantity"></td>
+                    <td><input type="hidden" step="1" value="{{item.id}}" name="id"></td>
 
                     <th><button type="submit" class="btn btn-sm btn-primary w-100" name="save">Save</button></th>
                     {% if role == "manager" or role == "admin" %}
-                    <th> <a href="{% url 'deleteStorage' s.id %}" class="btn btn-sm btn-danger px-3">Delete</a> </th>
+                    <th> <a href="{% url 'deleteStorage' item.id %}" class="btn btn-sm btn-danger px-3">Delete</a> </th>
                     {% endif %}
 
                 </form>
@@ -55,32 +55,27 @@
             {% csrf_token %}
 
             <div class="form-group pt-3">
-                <label for="item_name"><b>Item Name</b></label>
+                <label for="id_item_name"><b>Item Name</b></label>
                 <input type="text" class="form-control border border-secondary required" id="id_item_name"
                     name="itemName">
             </div>
 
             <div class="form-group pt-3">
-                <label for="exampleFormControlSelect1">Item Type</label>
+                <label for="id_item_type">Item Type</label>
                 <select class="form-control" name="itemType" required="" id="id_item_type">
                     <option value="" selected="">---------</option>
-
                     <option value="Kitchen">Kitchen</option>
-
                     <option value="Cleaning">Cleaning</option>
-
                     <option value="Electronic">Electronic</option>
-
-                    <option value="Textile">Textile</option>
-
+                    <option value="Linen">Linen</option>
+                    <option value="Drinks">Drinks</option>
                     <option value="Other">Other</option>
-
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="item-quantity"><b>Item Quantity</b></label>
-                <input type="int" class="form-control border border-secondary required" name="quantitiy"
+                <input type="number" class="form-control border border-secondary required" name="quantity"
                     id="item-quantity">
             </div>
 
