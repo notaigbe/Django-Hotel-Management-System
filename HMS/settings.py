@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'canlee-inn.onrender.com', 'canleeservicesltd.ng', 'www.canleeservicesltd.ng', 'localhost']
 
@@ -178,5 +178,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'info@gnotable.ng'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL') == 'True'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
