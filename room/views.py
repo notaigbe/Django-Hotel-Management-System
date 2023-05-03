@@ -141,7 +141,7 @@ def add_room(request):
 def room_profile(request, _id):
     role = str(request.user.groups.all()[0])
     path = role + "/"
-    tempRoom = Room.objects.get(name=_id)
+    tempRoom = Room.objects.get(number=_id)
     bookings = Booking.objects.filter(roomNumber=tempRoom)
     guests = Guest.objects.all()
     bookings2 = Booking.objects.all()

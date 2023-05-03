@@ -257,25 +257,25 @@ def employees(request):
     if request.method == "POST":
         if "filter" in request.POST:
             users = User.objects.all()
-            if (request.POST.get("id") != ""):
+            if request.POST.get("id") != "":
                 users = users.filter(
                     id__contains=request.POST.get("id"))
                 employees = employees.filter(user__in=users)
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 users = users.filter(
                     Q(first_name__contains=request.POST.get("name")) | Q(last_name__contains=request.POST.get("name")))
                 employees = employees.filter(user__in=users)
 
-            if (request.POST.get("email") != ""):
+            if request.POST.get("email") != "":
                 users = users.filter(email__contains=request.POST.get("email"))
                 employees = employees.filter(user__in=users)
 
-            if (request.POST.get("number") != ""):
+            if request.POST.get("number") != "":
                 employees = employees.filter(
                     phoneNumber__contains=request.POST.get("number"))
 
-            if (request.POST.get("filterRole") != ""):
+            if request.POST.get("filterRole") != "":
                 try:
                     group = Group.objects.get(
                         name__contains=request.POST.get("filterRole"))
@@ -318,7 +318,7 @@ def employee_details(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
 
-    tempUser = User.objects.get(id=request.user.id)
+    tempUser = User.objects.get(id=pk)
     employee = Employee.objects.get(user=tempUser)
     tasks = Task.objects.filter(employee=employee)
     context = {
