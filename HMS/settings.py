@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'canlee-inn.onrender.com', 'canleeservicesltd.ng', 'www.canleeservicesltd.ng', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'canlee-inn.onrender.com', 'canleeservicesltd.ng', 'www.canleeservicesltd.ng', 'localhost', 'canlee-inn.com']
 
 # Application definition
 
