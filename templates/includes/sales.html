@@ -1,3 +1,4 @@
+{% load static %}
 <div class="container">
     <div class="shadow-lg p-3">
         <div class="mt-5 pt-4">
@@ -14,7 +15,7 @@
             <div class="row mt-5">
                 <div class="col-6">
 
-                    <div class="form-group">
+                    <div class="form-group" id="sel">
                         <!--<label for="item-brand"><b>Brand: </b></label>
                         <input type="text" class="form-control border border-secondary"
                             value="{{drink.brand}}" id="item-brand" name="item-brand">-->
@@ -48,12 +49,157 @@
                             {% endfor %}
                         </select>
                     </div>-->
-                    <button type="submit" name="submit" class="btn btn-outline-success float-right">Save</button>
+
+                    <button type="submit" name="submit" class="btn btn-outline-primary float-right" onclick="AddData(event)">Add</button>
+
                 </div>
 
             </div>
         </form>
         <br>
+        <div class="h1 float-right mb-20"><p>N</p></div>
+                    <div id="tab">
+                        <table class="table table-hover table-striped" id="list">
+                            <thead>
+                                <tr>
+                                    <td>Item</td>
+                                    <td>Price</td>
+                                    <td>Quantity</td>
+                                    <td>Total</td>
+                                    </tr>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+
+                        </table>
+                        <button type="submit" name="submit" class="btn btn-primary float-right mb-3" id="printButton" disabled="disabled" onclick="PrintElem()">Print Receipt</button>
+                        <button type="submit" name="submit" class="btn btn-outline-success float-right mr-3 mb-3" disabled="disabled" id="saveButton">Save</button>
+                        </div>
     </div>
 </div>
+<script>
+    var sumVal = 0
+    function AddData(e)
+    {
+        e.preventDefault();
+        var rows="";
+        var sales=[];
+        var sel = document.querySelector("select")
+        var display_total = document.querySelector("p")
+        var item=sel[sel.selectedIndex].text;
+        var brand=item.split('-')[0].trim();
+        var price=item.split('-')[1].trim();
+        var quantity=document.getElementById("quantity").value;
+        var total=price * quantity;
+
+        rows+="<tr><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td></tr>";
+        $(rows).appendTo("#list tbody");
+
+        sumVal = sumVal + total;
+        display_total.innerHTML = 'N'+sumVal;
+        $('#saveButton').prop('disabled', false);
+        console.log(sumVal)
+    }
+</script>
+<script>
+    function total()
+    {
+    var table = document.getElementById("tab"), sumVal = 0
+
+    for(var i =1; i< table.rows.length; i++){
+        sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
+    }
+    console.log(sumVal);
+    }
+</script>
+
+ <script>
+            var orders = {}
+            var total = 0
+            $("#saveButton").click(function(e) {
+
+            // get the table data
+            var myRows = [];
+            var $headers = $('thead tr td');
+            var $rows = $('tbody tr').each(function(index){
+                $cells = $(this).find('td');
+                myRows[index] = {};
+                $cells.each(function(cellIndex){
+                    myRows[index][$($headers[cellIndex]).html()] = $(this).html();
+                });
+            });
+
+            var myObj = {};
+            myObj.myRows = myRows;
+            console.log(myObj);
+
+            if( myObj != {} ) {
+
+            // GET AJAX request
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'orders' %}",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                data: JSON.stringify(myObj),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(response) {
+                    // if successful, alert the user
+
+                    if(response['valid']){
+                        orders = response['orders']
+                        total = response['total']
+                        console.log(total)
+                        //PrintElem(orders, total)
+                        $('#printButton').prop('disabled', false);
+                        //alert('Posted');
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+            console.log(JSON.stringify(myObj))
+            }
+        })
+
+            function PrintElem() {
+            var mywindow = window.open('', 'PRINT');
+            mywindow.document.write('<html><head><title>Receipt</title>');
+            mywindow.document.write('</head><body style="text-align:center;font: Georgia, "Times New Roman", Times, serif;background: #fff;font-size: 22pt;margin:20px auto auto 50px;" >');
+            mywindow.document.write('<header style="text-align:center; white-space:nowrap;overflow:hidden;line-height: 1em;">' +
+                '<img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="Logo" style="max-width: inherit; width: inherit;">' +
+                '<p  style="text-align: center; align-content: center;">Payment Receipt</p>' +
+                '<p style="text-align: center; align-content: center;">CANLEE INN<br>#3 Ogiugo Avenue, <br>Off Aideyan & Aikhionbare<br>Streets, G.R.A. Benin City</p>' +
+                '</header>');
+            mywindow.document.write('<content style="width: 155px; max-width: 155px;text-align: center; align-content: center;">' +
+                    '<table style="margin-left: auto;margin-right: auto;border-collapse: collapse;">' +
+                    '<thead><tr  style="border-top: 1px solid black;border-collapse: collapse;"><th  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">Q.</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">Description</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">N</th></tr></thead>' +
+                    '<tbody>');
+
+            for (var item of orders.myRows){
+            console.log(item);
+            console.log(item.Item);
+            mywindow.document.write('<tr  style="border-top: 1px solid black;border-collapse: collapse;"><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + item.Quantity + '</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">' + item.Item + '</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + item.Price + '</td></tr>');
+            }
+            mywindow.document.write('<tr  style="border-top: 1px solid black;border-collapse: collapse;"><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;"></td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">TOTAL</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + total + '</td></tr>');
+            mywindow.document.write('</tbody></table></content>' +
+                '<footer>' +
+                '<hr style="margin-top:30pt;margin-bottom:30pt;">' +
+                    '<p style="text-align:right;">&copy Gnotable Technologies</p>' +
+                '</footer>'+
+                '');
+            mywindow.document.write('</body></html>');
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+            mywindow.print();
+            mywindow.close();
+            return true;
+        }
+    </script>
+
+<script>
+
+</script>

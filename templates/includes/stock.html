@@ -1,0 +1,160 @@
+<div class="container">
+    <div class="shadow-lg p-3">
+        <div class="mt-5 ">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row mt-5">
+                <div-- class="col-6">
+
+                    <div class="form-group" id="sel">
+                        <!--<label for="item-brand"><b>Brand: </b></label>
+                        <input type="text" class="form-control border border-secondary"
+                            value="{{drink.brand}}" id="item-brand" name="item-brand">-->
+                        {{ form.item }}
+                    </div>
+
+                    <!--div class="form-group">
+                        <label for="item-price"><b>Price: </b></label>
+                        <input type="number" min="0" step="0.01" class="form-control border border-secondary"
+                            value="{{drink.price}}" id="item-price" name="item-price">
+                        {{ form.restock_level }}
+                    </div-->
+
+                <!--/div>
+
+                <div class="col-6">
+
+                    <div class="form-group "-->
+                        <!--<label for="item-quantity"><b>Quantity : </b></label>
+                        <input type="number" min="1" class="form-control border border-secondary"
+                            id="item-quantity" name="item-quantity">-->
+                        {{ form.quantity }}
+                    <button type="submit" name="submit" class="btn btn-outline-primary mt-3" onclick="AddData(event)">Add</button>
+                    <button type="submit" name="submit" class="btn btn-outline-success float-right mt-3" id="saveStock">Save</button>
+                </div>
+
+                    <!--<div class="form-group">
+                        <label for="drink-type"><b>Room Type</b></label>
+                        <select name="drink-type" required="" id="drink-type"
+                            class="form-control border border-secondary">
+                            {% for drink in drinks %}
+                            <option value="{{ drink.drinkType }}">{{ drink.get_drinkType_display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>-->
+
+                </div>
+
+        </form>
+        <br>
+        <div class="h1 float-right mb-20"><p>N</p></div>
+                    <div id="tab">
+                        <table class="table table-hover table-striped" id="list">
+                            <thead>
+                                <tr>
+                                    <td>Item</td>
+                                    <td>Price</td>
+                                    <td>Quantity</td>
+                                    <td>Total</td>
+                                    </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+
+                        <button type="submit" name="submit" class="btn btn-outline-success float-right" id="saveButton">Save</button>
+
+                        </div>
+    </div>
+</div>
+<script>
+    var sumVal = 0
+    function AddData(e)
+    {
+        e.preventDefault();
+        var rows="";
+        var sales=[];
+        var sel = document.querySelector("select")
+        var display_total = document.querySelector("p")
+        var item=sel[sel.selectedIndex].text;
+        var brand=item.split('-')[0].trim();
+        var price=item.split('-')[1].trim();
+        var quantity=document.getElementById("quantity").value;
+        var total=price * quantity;
+
+        rows+="<tr><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td></tr>";
+        $(rows).appendTo("#list tbody");
+
+        sumVal = sumVal + total;
+        display_total.innerHTML = 'N'+sumVal;
+        console.log(sumVal)
+    }
+</script>
+<script>
+    function total()
+    {
+    var table = document.getElementById("tab"), sumVal = 0
+
+    for(var i =1; i< table.rows.length; i++){
+        sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
+    }
+    console.log(sumVal);
+    }
+</script>
+
+ <script>
+            $("#saveButton").click(function(e) {
+
+            // get the table data
+            var myRows = [];
+            var $headers = $('thead tr td');
+            var $rows = $('tbody tr').each(function(index){
+                $cells = $(this).find('td');
+                myRows[index] = {};
+                $cells.each(function(cellIndex){
+                    myRows[index][$($headers[cellIndex]).html()] = $(this).html();
+                });
+            });
+
+            var myObj = {};
+            myObj.myRows = myRows;
+            console.log(myObj);
+
+            if( myObj != {} ) {
+
+            // GET AJAX request
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'orders' %}",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                data: JSON.stringify(myObj),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(response) {
+                    // if email exists, alert the user
+
+                    if(response['valid']){
+                        var orders = response['orders']
+                        var total = response['total']
+                        alert('Posted');
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+            console.log(JSON.stringify(myObj))
+            }
+        })
+    </script>

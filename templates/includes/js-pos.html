@@ -1,0 +1,325 @@
+
+    <!-- (A) PRODUCTS LIST -->
+    <div id="poslist"></div>
+
+    <!-- (B) CART -->
+    <div id="poscart"></div>
+
+    <!-- (C) NINJA RECEIPT -->
+    <div id="posreceipt"></div>
+
+    <script>
+        var products = {
+          // (A) PRODUCTS LIST
+          list : {
+            1 : { name:"Banana", img:"banana.png", price: 12 },
+            2 : { name:"Cherry", img:"cherry.png", price: 23 },
+            3 : { name:"Ice Cream", img:"icecream.png", price: 54 },
+            4 : { name:"Orange", img:"orange.png", price: 65 },
+            5 : { name:"Strawberry", img:"strawberry.png", price: 34 },
+            6 : { name:"Watermelon", img:"watermelon.png", price: 67 }
+          },
+
+          // (B) DRAW HTML PRODUCTS LIST
+          draw : () => {
+            // (B1) TARGET WRAPPER
+            const wrapper = document.getElementById("poslist");
+
+            // (B2) CREATE PRODUCT HTML
+            for (let pid in products.list) {
+              // CURRENT PRODUCT
+              let p = products.list[pid],
+                  pdt = document.createElement("div"),
+                  segment;
+
+              // PRODUCT SEGMENT
+              pdt.className = "pwrap";
+              pdt.onclick = () => cart.add(pid);
+              wrapper.appendChild(pdt);
+
+              // IMAGE
+              segment = document.createElement("img");
+              segment.className = "pimg";
+              segment.src = "images/" + p.img;
+              pdt.appendChild(segment);
+
+              // NAME
+              segment = document.createElement("div");
+              segment.className = "pname";
+              segment.innerHTML = p.name;
+              pdt.appendChild(segment);
+
+              // PRICE
+              segment = document.createElement("div");
+              segment.className = "pprice";
+              segment.innerHTML = "$" + p.price;
+              pdt.appendChild(segment);
+            }
+          }
+        };
+        window.addEventListener("DOMContentLoaded", products.draw);
+    </script>
+    <script>
+        var cart = {
+          // (A) PROPERTIES
+          items : {}, // current items in cart
+
+          // (B) SAVE CURRENT CART INTO LOCALSTORAGE
+          save : () => localStorage.setItem("cart", JSON.stringify(cart.items)),
+
+          // (C) LOAD CART FROM LOCALSTORAGE
+          load : () => {
+            cart.items = localStorage.getItem("cart");
+            if (cart.items == null) { cart.items = {}; }
+            else { cart.items = JSON.parse(cart.items); }
+          },
+
+          // (D) NUKE CART!
+          nuke : () => {
+            cart.items = {};
+            localStorage.removeItem("cart");
+            cart.list();
+          },
+
+          // (E) INITIALIZE - RESTORE PREVIOUS SESSION
+          init : () => {
+            cart.load();
+            cart.list();
+          },
+
+          // (F) LIST CURRENT CART ITEMS (IN HTML)
+          list : () => {
+            // (F1) DRAW CART INIT
+            var wrapper = document.getElementById("poscart"),
+                item, part, pdt,
+                total = 0, subtotal = 0,
+                empty = true;
+            wrapper.innerHTML = "";
+            for (let key in cart.items) {
+              if (cart.items.hasOwnProperty(key)) { empty = false; break; }
+            }
+
+            // (F2) CART IS EMPTY
+            if (empty) {
+              item = document.createElement("div");
+              item.innerHTML = "Cart is empty";
+              wrapper.appendChild(item);
+            }
+
+            // (F3) CART IS NOT EMPTY - LIST ITEMS
+            else {
+              for (let pid in cart.items) {
+                // CURRENT ITEM
+                pdt = products.list[pid];
+                item = document.createElement("div");
+                item.className = "citem";
+                wrapper.appendChild(item);
+
+                // ITEM NAME
+                part = document.createElement("span");
+                part.innerHTML = pdt.name;
+                part.className = "cname";
+                item.appendChild(part);
+
+                // REMOVE
+                part = document.createElement("input");
+                part.type = "button";
+                part.value = "X";
+                part.className = "cdel";
+                part.onclick = () => cart.remove(pid);
+                item.appendChild(part);
+
+                // QUANTITY
+                part = document.createElement("input");
+                part.type = "number";
+                part.min = 0;
+                part.value = cart.items[pid];
+                part.className = "cqty";
+                part.onchange = function () { cart.change(pid, this.value); };
+                item.appendChild(part);
+
+                // SUBTOTAL
+                subtotal = cart.items[pid] * pdt.price;
+                total += subtotal;
+              }
+
+              // TOTAL AMOUNT
+              item = document.createElement("div");
+              item.className = "ctotal";
+              item.id = "ctotal";
+              item.innerHTML ="TOTAL: $" + total;
+              wrapper.appendChild(item);
+
+              // EMPTY BUTTON
+              item = document.createElement("input");
+              item.type = "button";
+              item.value = "Empty";
+              item.onclick = cart.nuke;
+              item.id = "cempty";
+              wrapper.appendChild(item);
+
+              // CHECKOUT BUTTON
+              item = document.createElement("input");
+              item.type = "button";
+              item.value = "Checkout";
+              item.onclick = cart.checkout;
+              item.id = "ccheckout";
+              wrapper.appendChild(item);
+            }
+          },
+
+          // (G) ADD ITEM TO CART
+          add : pid => {
+            if (cart.items[pid] == undefined) { cart.items[pid] = 1; }
+            else { cart.items[pid]++; }
+            cart.save(); cart.list();
+          },
+
+          // (H) CHANGE QUANTITY
+          change : (pid, qty) => {
+            // (H1) REMOVE ITEM
+            if (qty <= 0) {
+              delete cart.items[pid];
+              cart.save(); cart.list();
+            }
+
+            // (H2) UPDATE TOTAL ONLY
+            else {
+              cart.items[pid] = qty;
+              var total = 0;
+              for (let id in cart.items) {
+                total += cart.items[pid] * products.list[pid].price;
+                document.getElementById("ctotal").innerHTML ="TOTAL: $" + total;
+              }
+            }
+          },
+
+          // (I) REMOVE ITEM FROM CART
+          remove : pid => {
+            delete cart.items[pid];
+            cart.save(); cart.list();
+          },
+
+          // (J) CHECKOUT
+          checkout : () => {
+            orders.print();
+            orders.add();
+          }
+        };
+        window.addEventListener("DOMContentLoaded", cart.init);
+    </script>
+    <script>
+        var orders = {
+          // (A) PROPERTIES
+          iName : "JSPOS",
+          iDB : null, iOrders : null, iItems : null,
+
+          // (B) INIT
+          init : () => {
+            // (B1) REQUIREMENTS CHECK - INDEXED DB
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+            if (!window.indexedDB) {
+              alert("Your browser does not support indexed database.");
+              return;
+            }
+
+            // (B2) OPEN IDB
+            let req = window.indexedDB.open(orders.iName, 1);
+
+            // (B3) IDB OPEN ERROR
+            req.onerror = evt => {
+              alert("Indexed DB init error - " + evt.message);
+              console.error(evt);
+            };
+
+            // (B4) IDB UPGRADE NEEDED
+            req.onupgradeneeded = evt => {
+              orders.iDB = evt.target.result;
+
+              // (B4-1) IDB UPGRADE ERROR
+              orders.iDB.onerror = evt => {
+                alert("Indexed DB upgrade error - " + evt.message);
+                console.error(evt);
+              };
+
+              // (B4-2) IDB VERSION 1
+              if (evt.oldVersion < 1) {
+                // ORDERS STORE
+                let store = orders.iDB.createObjectStore("Orders", {
+                  keyPath: "oid",
+                  autoIncrement: true
+                });
+                store.createIndex("time", "time");
+
+                // ORDER ITEMS STORE
+                store = orders.iDB.createObjectStore("Items", {
+                  keyPath: ["oid", "pid"]
+                });
+                store.createIndex("qty", "qty");
+              }
+            };
+
+            // (B6) IDB OPEN OK
+            req.onsuccess = evt => {
+              orders.iDB = evt.target.result;
+              orders.iOrders = () => {
+                return orders.iDB
+                .transaction("Orders", "readwrite")
+                .objectStore("Orders");
+              };
+              orders.iItems = () => {
+                return orders.iDB
+                .transaction("Items", "readwrite")
+                .objectStore("Items");
+              };
+            };
+          },
+
+          // (C) ADD NEW ORDER
+          add : () => {
+            // (C1) INSERT ORDERS STORE
+            let req = orders.iOrders().put({ time: Date.now() });
+
+            // (C2) THE PAINFUL PART - INDEXED DB IS ASYNC
+            // HAVE TO WAIT UNTIL ALL IS ADDED TO DB BEFORE CLEAR CART
+            // THIS IS TO TRACK THE NUMBER OF ITEMS ADDED TO DATABASE
+            let size = 0, entry;
+            for (entry in cart.items) {
+              if (cart.items.hasOwnProperty(entry)) { size++; }
+            }
+
+            // (C3) INSERT ITEMS STORE
+            entry = 0;
+            req.onsuccess = e => {
+              oid = req.result;
+              for (let pid in cart.items) {
+                req = orders.iItems().put({ oid: oid, pid: pid, qty: cart.items[pid] });
+                req.onsuccess = () => {
+                  entry++;
+                  if (entry == size) { cart.nuke(); }
+                };
+              }
+            };
+          },
+
+          // (D) PRINT RECEIPT FOR CURRENT ORDER
+          print : () => {
+            // (D1) GENERATE RECEIPT
+            var wrapper = document.getElementById("posreceipt");
+            wrapper.innerHTML = "";
+            for (let pid in cart.items) {
+              let item = document.createElement("div");
+              item.innerHTML = `${cart.items[pid]} X ${products.list[pid].name}`;
+              wrapper.appendChild(item);
+            }
+
+            // (D2) PRINT
+            var printwin = window.open();
+            printwin.document.write(wrapper.innerHTML);
+            printwin.stop();
+            printwin.print();
+            printwin.close();
+          }
+        };
+        window.addEventListener("DOMContentLoaded", orders.init);
+    </script>

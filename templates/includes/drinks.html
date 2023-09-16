@@ -5,7 +5,11 @@
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
             <h2>Drinks</h2>
         </div>
-
+        <div class="col-sm-12 col-md-12 col-lg-6 mb-4">
+            <a href="{% url 'opening_stock' %}" class="btn btn-sm btn-info px-3">Opening Stock</a>
+            <a href="{% url 'restock' %}" class="btn btn-sm btn-warning px-3">Re-Stock</a>
+            <a href="{% url 'closing_stock' %}" class="btn btn-sm btn-secondary px-3">Closing Stock</a>
+        </div>
     </div>
     <table class="table table-hover table-striped">
         <thead class="bg-secondary rounded">
@@ -29,11 +33,11 @@
                         {% endifchanged %}
                         {% endfor %}
                         </select></th>
-                    <th class="text-white">Total Stock</th>
-                    <th class="text-white">Current Stock</th>
+                    <!--th class="text-white">Total Stock</th>
+                    <th class="text-white">Current Stock</th-->
                     <th class="text-white">Sales</th>
-                    <th class="text-white">Initial Stock</th>
-                    <th class="text-white">Topup Stock</th>
+                    <!--th class="text-white">Initial Stock</th>
+                    <th class="text-white">Topup Stock</th-->
                     <th class="text-white">Price</th>
                     <th colspan="3"><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button>
                     </th>
@@ -45,15 +49,15 @@
             {% for drink in drinks %}
             <tr>
                 <td>{{drink.id}}</td>
-                <td>{{drink.brand}}</td>
+                <td>{{drink.brand}} <span class="badge badge-primary">{{drink.quantity}}</span></td>
                 <td>{{drink.drinkType}}</td>
-                <td>{{drink.total_stock}}</td>
-                <td>{{drink.quantity}}</td>
+                <!--td>{{drink.quantity}}</td>
+                <td>{{drink.quantity}}</td-->
                 <td>{{drink.total_sales}}</td>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <td><input type="number" step="1" value="{{drink.initial_stock}}" name="initial-stock" class="form-control"></td>
-                    <td><input type="number" step="1" value="{{drink.topup_stock}}" name="topup-stock" class="form-control"></td>
+                    <!--td><input type="number" step="1" value="{{drink.initial_stock}}" name="initial-stock" class="form-control"></td>
+                    <td><input type="number" step="1" value="{{drink.topup_stock}}" name="topup-stock" class="form-control"></td-->
                     <td><input type="number" step="1" value="{{drink.price}}" name="price" class="form-control"></td>
                     <input type="hidden" step="1" value="{{drink.quantity}}" name="quantity">
                     <input type="hidden" step="1" value="{{drink.id}}" name="id">
@@ -94,26 +98,34 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <!--div class="form-group">
                 <label for="initial-stock"><b>Initial Stock</b></label>
                 <input type="number" class="form-control required" name="initial-stock"
                     id="initial-stock">
-            </div>
-
-            <!--<div class="form-group">
-                <label for="drink-quantity"><b>Quantity</b></label>
-                <input type="number" class="form-control required" name="quantity"
-                    id="drink-quantity">
-            </div>-->
+            </div-->
 
             <div class="form-group">
                 <label for="drink-price"><b>Price</b></label>
                 <input type="number" class="form-control required" name="price"
                     id="drink-price">
             </div>
-
+            <div class="form-group">
+                <label for="restock"><b>Restock Level</b></label>
+                <input type="number" class="form-control required" name="restock"
+                    id="restock">
+            </div>
             <button type="submit" class="btn btn-primary px-5 float-right mb-5" name="add">Add</button>
         </form>
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $("thead td input[type='button']").click(function(){
+            var $td = $(this).closest('td');
+            var selectedAttractions = $td.find("[name^='AttractionsAvailable']").val();
+            var selectedParticipants = $td.find("name^='AttractionsQuantity']").val();
+        });
+    });
+</script>

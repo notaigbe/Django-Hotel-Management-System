@@ -1,3 +1,6 @@
+import uuid
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -105,31 +108,21 @@ class Drink(models.Model):
     )
     brand = models.CharField(max_length=50)
     drinkType = models.CharField(max_length=20, choices=DRINK_TYPES)
-    price = models.FloatField()
-    initial_stock = models.IntegerField()
-    topup_stock = models.IntegerField(default=0)
-    total_stock = models.IntegerField(default=0)
     quantity = models.IntegerField(default=0)
-    total_sales = models.FloatField(default=0)
+    price = models.FloatField()
+    restock_level = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.brand)
+        return '{} - {}'.format(self.brand, self.price)
 
-    @property
-    def get_total_stock(self):
-        initial = int(self.initial_stock)
-        topup = int(self.topup_stock)
-        total = initial + topup
-        return total
 
-    def save(self, *args, **kwargs):
-        try:
-            self.total_stock = self.get_total_stock
-            if self.quantity == 0:
-                self.quantity = self.initial_stock
-        except Exception as e:
-            print(e)
-        super().save(*args, **kwargs)
+class Receipt(models.Model):
+    receipt_id = models.UUIDField(editable=False, unique=True)
+    details = models.JSONField(default=dict)
+    sales_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.receipt_id)
 
 
 class Sales(models.Model):
@@ -137,18 +130,24 @@ class Sales(models.Model):
     amount = models.FloatField()
     quantity = models.IntegerField()
     sales_date = models.DateTimeField(auto_now=True)
+    receipt = models.ForeignKey(Receipt, on_delete=models.PROTECT)
 
     def __str__(self):
-        return str(self.item)
+        return '{} - {}'.format(self.item, self.receipt)
 
     def save(self, *args, **kwargs):
         try:
             stock = Drink.objects.get(brand=self.item.brand)
             if stock.quantity > 0:
+                temp = stock.quantity
                 stock.quantity -= self.quantity
+                if stock.quantity < 0:
+                    stock.quantity = temp
+                    raise ValidationError('Insufficient Stock. Please update stock and try again.')
             else:
-                stock.quantity = stock.total_stock - self.quantity
-            stock.total_sales += stock.price * self.quantity
+                stock.quantity -= self.quantity
+
+            # stock.total_sales += stock.price * self.quantity
             stock.save()
         except Exception as e:
             print(e)
@@ -156,3 +155,71 @@ class Sales(models.Model):
 
     class Meta:
         verbose_name_plural = "Sales"
+
+
+class Opening_Stock(models.Model):
+    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING, related_name='opening_stock')
+    quantity = models.IntegerField()
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.item, self.date)
+
+    def save(self, *args, **kwargs):
+        try:
+            stock = Drink.objects.get(brand=self.item.brand)
+            stock.quantity += self.quantity
+            stock.save()
+
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Opening Stock"
+        unique_together = 'item', 'date'
+
+
+class Restock(models.Model):
+    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
+    quantity = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.item, self.date)
+
+    def save(self, *args, **kwargs):
+        try:
+            stock = Drink.objects.get(brand=self.item.brand)
+            stock.quantity += self.quantity
+            stock.save()
+
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Restock"
+
+
+class Closing_Stock(models.Model):
+    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
+    quantity = models.IntegerField()
+    date = models.DateField()
+
+    def __str__(self):
+        return '{} - {}'.format(self.item, self.date)
+
+    def save(self, *args, **kwargs):
+        try:
+            stock = Drink.objects.get(brand=self.item.brand)
+            stock.quantity += self.quantity
+            stock.save()
+
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Closing Stock"
+        unique_together = 'item', 'date'

@@ -41,15 +41,45 @@ class createItem(ModelForm):
 class DrinkForm(ModelForm):
     class Meta:
         model = Drink
-        fields = ["brand", "drinkType", "quantity", "price"]
+        fields = ["brand", "drinkType", "price", "restock_level"]
 
 
 class SalesForm(ModelForm):
     class Meta:
         model = Sales
-        fields = ["item", "amount", "quantity"]
+        fields = ["item", "quantity"]
         widgets = {
-            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink'}),
-            'amount': NumberInput(attrs={'class': 'form-control', 'placeholder': 'Amount'}),
-            'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity'}),
+            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item'}),
+            'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity', 'id': 'quantity'}),
+        }
+
+
+class OpeningStockForm(ModelForm):
+    class Meta:
+        model = Opening_Stock
+        fields = ["item", "quantity"]
+
+        widgets = {
+            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item'}),
+            'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity', 'id': 'quantity'}),
+        }
+
+
+class RestockForm(ModelForm):
+    class Meta:
+        model = Restock
+        fields = ["item", "quantity"]
+        widgets = {
+            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item'}),
+            'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity', 'id': 'quantity'}),
+        }
+
+
+class ClosingStockForm(ModelForm):
+    class Meta:
+        model = Closing_Stock
+        fields = ["item", "quantity", "date"]
+        widgets = {
+            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item'}),
+            'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity', 'id': 'quantity'}),
         }

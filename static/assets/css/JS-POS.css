@@ -1,0 +1,60 @@
+/* (A) WRAPPER */
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+#poslist { width: 70%; }
+#poscart { width: 30%; }
+
+/* (B) PRODUCTS LIST */
+#poslist {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: baseline;
+  padding: 10px;
+}
+@media screen AND (max-width:768px) {
+  #poslist { grid-template-columns: repeat(2, 1fr); }
+}
+.pwrap {
+  padding: 10px;
+  border: 1px solid #f1f1f1;
+  background: #fbfbfb;
+  cursor: pointer;
+  text-align: center;
+}
+.pimg {
+  object-fit: cover;
+  max-width: 100%; height: 100px;
+  margin-bottom: 10px;
+}
+.pname { font-weight: 700; }
+.pprice { color: #639aff; }
+
+/* (C) CART */
+#poscart {
+  padding: 10px;
+  border-left: 1px solid #f1f1f1;
+  background: #f7f7f7;
+}
+.citem > * { box-sizing: border-box; }
+.citem, .cname { width: 100%; }
+.citem { padding: 10px; }
+.cname{ display: block; }
+.cdel { width: 25%; }
+.cqty { width: 75%; }
+#ctotal { font-weight: 700; padding: 10px; }
+.cdel, .cqty, #cempty, #ccheckout { padding: 10px; }
+.cdel, #cempty, #ccheckout {
+  background: #9a2121;
+  border: 1px solid #9a2121;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+#cempty, #ccheckout { margin: 5px; }
+
+/* (D) RECEIPT */
+#posreceipt { display: none; }

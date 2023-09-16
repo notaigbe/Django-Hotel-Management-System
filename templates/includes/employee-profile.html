@@ -8,7 +8,7 @@
 
                 <div class="p-2 h4">
                     <span>Name:</span>
-                    {% if employee.user.id != request.user.id %}
+                    {% if role != "manager" or role != "admin" %}
                     <span class="font-weight-normal">{{employee.user.first_name}} {{employee.user.last_name}}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_first_name"
@@ -51,13 +51,10 @@
 
                 <div class="p-2 h4">
                     <span>Phone Number: </span>
-                    {% if employee.user.id != request.user.id %}
+
 
                     <span class="font-weight-normal">{{employee.phoneNumber}}</span>
-                    {% else %}
-                    <input type="text" class="form-control border border-secondary" id="id_phoneNumber"
-                        value="{{employee.phoneNumber}}" name="phoneNumber">
-                    {% endif %}
+
                 </div>
 
                 <br>
@@ -76,8 +73,19 @@
 
             </div>
         </div>
-        {% if employee.user.id == request.user.id %}
-        <button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button>
+
+        {% if employee.user.groups.first == 'manager' %}
+            {% if role == "admin" %}
+                <!--button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button-->
+        <a href="{% url 'deleteEmployee' employee.user.id %}" class="btn btn-sm btn-danger px-3 float-right">Delete</a>
+        <a href="{% url 'employee-edit' employee.user.id %}" class="btn btn-sm btn-danger px-3 float-right">Update</a>
+
+            {% endif %}
+        {% elif role == "admin" or role == "manager" %}
+                <!--button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button-->
+        <a href="{% url 'deleteEmployee' employee.user.id %}" class="btn btn-sm btn-danger px-3 float-right">Delete</a>
+        <a href="{% url 'employee-edit' employee.user.id %}" class="btn btn-sm btn-info px-3 float-right">Update</a>
+
         {% endif %}
         <br>
     </form>

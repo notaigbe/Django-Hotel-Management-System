@@ -359,6 +359,35 @@ def employee_details_edit(request, pk):
 
 
 @login_required(login_url='login')
+def delete_employee(request, pk):
+    role = str(request.user.groups.first())
+    path = role + "/"
+
+    tempuser = User.objects.get(id=pk)
+    print(tempuser)
+    employee = Employee.objects.get(user=tempuser)
+
+    #if request.method == "POST":
+
+    #form1 = editEmployee(instance=employee)
+    #form2 = editUser(instance=tempuser)
+
+    context = {
+        "role": role,
+        "employee": employee,
+        "user": tempuser,
+        #"form1": form1,
+        #"form2": form2
+    }
+
+    if request.method == "POST":
+        employee.delete()
+        return redirect('employees')
+
+    return render(request, path + "deleteEmployee.html", context)
+
+
+@login_required(login_url='login')
 def guest_edit(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"

@@ -1,3 +1,7 @@
+import json
+import uuid
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 
@@ -420,7 +424,7 @@ def payment(request):
 
             Please ignore this email, if you didn't initiate this transaction!
         """
-        # placing the code and user name in the email bogy text
+        # placing the code and username in the email bogy text
         email_text = text.format(
             guestName=receiver.user.first_name + " " + receiver.user.last_name, code=code)
 
@@ -486,24 +490,25 @@ def drinks(request):
     alldrinks = Drink.objects.all()
     context = {
         "role": role,
-        'drinks': drinks
+        'drinks': drinks,
+        "alldrinks": alldrinks,
     }
     if request.method == "POST":
         if 'add' in request.POST:
-            item = Drink(brand=request.POST.get("drink_brand"), drinkType=request.POST.get(
-                "drinkType"), price=request.POST.get("price"), initial_stock=request.POST.get("initial-stock"))
+            item = Drink(brand=request.POST.get("drink_brand"),
+                         drinkType=request.POST.get("drinkType"),
+                         price=request.POST.get("price"),
+                         restock_level=request.POST.get("restock"))
             item.save()
             drinks = Drink.objects.all()
 
         elif 'save' in request.POST:
             id = request.POST.get("id")
             drinks = Drink.objects.get(id=id)
-            drinks.quantity = request.POST.get("quantity")
             drinks.price = request.POST.get("price")
-            drinks.initial_stock = request.POST.get("initial-stock")
-            drinks.topup_stock = request.POST.get("topup-stock")
             drinks.save()
             drinks = Drink.objects.all()
+
         if "filter" in request.POST:
             # if request.POST.get("id") != "":
             #     drinks = drinks.filter(
@@ -526,7 +531,6 @@ def drinks(request):
             "id": request.POST.get("id"),
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
-            "q": request.POST.get("q"),
 
         }
         return render(request, path + "drinks.html", context)
@@ -569,7 +573,7 @@ def sales(request):
         if form.is_valid():
             print('Validated')
             form.save()
-            messages.success(request, "Sales info saved")
+            messages.success(request, "Sales info saved. Print receipt.")
 
         context = {
             "form": form,
@@ -581,6 +585,150 @@ def sales(request):
             "q": request.POST.get("q"),
 
         }
-        return render(request, path + "sales.html", context)
+        return render(request, path + "receipt.html", context)
 
     return render(request, path + "sales.html", context)
+
+
+@login_required(login_url='login')
+def order(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    order = Sales()
+
+    orders = json.loads(request.body)
+    print(orders)
+    total = 0
+    receipt_id = uuid.uuid4()
+    receipt = Receipt()
+    receipt.receipt_id = receipt_id
+    receipt.details = orders['myRows']
+    receipt.save()
+    receipt = Receipt.objects.get(receipt_id=receipt_id)
+
+    for item in orders['myRows']:
+        drink = Drink.objects.get(brand=item['Item'])
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), receipt=receipt)
+
+        print(item['Item'])
+        print(receipt)
+        total += float(item['Total'])
+    print(total)
+
+    #return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
+    return HttpResponse(json.dumps({'valid': True, 'orders': orders, 'total': total}), content_type='application/json')
+
+
+@login_required(login_url='login')
+def print_receipt(request, orders, total):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    order = Sales()
+    print(orders)
+
+    return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
+
+
+@login_required(login_url='login')
+def restock(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+    form = RestockForm()
+    drinks = Drink.objects.all()
+    context = {
+        "form": form,
+        "role": role,
+        'drinks': drinks,
+        'view': 'restock'
+    }
+    if request.method == "POST":
+        form = RestockForm(request.POST)
+        print('Posted')
+        if form.is_valid():
+            print('Validated')
+            form.save()
+            messages.success(request, "Item restocked.")
+
+        context = {
+            "form": form,
+            "role": role,
+            "drinks": drinks,
+            "id": request.POST.get("id"),
+            "brand": request.POST.get("drink_brand"),
+            "type": request.POST.get("type"),
+            "q": request.POST.get("q"),
+
+        }
+        return render(request, path + "drinks.html", context)
+
+    return render(request, path + "stock.html", context)
+
+
+@login_required(login_url='login')
+def opening_stock(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+    form = OpeningStockForm()
+    drinks = Drink.objects.all()
+    context = {
+        "form": form,
+        "role": role,
+        'drinks': drinks,
+    }
+    if request.method == "POST":
+        form = OpeningStockForm(request.POST)
+        print('Posted')
+        if form.is_valid():
+            print('Validated')
+            form.save()
+            messages.success(request, "Opening stock saved for the period.")
+
+        context = {
+            "form": form,
+            "role": role,
+            "drinks": drinks,
+            "id": request.POST.get("id"),
+            "brand": request.POST.get("drink_brand"),
+            "type": request.POST.get("type"),
+            "q": request.POST.get("q"),
+
+        }
+        return render(request, path + "drinks.html", context)
+
+    return render(request, path + "stock.html", context)
+
+
+@login_required(login_url='login')
+def closing_stock(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+    form = ClosingStockForm()
+    drinks = Drink.objects.all()
+    context = {
+        "form": form,
+        "role": role,
+        'drinks': drinks,
+    }
+    if request.method == "POST":
+        form = ClosingStockForm(request.POST)
+        print('Posted')
+        if form.is_valid():
+            print('Validated')
+            form.save()
+            messages.success(request, "Closing stock saved for the period.")
+
+        context = {
+            "form": form,
+            "role": role,
+            "drinks": drinks,
+            "id": request.POST.get("id"),
+            "brand": request.POST.get("drink_brand"),
+            "type": request.POST.get("type"),
+            "q": request.POST.get("q"),
+
+        }
+        return render(request, path + "drinks.html", context)
+
+    return render(request, path + "stock.html", context)
