@@ -111,6 +111,8 @@ def add_room(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
 
+    rooms = Room.objects.all()
+
     if request.method == "POST":
         guest = None
         if role == 'guest':
@@ -124,24 +126,27 @@ def add_room(request):
         numberOfBeds = request.POST.get('beds')
         roomType = request.POST.get('type')
         price = request.POST.get('price')
+        name = request.POST.get('name')
+        caution_fee = request.POST.get('caution_fee')
         print(capacity)
         room = Room(number=number, capacity=capacity,
-                    numberOfBeds=numberOfBeds, roomType=roomType, price=price)
+                    numberOfBeds=numberOfBeds, roomType=roomType, price=price, name=name, caution_fee=caution_fee)
 
         room.save()
         return redirect('rooms')
 
     context = {
-        "role": role
+        "role": role,
+        'rooms': rooms
     }
     return render(request, path + "add-room.html", context)
 
 
 @login_required(login_url='login')
-def room_profile(request, _id):
+def room_profile(request, pk):
     role = str(request.user.groups.all()[0])
     path = role + "/"
-    tempRoom = Room.objects.get(number=_id)
+    tempRoom = Room.objects.get(number=pk)
     bookings = Booking.objects.filter(roomNumber=tempRoom)
     guests = Guest.objects.all()
     bookings2 = Booking.objects.all()
@@ -208,9 +213,10 @@ def room_edit(request, pk):
 
     if request.method == 'POST':
         form1 = editRoom(request.POST, instance=room)
+        print(room.number)
         if form1.is_valid():
             form1.save()
-            return redirect("room-profile", id=room.number)
+            return redirect("room-profile", pk=room.number)
     return render(request, path + "room-edit.html", context)
 
 

@@ -8,7 +8,7 @@ from .models import *
 class editRoom(ModelForm):
     class Meta:
         model = Room
-        fields = ["capacity", "numberOfBeds", "roomType", "price"]
+        fields = ["capacity", "numberOfBeds", "roomType", "price", "caution_fee"]
 
     widgets = {'roomType': Select(
         attrs={'class': "form-control w-100 p-2", 'placeholder': 'Room Type'})}

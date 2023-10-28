@@ -53,7 +53,7 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th class="text-white">Apartment Number<input type="number" name="number" value="{{number}}"
+                    <th class="text-white">Apartment Name<input type="number" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Capacity<input type="number" name="capacity" value="{{capacity}}"
                             class="form-control border border-secondary"></th>
@@ -74,7 +74,7 @@
         <tbody>
             {% for room in rooms %}
             <tr>
-                <td>{{ room.number }}</td>
+                <td>{{ room.name }}</td>
                 <td>{{ room.capacity }}</td>
                 <td>{{ room.numberOfBeds }}</td>
                 <td>{{ room.get_roomType_display }}</td>
