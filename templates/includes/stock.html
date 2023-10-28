@@ -1,18 +1,10 @@
 <div class="container">
     <div class="shadow-lg p-3">
-        <div class="mt-5 ">
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-                {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
-        </div>
+
         <form action="" method="POST">
             {% csrf_token %}
             <div class="row mt-5">
-                <div-- class="col-6">
+                <div class="col-6">
 
                     <div class="form-group" id="sel">
                         <!--<label for="item-brand"><b>Brand: </b></label>

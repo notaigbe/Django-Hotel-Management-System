@@ -109,7 +109,8 @@ class Drink(models.Model):
     brand = models.CharField(max_length=50)
     drinkType = models.CharField(max_length=20, choices=DRINK_TYPES)
     quantity = models.IntegerField(default=0)
-    price = models.FloatField()
+    price = models.FloatField(default=0.0)
+    total_sales = models.FloatField(default=0.0)
     restock_level = models.IntegerField(default=0)
 
     def __str__(self):
@@ -133,6 +134,7 @@ class Sales(models.Model):
             if stock.quantity > 0:
                 temp = stock.quantity
                 stock.quantity -= self.quantity
+                stock.total_sales += float(self.amount)
                 if stock.quantity <= 0:
                     stock.quantity = temp
                     # receipt = Receipt.objects.last()
