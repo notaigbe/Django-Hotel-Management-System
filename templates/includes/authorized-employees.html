@@ -1,3 +1,4 @@
+{% load group_check from template_filters %}
 <div class="container py-5">
 
     {% for message in messages %}
@@ -41,7 +42,7 @@
         <tbody>
         {% if  role == "manager" %}
             {% for employee in employees %}
-            {% if employee.user.groups.first != 'admin' %}
+            {% if not employee.user|group_check:'admin' %}
             <tr>
                 <td>{{ employee.user.id }}</td>
                 <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
