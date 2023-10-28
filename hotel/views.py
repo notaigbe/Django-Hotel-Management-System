@@ -636,7 +636,7 @@ def report(request):
     drinks = Drink.objects.all()
     sales = Sales.objects.all()
 
-    return render(request, path + 'sales_report.html', {'sales': sales, 'drinks':drinks})
+    return render(request, path + 'sales_report.html', {'sales': sales, 'drinks':drinks, 'role':role})
 
 
 @login_required(login_url='login')
