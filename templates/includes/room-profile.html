@@ -6,12 +6,12 @@
             <div class="col-6">
 
                 <div class="p-2 h4">
-                    <span>Room Number:</span>
+                    <span>Apartment Number:</span>
                     <span class="font-weight-normal">{{room.number}}</span>
                 </div>
 
                 <div class="p-2 h4">
-                    <span>Number of Beds:</span>
+                    <span>Number of Rooms:</span>
                     <span class="font-weight-normal">{{room.numberOfBeds}}</span>
                 </div>
 
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="p-2 h4">
-                    <span>Room Type:</span>
+                    <span>Apartment Type:</span>
                     <span class="font-weight-normal">{{ room.get_roomType_display }}</span>
 
                 </div>
@@ -46,7 +46,7 @@
                             class="form-control w-50 mb-2">
                         <input type="date" placeholder="Enter End Date" name="bed" required
                             class="form-control w-50 mb-2">
-                        <button name="lockRoom" type="submit" class="btn btn-info w-50">Lock This Room</button>
+                        <button name="lockRoom" type="submit" class="btn btn-info w-50">Lock This Apartment</button>
                         <br>
 
                     </form>
@@ -55,12 +55,12 @@
                         <hr>
                         {% if room.statusStartDate != None %}
                         <div>
-                            This room is closed in between: <br>
+                            This apartment is closed in between: <br>
                             from {{room.statusStartDate}} <br>
                             to {{room.statusEndDate}}
                             <br>
                             <hr>
-                            <button name="unlockRoom" type="submit" class="btn btn-info w-50">Unlock This Room</button>
+                            <button name="unlockRoom" type="submit" class="btn btn-info w-50">Unlock this Apartment</button>
                         </div>
                         {% endif %}
 
@@ -86,7 +86,7 @@
             <div class="table-header row">
 
                 <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                    <h5>This room has these reservations</h5>
+                    <h5>This apartment has these reservations</h5>
                 </div>
 
             </div>

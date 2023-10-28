@@ -12,15 +12,15 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th class="text-white">Room Number<input type="number" min="0" name="number" value="{{number}}"
+                    <th class="text-white">Apartment Number<input type="number" min="0" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Guest Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Date of Reservation<input type="date" name="rez" value="{{rez}}"
                             class="form-control border border-secondary"></th>
-                    <th class="text-white">Start Day<input type="date" name="fd" value="{{fd}}"
+                    <th class="text-white">Check In<input type="date" name="fd" value="{{fd}}"
                             class="form-control border border-secondary"></th>
-                    <th class="text-white">End Day<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
+                    <th class="text-white">Check Out<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
                     </th>
                     <th class="pb-5 text-white">Phone</th>
                     <th class="pb-5 text-white">Total amount</th>

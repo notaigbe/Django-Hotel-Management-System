@@ -8,7 +8,7 @@
     </div>
     <div class="clearfix">
         {% if role == "manager" or role == "admin" %}
-        <a href="{% url 'add-room' %}" class="btn btn-danger rounded float-right">Add Room <i
+        <a href="{% url 'add-room' %}" class="btn btn-danger rounded float-right">Add Apartment <i
                 class="fas fa-plus"></i></a>
         {% endif %}
     </div>
@@ -16,8 +16,8 @@
     <div class="table-header row mt-3 clearfix">
 
         <div class="col-sm-12 col-md-12 col-lg-6 mb-4">
-            <h2>Room List</h2>
-            <span class="text-muted">Filter available room with time interval</span>
+            <h2>Apartment List</h2>
+            <span class="text-muted">Filter available apartments with time interval</span>
         </div>
 
 
@@ -27,14 +27,14 @@
                 <div class="row">
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">First Date</label>
+                        <label for="example-date-input" class="col-form-label">Check In Date</label>
                         <div class="">
                             <input class="form-control" type="date" name="fd" value="{{fd}}" id="example-date-input">
                         </div>
                     </div>
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">Last Date</label>
+                        <label for="example-date-input" class="col-form-label">Check Out Date</label>
                         <div class="">
                             <input class="form-control" type="date" name="ld" value="{{ld}}" id="example-date-input">
                         </div>
@@ -53,13 +53,13 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th class="text-white">Room Number<input type="number" name="number" value="{{number}}"
+                    <th class="text-white">Apartment Number<input type="number" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Capacity<input type="number" name="capacity" value="{{capacity}}"
                             class="form-control border border-secondary"></th>
-                    <th class="text-white">Number of Beds<input type="number" name="nob" value="{{nob}}"
+                    <th class="text-white">Number of Rooms<input type="number" name="nob" value="{{nob}}"
                             class="form-control border border-secondary"></th>
-                    <th class="text-white">Room Type<input type="text" name="type" value="{{type}}"
+                    <th class="text-white">Apartment Type<input type="text" name="type" value="{{type}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Price <input type="number" step="0.01" name="price" value="{{price}}"
                             class="form-control border border-secondary"></th>
@@ -81,10 +81,12 @@
                 <td>{{ room.price }}</td>
 
                 {% if role != "guest" %}
-                <td> <a href="{% url 'room-profile' room.number %}" class="btn btn-info btn-sm w-100">View</a>
-                </td>
-                {% if role == 'manager' or role == 'admin' %}<td> <a href="{% url 'room-edit' room.number %}"
-                        class="btn btn-sm btn-primary w-100">Edit&nbsp;Room</a></td> {% endif %}
+                <td> <a href="{% url 'room-profile' room.number %}" class="btn btn-info btn-sm w-100 p-2 mb-2">View</a>
+                {% if role == 'manager' or role == 'admin' %}
+                <a href="{% url 'room-edit' room.number %}"
+                        class="btn btn-sm btn-primary w-100 p-2">Edit Apartment</a>
+                {% endif %}</td>
+
                 {% endif %}
                 {% if role == "guest" or role == "receptionist" or role == "admin" %}
                 <td>
@@ -93,7 +95,7 @@
                         <input type="hidden" value="{{ room.number }}" name="roomid">
                         <input type="date" value="{{fd}}" name="fd" class="form-control">
                         <input type="date" value="{{ld}}" name="ld" class="form-control">
-                        <button type="submit" name="book" id="book" class="btn btn-sm btn-primary px-3">Book</button>
+                        <button type="submit" name="book" id="book" class="btn btn-sm btn-primary px-3 w-100 mt-2">Book</button>
                     </form>
                 </td>
                 {% endif %}

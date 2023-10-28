@@ -6,7 +6,7 @@
                 <div class="col-6">
 
                     <div class="form-group">
-                        <label for="item-quantity"><b>Number Of Beds: </b></label>
+                        <label for="item-quantity"><b>Number of Rooms: </b></label>
                         <input type="number" min="0" class="form-control border border-secondary"
                             value="{{room.numberOfBeds}}" id="id_numberOfBeds" name="numberOfBeds">
                     </div>
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="item-quantity"><b>Room Type</b></label>
+                        <label for="item-quantity"><b>Apartment Type</b></label>
                         <select name="roomType" required="" id="id_roomType"
                             class="form-control border border-secondary">
                             {% for room in rooms %}

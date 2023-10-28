@@ -624,8 +624,19 @@ def order(request):
         total += float(item['Total'])
     print(total)
 
-    #return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
+    # return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
     return HttpResponse(json.dumps({'valid': True, 'orders': orders, 'total': total}), content_type='application/json')
+
+
+@login_required(login_url='login')
+def report(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    drinks = Drink.objects.all()
+    sales = Sales.objects.all()
+
+    return render(request, path + 'sales_report.html', {'sales': sales, 'drinks':drinks})
 
 
 @login_required(login_url='login')
