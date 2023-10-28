@@ -39,7 +39,24 @@
             </tr>
         </thead>
         <tbody>
+        {% if  role == "manager" %}
             {% for employee in employees %}
+            {% if employee.user.groups.first != 'admin' %}
+            <tr>
+                <td>{{ employee.user.id }}</td>
+                <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
+                <td>{{ employee.user.email }}</td>
+                <td>{{ employee.phoneNumber }}</td>
+                <td>{{ employee.user.groups.first }}</td>
+                <td> <a href="{% url 'employee-profile' employee.user.id  %}"
+                        class="btn btn-sm btn-info w-100">Detail</a>
+                </td>
+
+            </tr>
+            {% endif %}
+            {% endfor %}
+        {% else %}
+        {% for employee in employees %}
             <tr>
                 <td>{{ employee.user.id }}</td>
                 <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
@@ -52,7 +69,7 @@
 
             </tr>
             {% endfor %}
-
+        {% endif %}
         </tbody>
 
     </table>
