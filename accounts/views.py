@@ -526,7 +526,7 @@ def change_password(request, pk):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Password updated successfully')
-            return redirect('employee_details_edit', pk)
+            return redirect('employee-edit', pk)
         else:
             messages.error(request, 'error')
         return render(request, path + 'change-password.html', context)
