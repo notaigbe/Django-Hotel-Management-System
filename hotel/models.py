@@ -115,11 +115,13 @@ class Drink(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.brand, self.price)
 
+
 class Sales(models.Model):
-    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
+    item = models.ForeignKey(Drink, on_delete=models.CASCADE)
     amount = models.FloatField()
     quantity = models.IntegerField()
     sales_date = models.DateTimeField(auto_now_add=True)
+
     # receipt = models.ForeignKey(Receipt, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -150,6 +152,7 @@ class Sales(models.Model):
     class Meta:
         verbose_name_plural = "Sales"
 
+
 class Receipt(models.Model):
     receipt_id = models.UUIDField(editable=False, unique=True)
     details = models.JSONField(default=dict)
@@ -160,9 +163,8 @@ class Receipt(models.Model):
         return '{}'.format(self.receipt_id)
 
 
-
 class Opening_Stock(models.Model):
-    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING, related_name='opening_stock')
+    item = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name='opening_stock')
     quantity = models.IntegerField()
     date = models.DateField(auto_now_add=True)
 
@@ -185,7 +187,7 @@ class Opening_Stock(models.Model):
 
 
 class Restock(models.Model):
-    item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
+    item = models.ForeignKey(Drink, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
 
