@@ -116,24 +116,15 @@ class Drink(models.Model):
         return '{} - {}'.format(self.brand, self.price)
 
 
-class Receipt(models.Model):
-    receipt_id = models.UUIDField(editable=False, unique=True)
-    details = models.JSONField(default=dict)
-    sales_date = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return str(self.receipt_id)
-
-
 class Sales(models.Model):
     item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
     amount = models.FloatField()
     quantity = models.IntegerField()
-    sales_date = models.DateTimeField(auto_now=True)
-    receipt = models.ForeignKey(Receipt, on_delete=models.PROTECT)
+    sales_date = models.DateTimeField(auto_now_add=True)
+    # receipt = models.ForeignKey(Receipt, on_delete=models.PROTECT)
 
     def __str__(self):
-        return '{} - {}'.format(self.item, self.receipt)
+        return '{}-{}'.format(self.item, self.sales_date)
 
     def save(self, *args, **kwargs):
         try:
@@ -141,20 +132,34 @@ class Sales(models.Model):
             if stock.quantity > 0:
                 temp = stock.quantity
                 stock.quantity -= self.quantity
-                if stock.quantity < 0:
+                if stock.quantity <= 0:
                     stock.quantity = temp
+                    # receipt = Receipt.objects.last()
+                    # receipt.delete()
                     raise ValidationError('Insufficient Stock. Please update stock and try again.')
             else:
-                stock.quantity -= self.quantity
+                # receipt = Receipt.objects.last()
+                # receipt.delete()
+                raise ValidationError('Insufficient Stock. Please update stock and try again.')
 
             # stock.total_sales += stock.price * self.quantity
             stock.save()
-        except Exception as e:
+        except ValidationError as e:
             print(e)
         super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Sales"
+
+
+class Receipt(models.Model):
+    receipt_id = models.UUIDField(editable=False, unique=True)
+    details = models.JSONField(default=dict)
+    # sales_date = models.DateTimeField(auto_now_add=True)
+    order = models.ForeignKey(Sales, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}'.format(self.receipt_id)
 
 
 class Opening_Stock(models.Model):

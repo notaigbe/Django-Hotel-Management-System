@@ -488,10 +488,12 @@ def drinks(request):
 
     drinks = Drink.objects.all()
     alldrinks = Drink.objects.all()
+    form = DrinkForm()
     context = {
         "role": role,
         'drinks': drinks,
         "alldrinks": alldrinks,
+        'form': form
     }
     if request.method == "POST":
         if 'add' in request.POST:
@@ -500,6 +502,9 @@ def drinks(request):
                          price=request.POST.get("price"),
                          restock_level=request.POST.get("restock"))
             item.save()
+            # form.save()
+
+            messages.success(request, 'Drink added successfully')
             drinks = Drink.objects.all()
 
         elif 'save' in request.POST:
@@ -569,9 +574,9 @@ def sales(request):
     }
     if request.method == "POST":
         form = SalesForm(request.POST)
-        print('Posted')
+
         if form.is_valid():
-            print('Validated')
+            print('Form Validated')
             form.save()
             messages.success(request, "Sales info saved. Print receipt.")
 
@@ -600,16 +605,19 @@ def order(request):
     orders = json.loads(request.body)
     print(orders)
     total = 0
-    receipt_id = uuid.uuid4()
-    receipt = Receipt()
-    receipt.receipt_id = receipt_id
-    receipt.details = orders['myRows']
-    receipt.save()
-    receipt = Receipt.objects.get(receipt_id=receipt_id)
 
     for item in orders['myRows']:
         drink = Drink.objects.get(brand=item['Item'])
-        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), receipt=receipt)
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']))
+        sales_order = Sales.objects.last()
+
+        receipt_id = uuid.uuid4()
+        receipt = Receipt()
+        receipt.receipt_id = receipt_id
+        receipt.details = orders['myRows']
+        receipt.order = sales_order
+        receipt.save()
+        # receipt = Receipt.objects.get(receipt_id=receipt_id)
 
         print(item['Item'])
         print(receipt)
@@ -621,14 +629,14 @@ def order(request):
 
 
 @login_required(login_url='login')
-def print_receipt(request, orders, total):
+def print_receipt(request, receipt):
     role = str(request.user.groups.all()[0])
     path = role + "/"
+    purchase = Sales.objects.filter(receipt=receipt)
+    # order = Sales()
+    print(purchase)
 
-    order = Sales()
-    print(orders)
-
-    return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
+    return render(request, path + 'receipt.html', {'purchase': purchase})
 
 
 @login_required(login_url='login')

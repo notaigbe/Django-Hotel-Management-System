@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from .views import login_page, logout_user, register_page, guests, employees, completeTask, tasks, employee_details, \
-    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee
+    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee, change_password
 
 urlpatterns = [
     path('backoffice/login/', login_page, name="login"),
@@ -18,4 +18,5 @@ urlpatterns = [
 
     path('guest-edit/<str:pk>', guest_edit, name="guest-edit"),
     path('guest-profile/<str:pk>', guest_profile, name="guest-profile"),
+    path('backoffice/password/<pk>', change_password, name='change_password')
 ]

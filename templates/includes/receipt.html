@@ -71,39 +71,13 @@
             <p class="centered">CANLEE INN
                 <br>#3 Ogiugo Avenue, Off Aideyan & Aikhionbare
                 <br>Streets, G.R.A. Benin City</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="quantity">Q.</th>
-                        <th class="description">Description</th>
-                        <th class="price">N</th>
-                    </tr>
-                </thead>
-                <tbody>
+
                 {% for order in orders %}
-                    <tr>
-                        <td class="quantity">{{ order.quantity }}</td>
-                        <td class="description">{{ order.item }}</td>
-                        <td class="price">{{ order.amount }}</td>
-                    </tr>
+                        {{ order.quantity }}
+                        {{ order.item }}
+                        {{ order.amount }}
                 {% endfor %}
-                    <tr>
-                        <td class="quantity">2.00</td>
-                        <td class="description">JAVASCRIPT BOOK</td>
-                        <td class="price">$10.00</td>
-                    </tr>
-                    <tr>
-                        <td class="quantity">1.00</td>
-                        <td class="description">STICKER PACK</td>
-                        <td class="price">$10.00</td>
-                    </tr>
-                    <tr>
-                        <td class="quantity"></td>
-                        <td class="description">TOTAL</td>
-                        <td class="price">{{ item.total }}</td>
-                    </tr>
-                </tbody>
-            </table>
+
             <p class="centered">Thanks for your patronage!
                 <br>Canlee Inn</p>
         </div>

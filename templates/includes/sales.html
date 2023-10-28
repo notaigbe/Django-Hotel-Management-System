@@ -167,35 +167,42 @@
 
             function PrintElem() {
             var mywindow = window.open('', 'PRINT');
-            mywindow.document.write('<html><head><title>Receipt</title>');
-            mywindow.document.write('</head><body style="text-align:center;font: Georgia, "Times New Roman", Times, serif;background: #fff;font-size: 22pt;margin:20px auto auto 50px;" >');
+            mywindow.document.write('<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Receipt</title>');
+            mywindow.document.write('</head><body style="text-align:center;font: Georgia, "Times New Roman", Times, serif;background: #fff;font-size: 12pt;" >');
             mywindow.document.write('<header style="text-align:center; white-space:nowrap;overflow:hidden;line-height: 1em;">' +
-                '<img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="Logo" style="max-width: inherit; width: inherit;">' +
+                '<img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="" style="max-width: 100px; width: 100px;">' +
                 '<p  style="text-align: center; align-content: center;">Payment Receipt</p>' +
-                '<p style="text-align: center; align-content: center;">CANLEE INN<br>#3 Ogiugo Avenue, <br>Off Aideyan & Aikhionbare<br>Streets, G.R.A. Benin City</p>' +
+                '<p style="text-align: center; align-content: center;">CANLEE INN<br>#3 Ogiugo Avenue, Off<br>Aideyan & Aikhionbare<br>Streets, G.R.A.<br>Benin City</p>' +
                 '</header>');
-            mywindow.document.write('<content style="width: 155px; max-width: 155px;text-align: center; align-content: center;">' +
+            mywindow.document.write('<content style="width: 40px; max-width: 40px;text-align: center; align-content: center;">' +
                     '<table style="margin-left: auto;margin-right: auto;border-collapse: collapse;">' +
-                    '<thead><tr  style="border-top: 1px solid black;border-collapse: collapse;"><th  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">Q.</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">Description</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">N</th></tr></thead>' +
+                    '<thead><tr  style="border-top: 1px solid black; border-bottom: 1px solid black;border-collapse: collapse;"><th  style="border-top: 1px solid black; border-collapse: collapse;width: 10px; max-width: 10px; word-break: break-all;">Q.</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">Item</th><th  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">N</th></tr></thead>' +
                     '<tbody>');
 
             for (var item of orders.myRows){
             console.log(item);
             console.log(item.Item);
-            mywindow.document.write('<tr  style="border-top: 1px solid black;border-collapse: collapse;"><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + item.Quantity + '</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">' + item.Item + '</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + item.Price + '</td></tr>');
+            mywindow.document.write('<tr  style="border-collapse: collapse;"><td  style="border-collapse: collapse;width: 10px; max-width: 10px; word-break: break-all;">' + item.Quantity + '</td><td  style="border-collapse: collapse;width: 75px;max-width: 75px;">' + item.Item + '</td><td  style="border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + item.Total + '</td></tr>');
             }
             mywindow.document.write('<tr  style="border-top: 1px solid black;border-collapse: collapse;"><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;"></td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 75px;max-width: 75px;">TOTAL</td><td  style="border-top: 1px solid black; border-collapse: collapse;width: 40px; max-width: 40px; word-break: break-all;">' + total + '</td></tr>');
             mywindow.document.write('</tbody></table></content>' +
                 '<footer>' +
-                '<hr style="margin-top:30pt;margin-bottom:30pt;">' +
+                '<div></div>' +
+                '<div></div>' +
+                '<p></p>' +
+                '<p></p>' +
+                '<p style="text-align:center;">Customer Sign</p>' +
+                '<hr>' +
                     '<p style="text-align:right;">&copy Gnotable Technologies</p>' +
-                '</footer>'+
-                '');
+                '</footer>');
             mywindow.document.write('</body></html>');
             mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
-            mywindow.print();
-            mywindow.close();
+
+            mywindow.onload=function(){ // necessary if div contains images
+                mywindow.focus(); // necessary for IE >= 10*/
+                mywindow.print();
+                mywindow.close();
+            };
             return true;
         }
     </script>

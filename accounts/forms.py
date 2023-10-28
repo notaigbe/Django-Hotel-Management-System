@@ -6,11 +6,6 @@ from django import forms
 from .models import *
 
 
-# class CreateUserForm(UserCreationForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'email', 'password1', 'password1']
-
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User

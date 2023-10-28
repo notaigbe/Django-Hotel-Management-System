@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from django.db.models import Q, Count
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 
@@ -252,7 +252,10 @@ def employees(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
 
-    employees = Employee.objects.all()
+    if role == 'manager':
+        employees = Employee.objects.all().exclude(user__groups=4).exclude(user=request.user)
+    else:
+        employees = Employee.objects.all().exclude(user=request.user)
 
     if request.method == "POST":
         if "filter" in request.POST:
@@ -311,6 +314,7 @@ def employee_details(request, pk):
         user.last_name = request.POST.get("last_name")
         user.email = request.POST.get("email")
         employee.phoneNumber = request.POST.get("phoneNumber")
+        user.password = request.POST.get("password")
         user.save()
         employee.save()
         return redirect("home")
@@ -349,11 +353,15 @@ def employee_details_edit(request, pk):
     }
 
     if request.method == "POST":
+        print(request.POST)
         form1 = editEmployee(request.POST, instance=employee)
         form2 = editUser(request.POST, instance=tempuser)
         if form1.is_valid() and form2.is_valid():
             form1.save()
             form2.save()
+            messages.info(request, "Staff Update Successful")
+        else:
+            messages.error(request, "Staff Update Failed")
 
     return render(request, path + "employee-edit.html", context)
 
@@ -367,17 +375,17 @@ def delete_employee(request, pk):
     print(tempuser)
     employee = Employee.objects.get(user=tempuser)
 
-    #if request.method == "POST":
+    # if request.method == "POST":
 
-    #form1 = editEmployee(instance=employee)
-    #form2 = editUser(instance=tempuser)
+    # form1 = editEmployee(instance=employee)
+    # form2 = editUser(instance=tempuser)
 
     context = {
         "role": role,
         "employee": employee,
         "user": tempuser,
-        #"form1": form1,
-        #"form2": form2
+        # "form1": form1,
+        # "form2": form2
     }
 
     if request.method == "POST":
@@ -500,3 +508,26 @@ def completeTask(request, pk):
 
     }
     return render(request, path + "completeTask.html", context)
+
+
+def change_password(request, pk):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    tempuser = User.objects.get(id=pk)
+    form = SetPasswordForm(tempuser)
+    if request.method == 'POST':
+        form = SetPasswordForm(tempuser, request.POST)
+        context = {
+            "role": role,
+            "user": tempuser,
+            "form": form,
+        }
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Password updated successfully')
+            return redirect('employee_details_edit', pk)
+        else:
+            messages.error(request, 'error')
+        return render(request, path + 'change-password.html', context)
+    return render(request, path + 'change-password.html', {'form': form, 'role': role})
