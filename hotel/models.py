@@ -115,7 +115,6 @@ class Drink(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.brand, self.price)
 
-
 class Sales(models.Model):
     item = models.ForeignKey(Drink, on_delete=models.DO_NOTHING)
     amount = models.FloatField()
@@ -151,15 +150,15 @@ class Sales(models.Model):
     class Meta:
         verbose_name_plural = "Sales"
 
-
 class Receipt(models.Model):
     receipt_id = models.UUIDField(editable=False, unique=True)
     details = models.JSONField(default=dict)
-    # sales_date = models.DateTimeField(auto_now_add=True)
+    sales_date = models.DateTimeField(auto_now_add=True)
     order = models.ForeignKey(Sales, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{}'.format(self.receipt_id)
+
 
 
 class Opening_Stock(models.Model):
