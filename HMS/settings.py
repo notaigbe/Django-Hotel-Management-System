@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # third part
     'phonenumber_field',
+    'mathfilters',
 
     # own
     'hotel',

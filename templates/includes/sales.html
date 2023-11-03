@@ -2,6 +2,14 @@
 <div class="container">
     <div class="shadow-lg p-3">
 
+        {% for stock in stocks %}
+            {% if stock.item.quantity < stock.item.restock_level  %}
+                <span> {{ stock.item.brand }} <span class="badge badge-danger">{{ stock.item.quantity }} </span></span>
+            {% else %}
+                <span> {{ stock.item.brand }} <span class="badge badge-success">{{ stock.item.quantity }} </span></span>
+            {% endif %}
+        {% endfor %}
+
         <form action="" method="POST">
             {% csrf_token %}
             <div class="row mt-5">

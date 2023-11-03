@@ -169,6 +169,7 @@ class Opening_Stock(models.Model):
     item = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name='opening_stock')
     quantity = models.IntegerField()
     date = models.DateField(auto_now_add=True)
+    close_stock = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.item, self.date)
@@ -176,7 +177,7 @@ class Opening_Stock(models.Model):
     def save(self, *args, **kwargs):
         try:
             stock = Drink.objects.get(brand=self.item.brand)
-            stock.quantity += self.quantity
+            stock.quantity = self.quantity
             stock.save()
 
         except Exception as e:

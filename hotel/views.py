@@ -1,3 +1,4 @@
+import calendar
 import json
 import uuid
 
@@ -25,6 +26,21 @@ from .forms import *
 def home(request):
     role = str(request.user.groups.all()[0])
     if role != "guest":
+        drinks = Drink.objects.all()
+        stocks = []
+        for drink in drinks:
+            stocks.append(Opening_Stock.objects.filter(item__brand=drink.brand).last())
+
+        for stock in stocks:
+            # stock = Opening_Stock.objects.all().last
+            last_day_of_period = calendar.monthrange(stock.date.year, stock.date.month)
+            end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
+            if datetime.now() > end_of_stock_period:
+                print(stock.item)
+                print(stock.date)
+                stock.close_stock = stock.item.quantity
+                stock.save()
+                Opening_Stock.objects.create(item=stock.item, quantity=stock.item.quantity)
         return redirect("employee-profile", pk=request.user.id)
     else:
         return redirect("guest-profile", pk=request.user.id)
@@ -211,21 +227,21 @@ def announcements(request):
             return redirect('announcements')
 
         if "filter" in request.POST:
-            if (request.POST.get("id") != ""):
+            if request.POST.get("id") != "":
                 announcements = announcements.filter(
                     id__contains=request.POST.get("id"))
 
-            if (request.POST.get("content") != ""):
+            if request.POST.get("content") != "":
                 announcements = announcements.filter(
                     content__contains=request.POST.get("content"))
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 users = User.objects.filter(
                     Q(first_name__contains=request.POST.get("name")) | Q(last_name__contains=request.POST.get("name")))
                 employees = Employee.objects.filter(user__in=users)
                 announcements = announcements.filter(sender__in=employees)
 
-            if (request.POST.get("date") != ""):
+            if request.POST.get("date") != "":
                 announcements = announcements.filter(
                     date=request.POST.get("date"))
 
@@ -284,15 +300,15 @@ def storage(request):
             storages.save()
 
         if "filter" in request.POST:
-            if (request.POST.get("id") != ""):
+            if request.POST.get("id") != "":
                 storage = storage.filter(
                     id__contains=request.POST.get("id"))
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 storage = storage.filter(
                     itemName__contains=request.POST.get("name"))
 
-            if (request.POST.get("type") != ""):
+            if request.POST.get("type") != "":
                 storage = storage.filter(
                     itemType__contains=request.POST.get("type"))
 
@@ -567,10 +583,15 @@ def sales(request):
     path = role + "/"
     form = SalesForm()
     drinks = Drink.objects.all()
+    stocks = []
+    for drink in drinks:
+        stocks.append(Opening_Stock.objects.filter(item__brand=drink.brand).last())
+
     context = {
         "form": form,
         "role": role,
-        'drinks': drinks
+        'drinks': drinks,
+        'stocks': stocks
     }
     if request.method == "POST":
         form = SalesForm(request.POST)
@@ -636,7 +657,7 @@ def report(request):
     drinks = Drink.objects.all()
     sales = Sales.objects.all()
 
-    return render(request, path + 'sales_report.html', {'sales': sales, 'drinks':drinks, 'role':role})
+    return render(request, path + 'sales_report.html', {'sales': sales, 'drinks': drinks, 'role': role})
 
 
 @login_required(login_url='login')
@@ -701,7 +722,8 @@ def opening_stock(request):
         print('Posted')
         if form.is_valid():
             print('Validated')
-            form.save()
+            stock, created = Opening_Stock.objects.update_or_create(item=request.POST['item'], quantity=request.POST['quantity'])
+            # form.save()
             messages.success(request, "Opening stock saved for the period.")
 
         context = {

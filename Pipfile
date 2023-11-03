@@ -59,6 +59,7 @@ urllib3 = "==1.26.13"
 werkzeug = "==2.1.1"
 whitenoise = "==6.2.0"
 psycopg2-binary = "*"
+django-mathfilters = "*"
 
 [dev-packages]
 

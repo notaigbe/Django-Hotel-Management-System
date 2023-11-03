@@ -9,7 +9,7 @@
         <div class="col-sm-12 col-md-12 col-lg-6 mb-4">
             <a href="{% url 'opening_stock' %}" class="btn btn-sm btn-info px-3">Opening Stock</a>
             <a href="{% url 'restock' %}" class="btn btn-sm btn-warning px-3">Re-Stock</a>
-            <a href="{% url 'closing_stock' %}" class="btn btn-sm btn-secondary px-3">Closing Stock</a>
+            <!--a href="{% url 'closing_stock' %}" class="btn btn-sm btn-secondary px-3">Closing Stock</a-->
         </div>
     </div>
     <table class="table table-hover table-striped">
@@ -50,7 +50,11 @@
             {% for drink in drinks %}
             <tr>
                 <td>{{drink.id}}</td>
-                <td>{{drink.brand}} <span class="badge badge-primary">{{drink.quantity}}</span></td>
+                {% if drink.quantity < drink.restock_level  %}
+                <td>{{drink.brand}} <span class="badge badge-danger">{{drink.quantity}}</span></td>
+                {% else %}
+                <td>{{drink.brand}} <span class="badge badge-success">{{drink.quantity}}</span></td>
+                {% endif %}
                 <td>{{drink.drinkType}}</td>
                 <!--td>{{drink.quantity}}</td>
                 <td>{{drink.quantity}}</td-->
