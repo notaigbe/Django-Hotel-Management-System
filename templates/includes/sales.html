@@ -1,15 +1,15 @@
 {% load static %}
 <div class="container">
     <div class="shadow-lg p-3">
-
+<hr>
         {% for stock in stocks %}
             {% if stock.item.quantity < stock.item.restock_level  %}
-                <span> {{ stock.item.brand }} <span class="badge badge-danger">{{ stock.item.quantity }} </span></span>
+        <span> {{ stock.item.brand }} <sup><span class="badge badge-danger">{{ stock.item.quantity }}</span></sup> |</span>
             {% else %}
-                <span> {{ stock.item.brand }} <span class="badge badge-success">{{ stock.item.quantity }} </span></span>
+        <span> {{ stock.item.brand }} <sup><span class="badge badge-success">{{ stock.item.quantity }}</span></sup> |</span>
             {% endif %}
         {% endfor %}
-
+<hr>
         <form action="" method="POST">
             {% csrf_token %}
             <div class="row mt-5">
