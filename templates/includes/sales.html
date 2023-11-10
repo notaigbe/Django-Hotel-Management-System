@@ -88,8 +88,8 @@
         var sel = document.querySelector("select")
         var display_total = document.querySelector("p")
         var item=sel[sel.selectedIndex].text;
-        var brand=item.split('-')[0].trim();
-        var price=item.split('-')[1].trim();
+        var brand=item.split(' - ')[0].trim();
+        var price=item.split(' - ')[1].trim();
         var quantity=document.getElementById("quantity").value;
         var total=price * quantity;
 
