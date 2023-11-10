@@ -30,18 +30,20 @@ def register_page(request):
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
+                print('valid')
+                return_next = request.POST.get('next', '/')
                 if len(User.objects.filter(email=request.POST.get("email"))) != 0:
-                    messages.error(
+                    messages.warning(
                         request, f'Email address {request.POST.get("email")} already exists')
-                    return redirect('login')
+                    return redirect('register')
                 if len(Guest.objects.filter(phoneNumber=request.POST.get("phoneNumber"))) != 0:
-                    messages.error(
+                    messages.warning(
                         request, f'User with phone number {request.POST.get("phoneNumber")} already exists')
-                    return redirect('login')
+                    return redirect('register')
 
                 user = form.save()
                 username = form.cleaned_data.get('email')
-                password = form.cleaned_data.get('password1')
+                password = "guest_pass"
 
                 group = Group.objects.get(name="guest")
                 user.groups.add(group)
@@ -54,7 +56,8 @@ def register_page(request):
                     request, 'Guest account created successfully for ' + username)
                 # user = authenticate(request, username=username, password=password)
 
-                return redirect("guest-profile", pk=user.id)
+                # return redirect("guest-profile", pk=user.id)
+                return redirect(return_next)
 
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
@@ -189,21 +192,21 @@ def guests(request):
         if "filterGuest" in request.POST:
             guests = Guest.objects.all()
             users = User.objects.all()
-            if (request.POST.get("id") != ""):
+            if request.POST.get("id") != "":
                 users = users.filter(
                     id__contains=request.POST.get("id"))
                 guests = guests.filter(user__in=users)
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 users = users.filter(
                     Q(first_name__contains=request.POST.get("name")) | Q(last_name__contains=request.POST.get("name")))
                 guests = guests.filter(user__in=users)
 
-            if (request.POST.get("email") != ""):
+            if request.POST.get("email") != "":
                 users = users.filter(email__contains=request.POST.get("email"))
                 guests = guests.filter(user__in=users)
 
-            if (request.POST.get("number") != ""):
+            if request.POST.get("number") != "":
                 guests = guests.filter(
                     phoneNumber__contains=request.POST.get("number"))
 
@@ -467,17 +470,17 @@ def tasks(request):
             return redirect("tasks")
 
         if "filter" in request.POST:
-            if (request.POST.get("id") != ""):
+            if request.POST.get("id") != "":
                 tasks = tasks.filter(id=request.POST.get("id"))
 
-            if (request.POST.get("desc") != ""):
+            if request.POST.get("desc") != "":
                 tasks = tasks.filter(
                     description__contains=request.POST.get("desc"))
 
-            if (request.POST.get("fd") != ""):
+            if request.POST.get("fd") != "":
                 tasks = tasks.filter(startTime__gte=request.POST.get("fd"))
 
-            if (request.POST.get("ed") != ""):
+            if request.POST.get("ed") != "":
                 tasks = tasks.filter(endTime__lte=request.POST.get("ed"))
 
             context = {

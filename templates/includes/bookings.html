@@ -14,7 +14,7 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th class="text-white">Apartment Number<input type="number" min="0" name="number" value="{{number}}"
+                    <th class="text-white">Apartment<input type="number" min="0" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Guest Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
@@ -35,22 +35,24 @@
         <tbody>
             {% for booking in bookings %}
             <tr>
-                <td><a href="{% url 'room-profile' booking.roomNumber.number %}">{{booking.roomNumber.number}}</a></td>
-                <td><a href="{% url 'guest-profile' booking.guest.user.id %}">{{booking.guest.user.first_name}}</a></td>
+                <td><a href="{% url 'room-profile' booking.roomNumber.number %}">{{booking.roomNumber.name}}</a></td>
+                <td><a href="{% url 'guest-profile' booking.guest.user.id %}">{{booking.guest.user.first_name}} {{booking.guest.user.last_name}}</a></td>
                 <td>{{ booking.dateOfReservation }}</td>
                 <td>{{ booking.startDate }}</td>
                 <td>{{ booking.endDate }}</td>
                 <td>{{ booking.numOfDep }}</td>
                 <td>
-                    {% for key, value in totals.items %}
+                    {% for key, value in booking_cost.items %}
                     {% if key == booking %}
                     {{ value }}
                     {% endif %}
                     {% endfor %}
                 </td>
                 {% if role == "admin" or role == 'manager' %}
-                <td> <a href="{% url 'deleteBooking' booking.id %}"
-                        class="btn btn-sm btn-outline-danger">Delete&nbsp;Booking</a></td>
+                <td><a href="{% url 'printReceipt' booking.id %}"
+                        class="btn btn-sm btn-outline-primary mb-2 w-100">Print Receipt</a>
+                    <a href="{% url 'deleteBooking' booking.id %}"
+                        class="btn btn-sm btn-outline-danger w-100">Delete Booking</a></td>
                 {% endif %}
             </tr>
             {% endfor %}
@@ -58,6 +60,69 @@
 
     </table>
 
+<div class="table-header row">
 
+        <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
+            <h2>Reservations</h2>
+        </div>
+
+    </div>
+
+    <table class="table table-hover table-striped">
+        <thead class="bg-secondary rounded">
+            <tr>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <th class="text-white">Apartment<input type="number" min="0" name="number" value="{{number}}"
+                            class="form-control border border-secondary"></th>
+                    <th class="text-white">Guest Name<input type="text" name="name" value="{{name}}"
+                            class="form-control border border-secondary"></th>
+                    <th class="text-white">Date of Reservation<input type="date" name="rez" value="{{rez}}"
+                            class="form-control border border-secondary"></th>
+                    <th class="text-white">Check in<input type="date" name="fd" value="{{fd}}"
+                            class="form-control border border-secondary"></th>
+                    <th class="text-white">Check out<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
+                    </th>
+                    <!--th class="pb-5 text-white">Number of Dependants</th-->
+                    <th class="pb-5 text-white">Total amount</th>
+                    <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
+                </form>
+
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for booking in reservations %}
+            <tr>
+                <td><a href="{% url 'room-profile' booking.room.number %}">{{booking.room.name}}</a></td>
+                <td>{{booking.name}}</td>
+                <td>{{ booking.dateOfReservation }}</td>
+                <td>{{ booking.startDate }}</td>
+                <td>{{ booking.endDate }}</td>
+                <!--td>{{ booking.numOfDep }}</td-->
+                <td>
+                    {% for key, value in reservation_cost.items %}
+                    {% if key == booking %}
+                    {{ value }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                {% if role == "admin" or role == 'manager' %}
+                <td>
+                    <form action="{% url 'booking-make' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ booking.room.number }}" name="roomid">
+                        <input type="hidden" value="{{ booking.startDate|date:'Y-m-d' }}" name="fd" class="form-control">
+                        <input type="hidden" value="{{ booking.endDate|date:'Y-m-d' }}" name="ld" class="form-control">
+                        <button type="submit" name="book" id="book" class="btn btn-sm btn-outline-primary px-3 w-100 mt-2 mb-2">Book Apartment</button>
+                    </form>
+                <a href="{% url 'deleteBooking' booking.id %}"
+                        class="btn btn-sm btn-outline-danger w-100">Cancel Reservation</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 
 </div>

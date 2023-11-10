@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -9,8 +10,8 @@
         <title>Print Receipt</title>
         <style>
                         * {
-                font-size: 12px;
-                font-family: 'Times New Roman';
+                font-size: 14px;
+                font-family: Courier, Georgia, "Times New Roman", Times, serif;;
             }
 
             td,
@@ -44,11 +45,16 @@
             .centered {
                 text-align: center;
                 align-content: center;
+                text-wrap: balance;
             }
 
             .ticket {
-                width: 155px;
-                max-width: 155px;
+                width: 250px;
+                max-width: 250px;
+                text-align:center;
+                white-space:nowrap;
+                overflow:hidden;
+                line-height: 1.5em;
             }
 
             img {
@@ -64,22 +70,27 @@
             }
         </style>
     </head>
-    <body>
+    <body style="text-align:center;">
+        <div class="ticket centered mt-2 p-2">
+            <img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="Logo" style="max-width: 100px; width: 100px;">
+            <hr>
+            PAYMENT RECEIPT
+            <p class="centered"><strong>#3 Ogiugo Avenue, <br>Off Aideyan & Aikhionbare
+                <br>Streets, G.R.A. Benin City</strong></p>
 
-        <div class="ticket">
-            <img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="Logo">
-            <p class="centered">CANLEE INN
-                <br>#3 Ogiugo Avenue, Off Aideyan & Aikhionbare
-                <br>Streets, G.R.A. Benin City</p>
+                        <span class="centered">Apartment: {{ booking.roomNumber }}<br>
+                        Check in: {{ booking.startDate }}<br>
+                        Check out: {{ booking.endDate }}<br>
+                        Customer: {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}<br>
+                        Amount: <del style="text-decoration-style: double;">N</del>{{ total|intcomma }}</span>
 
-                {% for order in orders %}
-                        {{ order.quantity }}
-                        {{ order.item }}
-                        {{ order.amount }}
-                {% endfor %}
-
-            <p class="centered">Thanks for your patronage!
+            <p class="centered mt-2">Thanks for your patronage!
                 <br>Canlee Inn</p>
+            <footer>
+
+                <hr>
+                    <p>&copy Gnotable Technologies</p>
+                </footer>
         </div>
         <button id="btnPrint" class="hidden-print">Print</button>
         <script>

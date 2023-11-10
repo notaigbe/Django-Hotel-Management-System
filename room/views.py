@@ -19,10 +19,9 @@ from hotel.models import *
 from .forms import *
 
 
-
 # The role corresponds to a folder containing the templates for a particular type of user. The role determines the
 # permissions a user may have. The various roles are admin, staff, guest, manager, receptionist
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def rooms(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -220,7 +219,7 @@ def room_edit(request, pk):
     return render(request, path + "room-edit.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def room_services(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -280,48 +279,52 @@ def current_room_services(request):
     if request.method == "POST":
         if "foodReq" in request.POST:
             newServiceReq = RoomServices(
-                curBooking=curBooking, price=50.0, room=curRoom,  servicesType='Food')
+                curBooking=curBooking, price=50.0, room=curRoom, servicesType='Food')
             newServiceReq.save()
 
             chosenEmp = random.choice(availableEmployee)
             lastTask = Task.objects.filter(employee=chosenEmp).last()
-            if(lastTask != None):
+            if lastTask is not None:
                 newTask = Task(employee=chosenEmp, startTime=lastTask.endTime,
-                               endTime=lastTask.endTime+datetime.timedelta(minutes=30), description="Food Request")
+                               endTime=lastTask.endTime + datetime.timedelta(minutes=30), description="Food Request")
             else:
                 newTask = Task(employee=chosenEmp, startTime=datetime.datetime.now(),
-                               endTime=datetime.datetime.now()+datetime.timedelta(minutes=30), description="Food Request")
+                               endTime=datetime.datetime.now() + datetime.timedelta(minutes=30),
+                               description="Food Request")
             newTask.save()
             return redirect("current-room-services")
 
         if "cleaningReq" in request.POST:
             newServiceReq = RoomServices(
-                curBooking=curBooking, price=0.0, room=curRoom,  servicesType='Cleaning')
+                curBooking=curBooking, price=0.0, room=curRoom, servicesType='Cleaning')
             newServiceReq.save()
             chosenEmp = random.choice(availableEmployee)
             lastTask = Task.objects.filter(employee=chosenEmp).last()
 
-            if(lastTask != None):
+            if lastTask is not None:
                 newTask = Task(employee=chosenEmp, startTime=lastTask.endTime,
-                               endTime=lastTask.endTime+datetime.timedelta(minutes=30), description="Cleaning Request")
+                               endTime=lastTask.endTime + datetime.timedelta(minutes=30),
+                               description="Cleaning Request")
             else:
                 newTask = Task(employee=chosenEmp, startTime=datetime.datetime.now(),
-                               endTime=datetime.datetime.now()+datetime.timedelta(minutes=30), description="Cleaning Request")
+                               endTime=datetime.datetime.now() + datetime.timedelta(minutes=30),
+                               description="Cleaning Request")
             newTask.save()
             return redirect("current-room-services")
 
         if "techReq" in request.POST:
             newServiceReq = RoomServices(
-                curBooking=curBooking, price=0.0, room=curRoom,  servicesType='Technical')
+                curBooking=curBooking, price=0.0, room=curRoom, servicesType='Technical')
             newServiceReq.save()
             chosenEmp = random.choice(availableEmployee)
             lastTask = Task.objects.filter(employee=chosenEmp).last()
-            if(lastTask != None):
+            if lastTask is not None:
                 newTask = Task(employee=chosenEmp, startTime=lastTask.endTime,
-                               endTime=lastTask.endTime+datetime.timedelta(minutes=30), description="Tech Request")
+                               endTime=lastTask.endTime + datetime.timedelta(minutes=30), description="Tech Request")
             else:
                 newTask = Task(employee=chosenEmp, startTime=datetime.datetime.now(),
-                               endTime=datetime.datetime.now()+datetime.timedelta(minutes=30), description="Tech Request")
+                               endTime=datetime.datetime.now() + datetime.timedelta(minutes=30),
+                               description="Tech Request")
             newTask.save()
             return redirect("current-room-services")
 
@@ -336,49 +339,64 @@ def bookings(request):
 
     bookings = Booking.objects.all()
     reservations = Reservation.objects.all()
-    # calculating total for every booking:
-    totals = {}  # <booking : total>
+    # calculating total for every booking and reservation:
+    booking_cost = {}  # <booking : total>
+    reservation_cost = {}  # <reservation : total>
+
     for booking in bookings:
         start_date = datetime.datetime.strptime(
             str(booking.startDate), "%Y-%m-%d")
         end_date = datetime.datetime.strptime(str(booking.endDate), "%Y-%m-%d")
-        numberOfDays = abs((end_date-start_date).days)
+        numberOfDays = abs((end_date - start_date).days)
         # get room peice:
         price = Room.objects.get(number=booking.roomNumber.number).price
         total = price * numberOfDays
-        totals[booking] = total
+        booking_cost[booking] = total
+
+    for reservation in reservations:
+        start_date = datetime.datetime.strptime(
+            str(reservation.startDate), "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(str(reservation.endDate), "%Y-%m-%d")
+        numberOfDays = abs((end_date - start_date).days)
+        print(numberOfDays)
+        # get room price:
+        price = Room.objects.get(number=reservation.room.number).price
+        print(price)
+        total = price * numberOfDays
+        reservation_cost[reservation] = total
 
     if request.method == "POST":
         if "filter" in request.POST:
-            if (request.POST.get("number") != ""):
+            if request.POST.get("number") != "":
                 rooms = Room.objects.filter(
                     number__contains=request.POST.get("number"))
                 bookings = bookings.filter(
                     roomNumber__in=rooms)
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 users = User.objects.filter(
                     Q(first_name__contains=request.POST.get("name")) | Q(last_name__contains=request.POST.get("name")))
                 guests = Guest.objects.filter(user__in=users)
                 bookings = bookings.filter(
                     guest__in=guests)
 
-            if (request.POST.get("rez") != ""):
+            if request.POST.get("rez") != "":
                 bookings = bookings.filter(
                     dateOfReservation=request.POST.get("rez"))
 
-            if (request.POST.get("fd") != ""):
+            if request.POST.get("fd") != "":
                 bookings = bookings.filter(
                     startDate__gte=request.POST.get("fd"))
 
-            if (request.POST.get("ed") != ""):
+            if request.POST.get("ed") != "":
                 bookings = bookings.filter(
                     endDate__lte=request.POST.get("ed"))
 
             context = {
                 "role": role,
                 'bookings': bookings,
-                'totals': totals,
+                'booking_cost': booking_cost,
+                'reservation_cost': reservation_cost,
                 'reservations': reservations,
                 "name": request.POST.get("name"),
                 "number": request.POST.get("number"),
@@ -393,17 +411,40 @@ def bookings(request):
         "role": role,
         'bookings': bookings,
         'reservations': reservations,
-        'totals': totals
+        'booking_cost': booking_cost,
+        'reservation_cost': reservation_cost,
     }
     return render(request, path + "bookings.html", context)
+
+
+@login_required(login_url='login')
+def printReceipt(request, pk):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+    # tempRoom = Room.objects.get(number=pk)
+    booking = Booking.objects.get(id=pk)
+    start_date = booking.startDate
+    end_date = booking.endDate
+    numberOfDays = abs((end_date - start_date).days)
+    # get room price:
+    price = booking.roomNumber.price
+    total = price * numberOfDays
+    context = {
+        "booking": booking,
+        'total': total
+    }
+
+    return render(request, path + "receipt.html", context)
 
 
 @login_required(login_url='login')
 def booking_make(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
+    # tempRoom = Room.objects.get(number=pk)
 
     room = Room.objects.get(number=request.POST.get("roomid"))
+    bookings = Booking.objects.filter(roomNumber=room)
     guests = Guest.objects.all()  # we pass this to context
     names = []
     if request.method == 'POST':
@@ -416,16 +457,21 @@ def booking_make(request):
             str(request.POST.get("fd")), "%Y-%m-%d")
         end_date = datetime.strptime(
             str(request.POST.get("ld")), "%Y-%m-%d")
-        numberOfDays = abs((end_date-start_date).days)
-        # get room peice:
+        numberOfDays = abs((end_date - start_date).days)
+        # get room price:
         price = room.price
         total = price * numberOfDays
+
+        for b in bookings:
+            if b.endDate >= start_date.date() and b.startDate <= end_date.date():
+                messages.warning(request, "This apartment has been booked for the selected period!")
+                return redirect("rooms")
 
         if 'add' in request.POST:  # add dependee
             name = request.POST.get("depName")
             names.append(name)
-            for i in range(room.capacity-2):
-                nameid = "name" + str(i+1)
+            for i in range(room.capacity - 2):
+                nameid = "name" + str(i + 1)
                 if request.POST.get(nameid) != "":
                     names.append(request.POST.get(nameid))
 
@@ -438,12 +484,12 @@ def booking_make(request):
                 "fd"), endDate=request.POST.get("ld"))
             curbooking.save()
 
-            for i in range(room.capacity-1):
-                nameid = "name" + str(i+1)
+            for i in range(room.capacity - 1):
+                nameid = "name" + str(i + 1)
                 if request.POST.get(nameid) != "":
-                    if request.POST.get(nameid) != None:
+                    if request.POST.get(nameid) is not None:
                         d = Dependants(booking=curbooking,
-                                      name=request.POST.get(nameid))
+                                       name=request.POST.get(nameid))
                         d.save()
 
             messages.success(request, "Successful Booking")
@@ -480,7 +526,7 @@ def deleteBooking(request, pk):
     return render(request, path + "deleteBooking.html", context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def refunds(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
@@ -507,11 +553,11 @@ def refunds(request):
 
                 # send email
                 send_mail(
-                    receiver_name + " " + subject,   # subject
-                    message,                          # message
-                    message_email,                    # from email
-                    [receiver.user.email],                    # to email
-                    fail_silently=False,              # for user in users :
+                    receiver_name + " " + subject,  # subject
+                    message,  # message
+                    message_email,  # from email
+                    [receiver.user.email],  # to email
+                    fail_silently=False,  # for user in users :
                     # user.email
                 )
 
@@ -558,23 +604,23 @@ def refunds(request):
 
         if "filter" in request.POST:
             users = User.objects.all()
-            if (request.POST.get("gid") != ""):
+            if request.POST.get("gid") != "":
                 users = users.filter(
                     id__contains=request.POST.get("gid"))
                 guests = Guest.objects.filter(user__in=users)
                 refunds = refunds.filter(guest__in=guests)
 
-            if (request.POST.get("name") != ""):
+            if request.POST.get("name") != "":
                 users = users.filter(
                     Q(first_name__contains=request.POST.get("name")) | Q(last_name__contains=request.POST.get("name")))
                 guests = Guest.objects.filter(user__in=users)
                 refunds = refunds.filter(guest__in=guests)
 
-            if (request.POST.get("booking") != ""):
+            if request.POST.get("booking") != "":
                 booking = Booking.objects.get(id=request.POST.get("booking"))
                 refunds = refunds.filter(reservation=booking)
 
-            if (request.POST.get("reason") != ""):
+            if request.POST.get("reason") != "":
                 refunds = refunds.filter(
                     reason__contains=request.POST.get("reason"))
 

@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from .views import bookings, rooms, room_services, current_room_services, request_refund, add_room, room_profile, \
-    room_edit, booking_make, deleteBooking, refunds
+    room_edit, booking_make, deleteBooking, refunds, printReceipt
 
 urlpatterns = [
     path('bookings/', bookings, name="bookings"),
@@ -20,5 +20,6 @@ urlpatterns = [
     path('booking-make/', booking_make, name="booking-make"),
     path('refunds/', refunds, name="refunds"),
     path('deleteBooking/<str:pk>/', deleteBooking, name="deleteBooking"),
+    path('printReceipt/<str:pk>/', printReceipt, name="printReceipt"),
 
 ]

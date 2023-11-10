@@ -4,7 +4,7 @@
     <div class="table-header row">
 
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-            <h2>Drinks Sales Report</h2>
+            <h2>Drinks Sales Report for </h2>
         </div>
         <!--div class="col-sm-12 col-md-12 col-lg-6 mb-4">
             <a href="{% url 'opening_stock' %}" class="btn btn-sm btn-info px-3">Opening Stock</a>
@@ -50,8 +50,15 @@
                 <td>{{sale.item.get_drinkType_display}} </td>
                 <td>{{sale.amount}}</td>
                 <td>{{sale.quantity}}</td>
-                <td>Opening stock was {{sale.item.opening_stock.last.quantity}} for {{sale.item.opening_stock.last.date}}</td>
-
+                <td>
+                {% for initial in sale.item.opening_stock.all %}
+                    {% if initial.close_stock != None %}
+                    Opening stock was {{initial.quantity}} on {{initial.date}}. Closing stock was {{initial.close_stock}}  <br>
+                    {% else %}
+                    Opening stock was {{initial.quantity}} on {{initial.date}}
+                    {% endif %}
+                {% endfor %}
+                </td>
             </tr>
             {% endfor %}
 

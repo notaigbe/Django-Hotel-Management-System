@@ -27,16 +27,16 @@
                 <div class="row">
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">Check In Date</label>
+                        <label for="fd" class="col-form-label">Check In Date</label>
                         <div class="">
-                            <input class="form-control" type="date" name="fd" value="{{fd}}" id="example-date-input">
+                            <input class="form-control" type="date" name="fd" value="{{fd}}" id="fd">
                         </div>
                     </div>
 
                     <div class="form-group col-4">
-                        <label for="example-date-input" class="col-form-label">Check Out Date</label>
+                        <label for="ld" class="col-form-label">Check Out Date</label>
                         <div class="">
-                            <input class="form-control" type="date" name="ld" value="{{ld}}" id="example-date-input">
+                            <input class="form-control" type="date" name="ld" value="{{ld}}" id="ld">
                         </div>
                     </div>
 
@@ -93,7 +93,7 @@
                 {% endif %}</td>
 
                 {% endif %}
-                {% if role == "guest" or role == "receptionist" or role == "admin" %}
+                {% if role == "guest" or role == "receptionist" or role == "admin" or role == "manager" %}
                 <td>
                     <form action="{% url 'booking-make' %}" method="POST">
                         {% csrf_token %}

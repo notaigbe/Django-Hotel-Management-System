@@ -30,17 +30,18 @@ def home(request):
         stocks = []
         for drink in drinks:
             stocks.append(Opening_Stock.objects.filter(item__brand=drink.brand).last())
-
+            print(stocks)
         for stock in stocks:
             # stock = Opening_Stock.objects.all().last
-            last_day_of_period = calendar.monthrange(stock.date.year, stock.date.month)
-            end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
-            if datetime.now() > end_of_stock_period:
-                print(stock.item)
-                print(stock.date)
-                stock.close_stock = stock.item.quantity
-                stock.save()
-                Opening_Stock.objects.create(item=stock.item, quantity=stock.item.quantity)
+            if stock is not None:
+                last_day_of_period = calendar.monthrange(stock.date.year, stock.date.month)
+                end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
+                if datetime.now() > end_of_stock_period:
+                    print(stock.item)
+                    print(stock.date)
+                    stock.close_stock = stock.item.quantity
+                    stock.save()
+                    Opening_Stock.objects.create(item=stock.item, quantity=stock.item.quantity)
         return redirect("employee-profile", pk=request.user.id)
     else:
         return redirect("guest-profile", pk=request.user.id)
@@ -527,6 +528,7 @@ def drinks(request):
             id = request.POST.get("id")
             drinks = Drink.objects.get(id=id)
             drinks.price = request.POST.get("price")
+            drinks.restock_level = request.POST.get("restock")
             drinks.save()
             drinks = Drink.objects.all()
 
@@ -654,8 +656,10 @@ def report(request):
     role = str(request.user.groups.all()[0])
     path = role + "/"
 
+    today = datetime.now()
     drinks = Drink.objects.all()
-    sales = Sales.objects.all()
+    sales = Sales.objects.filter(sales_date__year=today.year, sales_date__month=today.month - 1)
+    print(sales)
 
     return render(request, path + 'sales_report.html', {'sales': sales, 'drinks': drinks, 'role': role})
 
@@ -688,9 +692,20 @@ def restock(request):
         print('Posted')
         if form.is_valid():
             print('Validated')
-            form.save()
-            messages.success(request, "Item restocked.")
-
+            stock = Opening_Stock.objects.filter(item=request.POST['item']).last()
+            print(stock)
+            if stock:
+                form.save()
+                messages.success(request, "Item restocked.")
+            else:
+                stock = Opening_Stock()
+                brand = Drink.objects.get(id=request.POST['item'])
+                print(brand)
+                stock.item = brand
+                stock.quantity = request.POST['quantity']
+                stock.save()
+                messages.success(request, "No Opening Stock for this item. Restock saved as Opening stock for "
+                                          "the period.")
         context = {
             "form": form,
             "role": role,
@@ -719,13 +734,30 @@ def opening_stock(request):
     }
     if request.method == "POST":
         form = OpeningStockForm(request.POST)
+
         print('Posted')
         if form.is_valid():
             print('Validated')
-            stock, created = Opening_Stock.objects.update_or_create(item=request.POST['item'], quantity=request.POST['quantity'])
-            # form.save()
-            messages.success(request, "Opening stock saved for the period.")
-
+            stock = Opening_Stock.objects.filter(item=request.POST['item']).last()
+            print(stock)
+            if stock:
+                stock.quantity = request.POST['quantity']
+                stock.save()
+                # if datetime(stock.date.year) == datetime.now().year and datetime(stock.date.month) == datetime.now(
+                # ).month:
+                # Opening_Stock.objects.update(item=request.POST['item'], quantity=request.POST['quantity'])
+                # else:
+                #    Opening_Stock.objects.create(item=request.POST['item'], quantity=request.POST['quantity'])
+                # form.save()
+                messages.success(request, "Opening stock saved for the period.")
+            else:
+                stock = Opening_Stock()
+                brand = Drink.objects.get(id=request.POST['item'])
+                print(brand)
+                stock.item = brand
+                stock.quantity = request.POST['quantity']
+                stock.save()
+                messages.success(request, "Opening stock saved for the period.")
         context = {
             "form": form,
             "role": role,

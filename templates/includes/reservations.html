@@ -1,5 +1,12 @@
 <div class="container py-5">
-
+{% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
     <div class="table-header row">
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
@@ -12,7 +19,7 @@
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th class="text-white">Apartment Number<input type="number" min="0" name="number" value="{{number}}"
+                    <th class="text-white">Apartment<input type="number" min="0" name="number" value="{{number}}"
                             class="form-control border border-secondary"></th>
                     <th class="text-white">Guest Name<input type="text" name="name" value="{{name}}"
                             class="form-control border border-secondary"></th>
@@ -40,7 +47,7 @@
                 <td>{{ reservation.phoneNumber }}</td>
                 <td>
                     {% for key, value in totals.items %}
-                    {% if key == reservation %}
+                    {% if key == booking %}
                     {{ value }}
                     {% endif %}
                     {% endfor %}

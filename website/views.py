@@ -76,11 +76,14 @@ def check_availability(fd, ed):
     availableRooms = []
     for room in rooms:
         availList = []
-        bookingList = Reservation.objects.filter(room=room)
+        bookingList = Booking.objects.filter(roomNumber=room)
+        reservationList = Reservation.objects.filter(room=room)
         if room.statusStartDate is None:
             for booking in bookingList:
                 if booking.startDate > ed.date() or booking.endDate < fd.date():
-                    availList.append(True)
+                    for reserved in reservationList:
+                        if reserved.startDate > ed.date() or reserved.endDate < fd.date():
+                            availList.append(True)
                 else:
                     availList.append(False)
             if all(availList):
@@ -89,13 +92,41 @@ def check_availability(fd, ed):
             if room.statusStartDate > ed.date() or room.statusEndDate < fd.date():
                 for booking in bookingList:
                     if booking.startDate > ed.date() or booking.endDate < fd.date():
-                        availList.append(True)
+                        for reserved in reservationList:
+                            if reserved.startDate > ed.date() or reserved.endDate < fd.date():
+                                availList.append(True)
                     else:
                         availList.append(False)
                     if all(availList):
                         availableRooms.append(room)
 
     return availableRooms
+
+
+def check_room(room, fd, ed):
+    room = room
+    firstDayStr = None
+    lastDateStr = None
+    availList = []
+    bookingList = Booking.objects.filter(roomNumber=room)
+    reservationList = Reservation.objects.filter(room=room)
+    if room.statusStartDate is None:
+        for booking in bookingList:
+            if booking.startDate > ed.date() or booking.endDate < fd.date():
+                for reserved in reservationList:
+                    if reserved.startDate > ed.date() or reserved.endDate < fd.date():
+                        return True
+            else:
+                return False
+    else:
+        if room.statusStartDate > ed.date() or room.statusEndDate < fd.date():
+            for booking in bookingList:
+                if booking.startDate > ed.date() or booking.endDate < fd.date():
+                    for reserved in reservationList:
+                        if reserved.startDate > ed.date() or reserved.endDate < fd.date():
+                            return True
+                else:
+                    return False
 
 
 def reservation(request):
@@ -106,16 +137,39 @@ def reservation(request):
 
         if len(Room.objects.filter(name=request.POST.get("room"))) != 0:
             room = Room.objects.get(name=request.POST.get('room'))
-            bookingList = Reservation.objects.filter(room=room)
+            bookingList = Booking.objects.filter(roomNumber=room)
             ed = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
             fd = datetime.strptime(request.POST.get('endDate'),
                                    '%d %B, %Y')
-            if len(bookingList) != 0:
-                for booking in bookingList:
-                    print(booking.startDate)
-                    if booking.startDate is not None:
-                        if booking.startDate > ed.date() or booking.endDate < fd.date():
-                            print('Reservation function not empty')
+            if not check_room(cur_room, fd, ed):
+                if len(bookingList) != 0:
+                    for booking in bookingList:
+                        print(booking.startDate)
+                        if booking.startDate is not None:
+                            if booking.startDate > ed.date() or booking.endDate < fd.date():
+                                print('Reservation function not empty')
+                                guest = Reservation(
+                                    name=request.POST.get('name'),
+                                    email=request.POST.get('email'),
+                                    phoneNumber=request.POST.get('phoneNumber'),
+                                    room=room,
+                                    startDate=datetime.strptime(request.POST.get('startDate'), '%d %B, %Y'),
+                                    endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                                )
+                                guest.save()
+
+                                room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
+                                room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                                room.save()
+                                messages.info(
+                                    request,
+                                    f"You have successfully reserved the {request.POST.get('room')} apartment/room for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
+                            else:
+                                messages.warning(
+                                    request, f"The {request.POST.get('room')} apartment/room is unavailable for the "
+                                             f"dates selected")
+                        else:
+                            print('Reservation function empty')
                             guest = Reservation(
                                 name=request.POST.get('name'),
                                 email=request.POST.get('email'),
@@ -131,47 +185,29 @@ def reservation(request):
                             room.save()
                             messages.info(
                                 request,
-                                f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
-                        else:
-                            messages.info(
-                                request, f"The {request.POST.get('room')} apartment/room is unavailable for the dates selected")
-                    else:
-                        print('Reservation function empty')
-                        guest = Reservation(
-                            name=request.POST.get('name'),
-                            email=request.POST.get('email'),
-                            phoneNumber=request.POST.get('phoneNumber'),
-                            room=room,
-                            startDate=datetime.strptime(request.POST.get('startDate'), '%d %B, %Y'),
-                            endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                        )
-                        guest.save()
+                                f"You have successfully reserved the {request.POST.get('room')} apartment/room for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
 
-                        room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
-                        room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                        room.save()
-                        messages.info(
-                            request,
-                            f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
+                else:
 
+                    guest = Reservation(
+                        name=request.POST.get('name'),
+                        email=request.POST.get('email'),
+                        phoneNumber=request.POST.get('phoneNumber'),
+                        room=room,
+                        startDate=datetime.strptime(request.POST.get('startDate'), '%d %B, %Y'),
+                        endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                    )
+                    guest.save()
+                    room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
+                    room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
+                    room.save()
+                    messages.info(
+                        request,
+                        f"You have successfully reserved the {request.POST.get('room')} apartment/room for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
             else:
-
-                guest = Reservation(
-                    name=request.POST.get('name'),
-                    email=request.POST.get('email'),
-                    phoneNumber=request.POST.get('phoneNumber'),
-                    room=room,
-                    startDate=datetime.strptime(request.POST.get('startDate'), '%d %B, %Y'),
-                    endDate=datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                )
-                guest.save()
-                room.statusStartDate = datetime.strptime(request.POST.get('startDate'), '%d %B, %Y')
-                room.statusEndDate = datetime.strptime(request.POST.get('endDate'), '%d %B, %Y')
-                room.save()
-                messages.info(
+                messages.warning(
                     request,
-                    f"The {request.POST.get('room')} apartment/room has been successfully reserved for {request.POST.get('startDate')} - {request.POST.get('endDate')}")
-
+                    f"The {request.POST.get('room')} apartment/room is unavailable for the dates selected")
         else:
             messages.error(
                 request, f"The {request.POST.get('room')} apartment/room doesn't exist in the database")

@@ -6,6 +6,7 @@
     {% include 'includes/inner-page-hero.html' %}
 
     <section class="section contact-section" id="next">
+
       <div class="container">
         <div class="row">
           <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
@@ -35,12 +36,14 @@
                   <div class="field-icon-wrap">
                     <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                     <select name="room" id="room" class="form-control required">
-                      <option value="Efosa 1">Efosa 1</option>
-                      <option value="Efosa 2">Efosa 2</option>
+                      {% for room in rooms %}
+                      <option value="{{room.name}}">{{room.name}}</option>
+                      {% endfor %}
+                      <!--option value="Efosa 2">Efosa 2</option>
                       <option value="Osato 1">Osato 1</option>
                       <option value="Osato 2">Osato 2</option>
                       <option value="Ogiuwa 1">Ogiuwa 1</option>
-                      <option value="Ogiuwa 2">Ogiuwa 2</option>
+                      <option value="Ogiuwa 2">Ogiuwa 2</option-->
                     </select>
                   </div>
                 </div>

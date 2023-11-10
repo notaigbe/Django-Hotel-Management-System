@@ -27,15 +27,28 @@
             <input type="hidden" value="{{ room.number }}" name="roomid">
             <input type="date" value="{{ fd }}" name="fd" class="d-none">
             <input type="date" value="{{ ld }}" name="ld" class="d-none">
+            {% if role == "receptionist" or role == 'admin' %}
+            <div class="col-4">
+            <label for="id_guest">Select A Guest
+            </label>
+            <select class="form-control" name="guest" required="" id="id_guest">
+                {% for guest in guests %}
+                <option value="{{guest.id}}">{{guest.user.first_name}} {{guest.user.last_name}}</option>
+                {% endfor %}
+            </select>
+                <span>OR</span>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary mt-3">Create Guest Profile</a>
+            </div>
+            {% endif %}
             {% if room.capacity > 1 %}
-            <div class="col-6">
+            <div class="col-4">
                 <h4>Add Dependant</h4>
                 <input type="text" class="form-control d-inline" name="depName">
                 <button type="submit" name="add"
-                    class="form-control btn btn-sm btn-outline-success px-3 d-inline">Add</button>
+                    class="form-control btn btn-sm btn-outline-success px-3 d-inline mt-3">Add</button>
             </div>
 
-            <div class="col-6">
+            <div class="col-4">
                 <ul id="myList" class="list-group">
                     <h4>List of Dependants</h4>
                     {% for name in names %}
@@ -46,21 +59,9 @@
             </div>
             {% endif %}
 
-            {% if role == "receptionist" or role == 'admin' %}
-
-            <label for="exampleFormControlSelect1">Select A Guest
-            </label>
-            <select class="form-control" name="guest" required="" id="id_guest">
-                {% for guest in guests %}
-                <option value="{{guest.id}}">{{guest.user.first_name}} {{guest.user.last_name}}</option>
-                {% endfor %}
-            </select>
-            {% endif %}
-
             <button type="submit" class="btn btn-info w-100 mt-3" name="bookGuestButton">Book</button>
         </div>
     </form>
-
 
     <div class="py-3">
         &nbsp
