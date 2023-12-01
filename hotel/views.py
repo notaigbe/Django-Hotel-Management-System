@@ -42,6 +42,8 @@ def home(request):
                     stock.close_stock = stock.item.quantity
                     stock.save()
                     Opening_Stock.objects.create(item=stock.item, quantity=stock.item.quantity)
+                else:
+                    Opening_Stock.objects.create(item=stock.item, quantity=stock.item.quantity)
         return redirect("employee-profile", pk=request.user.id)
     else:
         return redirect("guest-profile", pk=request.user.id)
