@@ -76,3 +76,6 @@ urlpatterns = [
     # path('deleteBooking/<str:pk>/', deleteBooking, name="deleteBooking"),
     # path('completeTask/<str:pk>/', completeTask, name="completeTask"),
 ]
+handler404 = 'landing.views.error_404'
+handler500 = 'landing.views.error_500'
+handler403 = 'landing.views.error_403'

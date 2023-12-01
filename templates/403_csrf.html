@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Canlee Inn - E403</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="{% static 'assets/css/error_403/style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="fadeIn first">
+  <img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="" class="img-fluid" width="100px shadow-lg">
+</div>
+<h1>403</h1>
+<div><p>> <span>ERROR CODE</span>: "<i>HTTP 403 Forbidden</i>"</p>
+<p>> <span>ERROR DESCRIPTION</span>: "<i>Access Denied. You Do Not Have The Permission To Access This Page On This Server</i>"</p>
+<p>> <span>ERROR POSSIBLY CAUSED BY</span>: [<b>expired login credentials, execute access forbidden, read access forbidden, write access forbidden, ssl required, ssl 128 required, ip address rejected, client certificate required, site access denied, too many users, invalid configuration, password change, mapper denied access, client certificate revoked, directory listing denied, client access licenses exceeded, client certificate is untrusted or invalid, client certificate has expired or is not yet valid, passport logon failed, source access denied, infinite depth is denied, too many requests from the same client ip</b>...]</p>
+<p>> <span>RETURN TO HOME PAGE</span>: [<a href="{% url 'home' %}">Home</a>]</p><p>> <span>TRY CLEARING YOUR BROWSER COOKIES AND REFRESH</span></p>
+</div>
+
+<!-- partial -->
+  <script  src="{% static 'assets/js/error_403/script.js' %}"></script>
+
+</body>
+</html>

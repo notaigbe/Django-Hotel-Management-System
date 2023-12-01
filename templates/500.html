@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Edo State House of Assembly - E500</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400|Oswald:600'><link rel="stylesheet" href="{% static 'assets/css/error_500/style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="fadeIn first">
+  <img src="{% static 'assets/images/canlee-transparent-orange.png' %}" alt="" class="img-fluid" width="100px shadow-lg">
+</div>
+<div id="error">Error</div>
+<div class="error-num">500
+  <div class="error-num__clip">500</div>
+</div>
+<p id="desc">Server error.</p>
+<p>Please contact an administrator <a href="{% url 'home' %}">return to home</a></p>
+<!-- partial -->
+  <script  src="{% static 'assets/js/error_500/script.js' %}"></script>
+
+</body>
+</html>

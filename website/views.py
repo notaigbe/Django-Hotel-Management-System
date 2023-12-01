@@ -242,3 +242,15 @@ def contact(request):
 
         messages.info(request, "Your message has been sent")
         return redirect("index")
+
+
+def error_404(request, exception):
+    return render(request, '404.html')
+
+
+def error_500(request):
+    return render(request, '500.html')
+
+
+def error_403(request, exception):
+    return render(request, '403_csrf.html')
