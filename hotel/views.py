@@ -36,7 +36,7 @@ def home(request):
             if stock is not None:
                 last_day_of_period = calendar.monthrange(stock.date.year, stock.date.month)
                 end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
-                if datetime.now().date() > end_of_stock_period:
+                if datetime.now().date() > end_of_stock_period.date():
                     print(stock.item)
                     print(stock.date)
                     stock.close_stock = stock.item.quantity
