@@ -41,9 +41,9 @@ def home(request):
                     print(stock.date)
                     stock.close_stock = stock.item.quantity
                     stock.save()
-                    #Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
-                else:
-                    #Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
+                    # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
+                # else:
+                    # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
         return redirect("employee-profile", pk=request.user.id)
     else:
         return redirect("guest-profile", pk=request.user.id)
@@ -813,3 +813,14 @@ def closing_stock(request):
         return render(request, path + "drinks.html", context)
 
     return render(request, path + "stock.html", context)
+
+def error_404(request, exception):
+    return render(request, '404.html')
+
+
+def error_500(request):
+    return render(request, '500.html')
+
+
+def error_403(request, exception):
+    return render(request, '403_csrf.html')
