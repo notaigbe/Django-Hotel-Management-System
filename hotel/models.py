@@ -104,6 +104,8 @@ class Drink(models.Model):
         ('soft', 'Soft Drinks'),
         ('spirit', 'Spirit'),
         ('water', 'Water'),
+        ('juice', 'Fruit Juice'),
+        ('energy', 'Energy Drink'),
         ('other', 'Other'),
     )
     brand = models.CharField(max_length=50)
