@@ -30,17 +30,18 @@ def home(request):
         stocks = []
         for drink in drinks:
             stocks.append(Opening_Stock.objects.filter(item__brand=drink.brand).last())
-            print(stocks)
+            print('Login Successful')
         for stock in stocks:
             # stock = Opening_Stock.objects.all().last
             if stock is not None:
                 last_day_of_period = calendar.monthrange(stock.date.year, stock.date.month)
                 end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
                 if datetime.now().date() > end_of_stock_period.date():
-                    print(stock.item)
-                    print(stock.date)
-                    stock.close_stock = stock.item.quantity
-                    stock.save()
+                    pass
+                    #print(stock.item)
+                    #print(stock.date)
+                    #stock.close_stock = stock.item.quantity
+                    #stock.save()
                     # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
                 # else:
                     # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
