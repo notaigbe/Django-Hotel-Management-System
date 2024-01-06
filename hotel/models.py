@@ -124,13 +124,14 @@ class Sales(models.Model):
     amount = models.FloatField()
     quantity = models.IntegerField()
     sales_date = models.DateTimeField(auto_now_add=True)
+    sales_person = models.CharField(max_length=50, default='Management')
 
     # receipt = models.ForeignKey(Receipt, on_delete=models.PROTECT)
 
     def __str__(self):
         return '{}-{}'.format(self.item, self.sales_date)
 
-    def save(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):
         try:
             stock = Drink.objects.get(brand=self.item.brand)
             if stock.quantity > 0:
@@ -141,17 +142,20 @@ class Sales(models.Model):
                     stock.quantity = temp
                     # receipt = Receipt.objects.last()
                     # receipt.delete()
-                    raise ValidationError('Insufficient Stock. Please update stock and try again.')
+                    raise ValidationError({'quantity':'Insufficient Stock. Please update stock and try again.'})
             else:
                 # receipt = Receipt.objects.last()
                 # receipt.delete()
-                raise ValidationError('Insufficient Stock. Please update stock and try again.')
+                raise ValidationError({'quantity':'Insufficient Stock. Please update stock and try again.'})
 
             # stock.total_sales += stock.price * self.quantity
             stock.save()
         except ValidationError as e:
             print(e)
-        super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Sales"

@@ -37,7 +37,8 @@
                         </select></th>
                     <th class="text-white text-center" style="width:20%" >Sales<br><p class="text-dark h1"><del style="text-decoration-style: double;">N</del>{{ total|intcomma }}</p></th>
                     <th class="text-white">Quantity Sold</th>
-                    <th class="text-white">Remarks</th>
+                    <th class="text-white">Date</th>
+                    <th class="text-white">Sales Person</th>
                 </form>
             </tr>
         </thead>
@@ -50,8 +51,9 @@
                 <td style="width: 12%;">{{sale.item.get_drinkType_display}} </td>
                 <td class="pull-right" ><del style="text-decoration-style: double;">N</del>{{sale.amount}}</td>
                 <td style="width: 10%;">{{sale.quantity}}</td>
+                <td style="width: 10%;">{{sale.sales_date}}</td>
                 <td>
-                    <comment>Opening stock was {{opening_stock.quantity}} on {{opening_stock.date}}.</comment>
+                    {{ sale.sales_person }}
                 </td>
             </tr>
             {% endfor %}

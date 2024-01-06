@@ -49,7 +49,7 @@ class SalesForm(ModelForm):
         model = Sales
         fields = ["item", "quantity"]
         widgets = {
-            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item'}),
+            'item': Select(attrs={'class': 'form-control', 'placeholder': 'Drink', 'id': 'item', 'onchange':'updateSecondSelect()'}),
             'quantity': NumberInput(attrs={'class': "form-control w-100", 'placeholder': 'Quantity', 'id': 'quantity'}),
         }
 

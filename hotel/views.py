@@ -38,13 +38,13 @@ def home(request):
                 end_of_stock_period = datetime(stock.date.year, stock.date.month, last_day_of_period[1])
                 if datetime.now().date() > end_of_stock_period.date():
                     pass
-                    #print(stock.item)
-                    #print(stock.date)
-                    #stock.close_stock = stock.item.quantity
-                    #stock.save()
+                    # print(stock.item)
+                    # print(stock.date)
+                    # stock.close_stock = stock.item.quantity
+                    # stock.save()
                     # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
                 # else:
-                    # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
+                # Opening_Stock.objects.get_or_create(item=stock.item, quantity=stock.item.quantity)
         return redirect("employee-profile", pk=request.user.id)
     else:
         return redirect("guest-profile", pk=request.user.id)
@@ -634,7 +634,39 @@ def order(request):
 
     for item in orders['myRows']:
         drink = Drink.objects.get(brand=item['Item'])
-        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']))
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), sales_person=orders['salesPerson'])
+        sales_order = Sales.objects.last()
+
+        receipt_id = uuid.uuid4()
+        receipt = Receipt()
+        receipt.receipt_id = receipt_id
+        receipt.details = orders['myRows']
+        receipt.order = sales_order
+        receipt.save()
+        # receipt = Receipt.objects.get(receipt_id=receipt_id)
+
+        print(item['Item'])
+        print(receipt)
+        total += float(item['Total'])
+    print(total)
+
+    # return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
+    return HttpResponse(json.dumps({'valid': True, 'orders': orders, 'total': total}), content_type='application/json')
+
+@login_required(login_url='login')
+def check_stock(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    stock = Sales()
+
+    orders = json.loads(request.body)
+    print(orders)
+    total = 0
+
+    for item in orders['myRows']:
+        drink = Drink.objects.get(brand=item['Item'])
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), sales_person=orders['salesPerson'])
         sales_order = Sales.objects.last()
 
         receipt_id = uuid.uuid4()
@@ -669,10 +701,11 @@ def report(request):
         print(sale.amount)
     print(total)
     opening_stock = Opening_Stock.objects.all()
-    sale_bundle = zip(sales,opening_stock)
+    sale_bundle = zip(sales, opening_stock)
     print(total)
 
-    return render(request, path + 'sales_report.html', {'drinks': drinks, 'role': role, 'total':total, 'sale_bundle': sale_bundle, 'sales':sales})
+    return render(request, path + 'sales_report.html',
+                  {'drinks': drinks, 'role': role, 'total': total, 'sale_bundle': sale_bundle, 'sales': sales})
 
 
 @login_required(login_url='login')
@@ -816,6 +849,7 @@ def closing_stock(request):
         return render(request, path + "drinks.html", context)
 
     return render(request, path + "stock.html", context)
+
 
 def error_404(request, exception):
     return render(request, '404.html')

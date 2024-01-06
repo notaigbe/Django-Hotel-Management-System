@@ -12,6 +12,8 @@
 <hr>
         <form action="" method="POST">
             {% csrf_token %}
+            {{ form.errors }}
+            <h4>Current User: {{ request.user.first_name }} {{ request.user.last_name }}</h4><hr>
             <div class="row mt-5">
                 <div class="col-6">
 
@@ -39,7 +41,12 @@
                             id="item-quantity" name="item-quantity">-->
                         {{ form.quantity }}
                     </div>
-
+                    <select name="drink-type" required="" id="secondSelect"
+                            class="form-control mb-2" disabled="disabled">
+                            {% for drink in drinks %}
+                            <option value="{{ drink.brand }}">{{ drink.quantity }}</option>
+                            {% endfor %}
+                        </select>
                     <!--<div class="form-group">
                         <label for="drink-type"><b>Room Type</b></label>
                         <select name="drink-type" required="" id="drink-type"
@@ -80,10 +87,26 @@
     </div>
 </div>
 <script>
+    function updateSecondSelect() {
+      // Get the selected index of the first select
+      var selectedIndex = document.querySelector("select").selectedIndex;
+      // Set the selected index of the second select to match the first select
+      document.querySelectorAll("select")[1].selectedIndex = selectedIndex - 1;
+    }
+
     var sumVal = 0
     var rowid = 0
     function AddData(e)
     {
+        if (document.getElementById("quantity").value != ''){
+        // Get the selected index of the first select
+      var selectedIndex = document.querySelector("select").selectedIndex;
+
+      // Set the selected index of the second select to match the first select
+      document.querySelectorAll("select")[1].selectedIndex = selectedIndex - 1;
+      var stock = document.querySelectorAll("select")[1][selectedIndex - 1].text
+
+      console.log(stock);
         e.preventDefault();
         var rows="";
         var sales=[];
@@ -93,17 +116,21 @@
         var brand=item.split(' - ')[0].trim();
         var price=item.split(' - ')[1].trim();
         var quantity=document.getElementById("quantity").value;
-        var total=price * quantity;
-        rowid += 1
-        rows+="<tr id" + "row_"+rowid +"><td>"+rowid+"</td><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td><td><button class='btn btn-sm btn-danger' onclick='RemoveData(event,this,"+total+")'>Remove</button></td></tr>";
-        $(rows).appendTo("#list tbody");
+        if (quantity <= stock){
+            var total=price * quantity;
+            rowid += 1
+            rows+="<tr id" + "row_"+rowid +"><td>"+rowid+"</td><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td><td><button class='btn btn-sm btn-danger' onclick='RemoveData(event,this,"+total+")'>Remove</button></td></tr>";
+            $(rows).appendTo("#list tbody");
 
-        sumVal = sumVal + total;
-        display_total.innerHTML = 'N'+sumVal;
-        $('#saveButton').prop('disabled', false);
-        console.log(sumVal)
+            sumVal = sumVal + total;
+            display_total.innerHTML = 'N'+sumVal;
+            $('#saveButton').prop('disabled', false);
+            console.log(sumVal)
+          }else {
+            console.log('Insufficient stock');
+            (alert('Insufficient stock'));}
     }
-
+}
     function RemoveData(e, id, unitTotal)
     {
         e.preventDefault();
@@ -118,11 +145,23 @@
     }
 </script>
 <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        var table = document.getElementById("list");
+        console.log(table.rows.length)
+        var saveButton = document.getElementById("saveButton");
+        var printButton = document.getElementById("printButton");
+        if (table.rows.length <= 1) {
+            saveButton.disabled = true;
+            printButton.disabled = true;
+        }
+    });
+
     function total()
     {
     var table = document.getElementById("tab"), sumVal = 0
 
     for(var i =1; i< table.rows.length; i++){
+
         sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
     }
     console.log(sumVal);
@@ -147,6 +186,7 @@
 
             var myObj = {};
             myObj.myRows = myRows;
+            myObj.salesPerson = "{{request.user.first_name}}";
             console.log(myObj);
 
             if( myObj != {} ) {
@@ -165,7 +205,7 @@
                     if(response['valid']){
                         orders = response['orders']
                         total = response['total']
-                        console.log(total)
+                        console.log(response)
                         //PrintElem(orders, total)
                         $('#printButton').prop('disabled', false);
                         //alert('Posted');
@@ -181,6 +221,7 @@
         })
 
             function PrintElem() {
+            const d = new Date();
             var mywindow = window.open('', 'PRINT');
             mywindow.document.write('<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Receipt</title>');
             mywindow.document.write('</head><body style="text-align:center;font: Courier, Georgia, "Times New Roman", Times, serif;background: #fff;font-size: 12pt;" >');
@@ -206,7 +247,8 @@
                 '<div></div>' +
                 '<p></p>' +
                 '<p></p>' +
-                '<p style="text-align:center;">Customer Sign</p>' +
+                '<p style="text-align:center;">Sales Person: {{request.user.first_name}}</p>' +
+                '<p style="text-align:center;">' + d.toLocaleString() + '</p>' +
                 '<hr>' +
                     '<p style="text-align:right;">&copy Gnotable Technologies</p>' +
                 '</footer>');
