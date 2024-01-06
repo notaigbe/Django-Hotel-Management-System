@@ -30,7 +30,7 @@ def home(request):
         stocks = []
         for drink in drinks:
             stocks.append(Opening_Stock.objects.filter(item__brand=drink.brand).last())
-            print('Login Successful')
+            # print('Login Successful')
         for stock in stocks:
             # stock = Opening_Stock.objects.all().last
             if stock is not None:
@@ -666,11 +666,13 @@ def report(request):
     total = 0
     for sale in sales:
         total += sale.amount
+        print(sale.amount)
+    print(total)
     opening_stock = Opening_Stock.objects.all()
     sale_bundle = zip(sales,opening_stock)
     print(total)
 
-    return render(request, path + 'sales_report.html', {'drinks': drinks, 'role': role, 'total':total, 'sale_bundle': sale_bundle})
+    return render(request, path + 'sales_report.html', {'drinks': drinks, 'role': role, 'total':total, 'sale_bundle': sale_bundle, 'sales':sales})
 
 
 @login_required(login_url='login')

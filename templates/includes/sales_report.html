@@ -43,7 +43,7 @@
         </thead>
         <tbody>
 
-            {% for sale, opening_stock in sale_bundle %}
+            {% for sale in sales %}
             <tr>
                 <td style="width: 5%;">{{forloop.counter}}</td>
                 <td>{{sale.item.brand}} <span class="badge badge-primary">{{sale.item.quantity}}</span> </td>
@@ -51,7 +51,7 @@
                 <td class="pull-right" ><del style="text-decoration-style: double;">N</del>{{sale.amount}}</td>
                 <td style="width: 10%;">{{sale.quantity}}</td>
                 <td>
-                    Opening stock was {{opening_stock.quantity}} on {{opening_stock.date}}.
+                    <comment>Opening stock was {{opening_stock.quantity}} on {{opening_stock.date}}.</comment>
                 </td>
             </tr>
             {% endfor %}
