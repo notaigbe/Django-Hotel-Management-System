@@ -661,12 +661,12 @@ def report(request):
 
     today = datetime.now()
     drinks = Drink.objects.all()
-    sales = Sales.objects.filter(sales_date__year=today.year, sales_date__month__gte=today.month-1)
+    sales = Sales.objects.all()
 
     total = 0
     for sale in sales:
         total += sale.amount
-    opening_stock = Opening_Stock.objects.filter(date__year=today.year, date__month__gte=today.month-1)
+    opening_stock = Opening_Stock.objects.all()
     sale_bundle = zip(sales,opening_stock)
     print(total)
 
