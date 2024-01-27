@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
-
+from django.template import loader
 from django.contrib import messages
 
 from datetime import datetime, date, timedelta
@@ -103,7 +103,8 @@ def add_employee(request):
         'form': form,
         'form2': form2,
         'form3': form3,
-        "role": role
+        "role": role,
+        'segment': 'employees'
     }
     return render(request, path + "add-employee.html", context)
 
@@ -168,7 +169,8 @@ def guests(request):
                     "role": role,
                     "guests": guests,
                     "fd": "",
-                    "ld": ""
+                    "ld": "",
+                    'segment': 'guests'
                 }
                 return render(request, path + "guests.html", context)
 
@@ -216,7 +218,8 @@ def guests(request):
                 "id": request.POST.get("id"),
                 "name": request.POST.get("name"),
                 "email": request.POST.get("email"),
-                "number": request.POST.get("number")
+                "number": request.POST.get("number"),
+                'segment': 'guests'
             }
             return render(request, path + "guests.html", context)
 
@@ -236,7 +239,8 @@ def guests(request):
                 "topList": topList,
                 "topLimit": topLimit,
                 "fd": fd,
-                "ld": ld
+                "ld": ld,
+                'segment': 'guests'
             }
             return render(request, path + "guests.html", context)
     context = {
@@ -245,7 +249,8 @@ def guests(request):
         "topList": topList,
         "topLimit": topLimit,
         "fd": fd,
-        "ld": ld
+        "ld": ld,
+        'segment': 'guests'
     }
     return render(request, path + "guests.html", context)
 
@@ -297,13 +302,15 @@ def employees(request):
             "name": request.POST.get("name"),
             "email": request.POST.get("email"),
             "number": request.POST.get("number"),
-            "filterRole": request.POST.get("filterRole")
+            "filterRole": request.POST.get("filterRole"),
+            'segment': 'employees'
         }
         return render(request, path + "employees.html", context)
 
     context = {
         "role": role,
-        "employees": employees
+        "employees": employees,
+        'segment': 'employees'
     }
     return render(request, path + "employees.html", context)
 
@@ -331,7 +338,8 @@ def employee_details(request, pk):
     context = {
         "role": role,
         "employee": employee,
-        "tasks": tasks
+        "tasks": tasks,
+        'segment': 'employees'
     }
     return render(request, path + "employee-profile.html", context)
 
@@ -352,7 +360,8 @@ def employee_details_edit(request, pk):
         "employee": employee,
         "user": tempuser,
         "form1": form1,
-        "form2": form2
+        "form2": form2,
+        'segment': 'employees'
     }
 
     if request.method == "POST":
@@ -389,6 +398,7 @@ def delete_employee(request, pk):
         "user": tempuser,
         # "form1": form1,
         # "form2": form2
+        'segment': 'employees'
     }
 
     if request.method == "POST":
@@ -413,6 +423,7 @@ def guest_edit(request, pk):
         "form1": form1,
         "form2": form2,
         "user": tempuser,
+        'segment': 'guests'
     }
 
     if request.method == "POST":
@@ -446,7 +457,8 @@ def guest_profile(request, pk):
         "role": role,
         "guest": guest,
         "eventAttendees": eventAttendees,
-        "bookings": bookings
+        "bookings": bookings,
+        'segment': 'guests'
     }
     return render(request, path + "guest-profile.html", context)
 
@@ -534,3 +546,83 @@ def change_password(request, pk):
             messages.error(request, 'error')
         return render(request, path + 'change-password.html', context)
     return render(request, path + 'change-password.html', {'form': form, 'role': role})
+
+def login_view(request):
+    form = LoginForm(request.POST or None)
+
+    msg = None
+
+    if request.method == "POST":
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard')
+            else:
+                msg = 'Invalid credentials'
+        else:
+            msg = 'Error validating the form'
+
+    return render(request, "accounts/login.html", {"form": form, "msg": msg})
+
+
+def register_user(request):
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=raw_password)
+
+            msg = 'User created - please <a href="/login">login</a>.'
+            success = True
+
+            # return redirect("/login/")
+
+        else:
+            msg = 'Form is not valid'
+    else:
+        form = SignUpForm()
+
+    return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+
+@login_required(login_url="login")
+def dashboard(request):
+    role = str(request.user.groups.all()[0])
+    path = role + "/"
+
+    if role == 'manager':
+        employees = Employee.objects.all().exclude(user__groups=4).exclude(user=request.user)
+    else:
+        employees = Employee.objects.all().exclude(user=request.user)
+    
+    low_stock = Drink.objects.filter(quantity__lt = F('restock_level'))
+    low_stock_count = low_stock.count()
+    out_of_stock = Drink.objects.filter(quantity=0)
+    out_of_stock_count = out_of_stock.count()
+    sales = Sales.objects.all()
+
+    sales_total = 0
+    for sale in sales:
+        sales_total += sale.amount
+        print(sale.amount)
+    print(low_stock)
+        
+    context = {'segment': 'dashboard', 
+               'role':role, 
+               'low_stock':low_stock, 
+               'low_stock_count': low_stock_count,
+               'out_of_stock':out_of_stock,
+               'out_of_stock_count':out_of_stock_count,
+               'sales_total': sales_total}
+
+    # html_template = loader.get_template('home/index.html')
+    return render(request, 'home/index.html', context)
+

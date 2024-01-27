@@ -1,12 +1,17 @@
 from django.urls import path, include
 
 from .views import login_page, logout_user, register_page, guests, employees, completeTask, tasks, employee_details, \
-    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee, change_password
+    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee, change_password, login_view, register_user, dashboard
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('backoffice/login/', login_page, name="login"),
+    path('backoffice/', dashboard, name='dashboard'),
+    # path('backoffice/login/', login_page, name="login"),
     path('backoffice/logout/', logout_user, name="logout"),
-    path('backoffice/register/', register_page, name="register"),
+    # path('backoffice/register/', register_page, name="register"),
+    path('backoffice/login/', login_view, name="login"),
+    path('backoffice/register/', register_user, name="register"),
+    # path('backoffice/logout/', LogoutView.as_view(), name="logout"),
     path('guests/', guests, name="guests"),
     path('backoffice/employees/', employees, name="employees"),
     path('backoffice/completeTask/<str:pk>/', completeTask, name="completeTask"),
@@ -18,5 +23,6 @@ urlpatterns = [
 
     path('guest-edit/<str:pk>', guest_edit, name="guest-edit"),
     path('guest-profile/<str:pk>', guest_profile, name="guest-profile"),
-    path('backoffice/password/<pk>', change_password, name='change_password')
+    path('backoffice/password/<pk>', change_password, name='change_password'),
+
 ]
