@@ -1,0 +1,68 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Login {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">
+                    Login
+                </h4>
+            </div>
+            <div class="card-body">
+
+                <h6 class="card-category">
+                    Add your credentials
+                </h6>
+
+                <br/>
+
+                <form action="/" role="form">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Username</label>
+                                <input class="form-control" placeholder="Username" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Password</label>
+                                <input class="form-control" placeholder="Password" type="password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <button class="btn btn-primary pull-left" name="login" type="submit">Login</button>
+
+                    &nbsp; &nbsp;
+                    <span class="pull-right">
+              Don't have an account? <a class="text-primary" href="/register.html">Create</a>
+            </span>
+
+                    <div class="clearfix"></div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
