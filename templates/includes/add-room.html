@@ -6,23 +6,23 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="item-type"><b>Apartment Number: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-number" name="number" />
+                    <input class="form-control " id="item-number" name="number" type="number"/>
                 </div>
 
                 <div class="form-group">
                     <label for="item-type"><b>Apartment Name: </b></label>
-                    <input type="text" class="form-control border border-secondary" id="item-name" name="name" />
+                    <input class="form-control " id="item-name" name="name" type="text"/>
                 </div>
 
 
                 <div class="form-group">
                     <label for="item-price"><b>Price: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-price" name="price" />
+                    <input class="form-control " id="item-price" min="0" name="price" type="number"/>
                 </div>
 
                 <div class="form-group">
                     <label for="item-caution"><b>Caution Fee: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-caution" name="caution_fee" />
+                    <input class="form-control " id="item-caution" min="0" name="caution_fee" type="number"/>
                 </div>
 
             </div>
@@ -30,14 +30,14 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="item-capacity"><b>Capacity: </b></label>
-                    <input type="number" min="0" class="form-control border border-secondary" id="item-capacity"
+                    <input class="form-control " id="item-capacity" min="0" type="number"
                         name="capacity" />
                 </div>
 
                 <div class="form-group">
                     <label for="item-type"><b>Apartment Type:</b></label>
                     <select name="type" required="" id="item-Type"
-                            class="form-control border border-secondary">
+                            class="form-control ">
                             {% for room in rooms %}
                             <option value="{{ room.roomType }}">{{ room.get_roomType_display }}</option>
                             {% endfor %}
@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label for="item-quantity"><b>Number of Rooms: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-quantity" name="beds" />
+                    <input class="form-control " id="item-quantity" name="beds" type="number"/>
                 </div>
             </div>
         </div>

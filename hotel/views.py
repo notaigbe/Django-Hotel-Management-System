@@ -1,20 +1,14 @@
 import calendar
 import json
 import uuid
+from datetime import datetime
 
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-
-from django.db.models import Q, Count
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.models import Group, User
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 
-from datetime import datetime, date, timedelta
-import random
 # Create your views here.
 from accounts.models import *
 from room.models import *
@@ -88,7 +82,8 @@ def events(request):
                 "type": request.POST.get("type"),
                 "location": request.POST.get("location"),
                 "fd": request.POST.get("fd"),
-                "ed": request.POST.get("ed")
+                "ed": request.POST.get("ed"),
+                'segment': 'events'
             }
             return render(request, path + "events.html", context)
 
@@ -128,7 +123,8 @@ def events(request):
         "type": request.POST.get("type"),
         "location": request.POST.get("location"),
         "fd": request.POST.get("fd"),
-        "ed": request.POST.get("ed")
+        "ed": request.POST.get("ed"),
+        'segment': 'events'
     }
     return render(request, path + "events.html", context)
 
@@ -147,7 +143,8 @@ def createEvent(request):
 
     context = {
         'form': form,
-        "role": role
+        "role": role,
+        'segment': 'events'
     }
     return render(request, path + "createEvent.html", context)
 
@@ -164,7 +161,8 @@ def deleteEvent(request, pk):
 
     context = {
         "role": role,
-        'event': event
+        'event': event,
+        'segment': 'events'
 
     }
     return render(request, path + "deleteEvent.html", context)
@@ -181,7 +179,8 @@ def event_profile(request, id):
     context = {
         "role": role,
         "attendees": attendees,
-        "event": tempEvent
+        "event": tempEvent,
+        'segment': 'events'
     }
     return render(request, path + "event-profile.html", context)
 
@@ -198,6 +197,7 @@ def event_edit(request, pk):
         "role": role,
         "event": event,
         "form": form1,
+        'segment': 'events'
     }
 
     if request.method == "POST":
@@ -255,7 +255,8 @@ def announcements(request):
             "id": request.POST.get("id"),
             "name": request.POST.get("name"),
             "content": request.POST.get("content"),
-            "date": request.POST.get("date")
+            "date": request.POST.get("date"),
+            'segment': 'announcements'
         }
         return render(request, path + "announcements.html", context)
 
@@ -274,7 +275,8 @@ def deleteAnnouncement(request, pk):
 
     context = {
         "role": role,
-        'announcement': announcement
+        'announcement': announcement,
+        'segment': 'announcements'
 
     }
     return render(request, path + "deleteAnnouncement.html", context)
@@ -288,7 +290,8 @@ def storage(request):
     storage = Storage.objects.all()
     context = {
         "role": role,
-        'storage': storage
+        'storage': storage,
+        'segment': 'storage'
     }
     if request.method == "POST":
         if 'add' in request.POST:
@@ -323,7 +326,7 @@ def storage(request):
             "name": request.POST.get("name"),
             "type": request.POST.get("type"),
             "q": request.POST.get("q"),
-
+            'segment': 'storage'
         }
         return render(request, path + "storage.html", context)
 
@@ -342,8 +345,8 @@ def deleteStorage(request, pk):
 
     context = {
         "role": role,
-        'storage': storage
-
+        'storage': storage,
+        'segment': 'storage'
     }
     return render(request, path + "deleteStorage.html", context)
 
@@ -362,7 +365,8 @@ def food_menu(request):
     food_menu = FoodMenu.objects.all()
     context = {
         "role": role,
-        'food_menu': food_menu
+        'food_menu': food_menu,
+        'segment': 'food'
     }
     return render(request, path + "food-menu.html", context)
 
@@ -379,7 +383,8 @@ def deleteFoodMenu(request, pk):
 
     context = {
         "role": role,
-        'food_menu': food_menu
+        'food_menu': food_menu,
+        'segment': 'food'
 
     }
     return render(request, path + "deleteFoodMenu.html", context)
@@ -399,7 +404,8 @@ def food_menu_edit(request, pk):
 
     context = {
         "role": role,
-        'food_menu': food_menu
+        'food_menu': food_menu,
+        'segment': 'food'
     }
     return render(request, path + "food-menu-edit.html", context)
 
@@ -513,7 +519,8 @@ def drinks(request):
         "role": role,
         'drinks': drinks,
         "alldrinks": alldrinks,
-        'form': form
+        'form': form,
+        'segment': 'drinks'
     }
     if request.method == "POST":
         if 'add' in request.POST:
@@ -557,7 +564,7 @@ def drinks(request):
             "id": request.POST.get("id"),
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
-
+            'segment': 'drinks'
         }
         return render(request, path + "drinks.html", context)
 
@@ -576,8 +583,8 @@ def deleteDrink(request, pk):
 
     context = {
         "role": role,
-        'drink': drink
-
+        'drink': drink,
+        'segment': 'drinks'
     }
     return render(request, path + "deleteDrinks.html", context)
 
@@ -596,7 +603,8 @@ def sales(request):
         "form": form,
         "role": role,
         'drinks': drinks,
-        'stocks': stocks
+        'stocks': stocks,
+        'segment': 'sales'
     }
     if request.method == "POST":
         form = SalesForm(request.POST)
@@ -614,7 +622,7 @@ def sales(request):
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
             "q": request.POST.get("q"),
-
+            'segment': 'sales'
         }
         return render(request, path + "receipt.html", context)
 
@@ -705,7 +713,8 @@ def report(request):
     print(total)
 
     return render(request, path + 'sales_report.html',
-                  {'drinks': drinks, 'role': role, 'total': total, 'sale_bundle': sale_bundle, 'sales': sales})
+                  {'drinks': drinks, 'role': role, 'total': total, 'sale_bundle': sale_bundle, 'sales': sales,
+                   'segment': 'report'})
 
 
 @login_required(login_url='login')
@@ -729,7 +738,8 @@ def restock(request):
         "form": form,
         "role": role,
         'drinks': drinks,
-        'view': 'restock'
+        'view': 'restock',
+        'segment': 'drinks'
     }
     if request.method == "POST":
         form = RestockForm(request.POST)
@@ -758,7 +768,7 @@ def restock(request):
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
             "q": request.POST.get("q"),
-
+            'segment': 'drinks'
         }
         return render(request, path + "drinks.html", context)
 
@@ -775,6 +785,7 @@ def opening_stock(request):
         "form": form,
         "role": role,
         'drinks': drinks,
+        'segment': 'drinks'
     }
     if request.method == "POST":
         form = OpeningStockForm(request.POST)
@@ -810,7 +821,7 @@ def opening_stock(request):
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
             "q": request.POST.get("q"),
-
+            'segment': 'drinks'
         }
         return render(request, path + "drinks.html", context)
 
@@ -827,6 +838,7 @@ def closing_stock(request):
         "form": form,
         "role": role,
         'drinks': drinks,
+        'segment': 'drinks'
     }
     if request.method == "POST":
         form = ClosingStockForm(request.POST)
@@ -844,7 +856,7 @@ def closing_stock(request):
             "brand": request.POST.get("drink_brand"),
             "type": request.POST.get("type"),
             "q": request.POST.get("q"),
-
+            'segment': 'drinks'
         }
         return render(request, path + "drinks.html", context)
 

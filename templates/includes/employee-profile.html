@@ -11,10 +11,10 @@
                     {% if role != "manager" or role != "admin" %}
                     <span class="font-weight-normal">{{employee.user.first_name}} {{employee.user.last_name}}</span>
                     {% else %}
-                    <input type="text" class="form-control border border-secondary" id="id_first_name"
+                    <input class="form-control " id="id_first_name" type="text"
                         value="{{employee.user.first_name}}" name="first_name">
                     <br>
-                    <input type="text" class="form-control border border-secondary" id="id_last_name"
+                    <input class="form-control " id="id_last_name" type="text"
                         value="{{employee.user.last_name}}" name="last_name">
                     {% endif %}
                 </div>
@@ -24,7 +24,7 @@
                     {% if employee.user.id != request.user.id %}
                     <span class="font-weight-normal"> {{employee.user.last_name}}</span>
                     {% else %}
-                    <input type="text" class="form-control border border-secondary" id="id_last_name"
+                    <input type="text" class="form-control " id="id_last_name"
                         value="{{employee.user.last_name}}" name="last_name">
                     {% endif %}
                 </div>-->
@@ -34,7 +34,7 @@
                 <div class="p-2 h4">
                     <span>Email :</span>
                     <span class="font-weight-normal">{{employee.user.email}}</span>
-                    <input type="hidden" class="form-control border border-secondary" id="id_email"
+                    <input class="form-control " id="id_email" type="hidden"
                         value="{{employee.user.email}}" name="email">
                 </div>
 

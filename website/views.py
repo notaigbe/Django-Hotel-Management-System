@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from email.mime.text import MIMEText
 
 from django.contrib import messages
@@ -6,11 +6,12 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from psycopg2._range import DateTimeTZRange
 
-from .forms import reservationForm
-from .models import Reservation
 from room.models import Room, Booking
+from .models import Reservation
+
+
+# from psycopg2._range import DateTimeTZRange
 
 
 # Create your views here.

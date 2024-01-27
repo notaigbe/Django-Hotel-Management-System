@@ -1,8 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 
-from .views import login_page, logout_user, register_page, guests, employees, completeTask, tasks, employee_details, \
-    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee, change_password, login_view, register_user, dashboard
-from django.contrib.auth.views import LogoutView
+from .views import logout_user, guests, employees, completeTask, tasks, employee_details, \
+    employee_details_edit, add_employee, guest_edit, guest_profile, delete_employee, change_password, login_view, \
+    register_user, dashboard
 
 urlpatterns = [
     path('backoffice/', dashboard, name='dashboard'),

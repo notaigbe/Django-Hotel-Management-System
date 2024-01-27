@@ -1,7 +1,4 @@
-from django.forms import ModelForm, TextInput, NumberInput, Select
-from django.contrib.auth.forms import UserCreationForm
-from django import forms
-from django.contrib.auth.models import User
+from django.forms import ModelForm, NumberInput, Select
 
 from .models import *
 
@@ -55,6 +52,9 @@ class SalesForm(ModelForm):
 
 
 class OpeningStockForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['item'].queryset = Drink.objects.filter(opening_stock=None)
     class Meta:
         model = Opening_Stock
         fields = ["item", "quantity"]

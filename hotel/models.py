@@ -1,13 +1,8 @@
-import uuid
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
 
 from accounts.models import Guest, Employee
-from phonenumber_field.modelfields import PhoneNumberField
-from room.models import Room
 
 
 # Create your models here.
@@ -117,6 +112,11 @@ class Drink(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.brand, self.price)
+
+    def low_stock(self):
+        if self.quantity <= self.restock_level:
+            return True
+        return False
 
 
 class Sales(models.Model):

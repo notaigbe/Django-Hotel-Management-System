@@ -5,7 +5,9 @@ from django.utils.safestring import mark_safe
 from django.core import serializers
 from django.utils.encoding import is_protected_type
 from django.core.serializers.json import DjangoJSONEncoder
+
 register = template.Library()
+
 
 @register.filter
 def queryset_as_json(qs):

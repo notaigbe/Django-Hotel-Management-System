@@ -1,21 +1,17 @@
 # imports
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-
-from django.db.models import Q, Count
-from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.models import Group, User
-
-from datetime import datetime, date, timedelta
 import random
+from datetime import datetime
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+
 # Create your views here.
 from accounts.models import *
-from website.models import Reservation
-from .models import *
 from hotel.models import *
+from website.models import Reservation
 from .forms import *
 
 
@@ -92,7 +88,8 @@ def rooms(request):
                 "capacity": request.POST.get("capacity"),
                 "nob": request.POST.get("nob"),
                 "price": request.POST.get("price"),
-                "type": request.POST.get("type")
+                "type": request.POST.get("type"),
+                'segment': 'apartment'
             }
             return render(request, path + "apartments.html", context)
 
@@ -100,7 +97,8 @@ def rooms(request):
         "role": role,
         'rooms': rooms,
         'fd': firstDayStr,
-        'ld': lastDateStr
+        'ld': lastDateStr,
+        'segment': 'apartment'
     }
     return render(request, path + "apartments.html", context)
 
@@ -136,7 +134,8 @@ def add_room(request):
 
     context = {
         "role": role,
-        'rooms': rooms
+        'rooms': rooms,
+        'segment': 'apartment'
     }
     return render(request, path + "add-room.html", context)
 
@@ -156,7 +155,8 @@ def room_profile(request, pk):
         "room": tempRoom,
         "guests": guests,
         "bookings2": bookings2,
-        "rooms": rooms
+        "rooms": rooms,
+        'segment': 'apartment'
     }
 
     if request.method == "POST":
@@ -207,7 +207,8 @@ def room_edit(request, pk):
         "role": role,
         "room": room,
         "form1": form1,
-        "rooms": rooms
+        "rooms": rooms,
+        'segment': 'apartment'
     }
 
     if request.method == 'POST':
@@ -402,7 +403,8 @@ def bookings(request):
                 "number": request.POST.get("number"),
                 "rez": request.POST.get("rez"),
                 "fd": request.POST.get("fd"),
-                "ed": request.POST.get("ed")
+                "ed": request.POST.get("ed"),
+                'segment': 'bookings'
             }
 
             return render(request, path + "bookings.html", context)
@@ -413,6 +415,7 @@ def bookings(request):
         'reservations': reservations,
         'booking_cost': booking_cost,
         'reservation_cost': reservation_cost,
+        'segment': 'bookings'
     }
     return render(request, path + "bookings.html", context)
 
@@ -502,7 +505,8 @@ def booking_make(request):
         "guests": guests,
         "room": room,
         "total": total,
-        "names": names
+        "names": names,
+        'segment': 'bookings'
     }
 
     return render(request, path + "booking-make.html", context)
@@ -520,7 +524,8 @@ def deleteBooking(request, pk):
 
     context = {
         "role": role,
-        'booking': booking
+        'booking': booking,
+        'segment': 'bookings'
 
     }
     return render(request, path + "deleteBooking.html", context)

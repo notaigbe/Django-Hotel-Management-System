@@ -1,21 +1,17 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.forms import inlineformset_factory
-from django.db.models import Q, Count, F
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group, User
-from django.template import loader
-from django.contrib import messages
-
 from datetime import datetime, date, timedelta
-import random
 
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.models import Group
+from django.db.models import Count, F
+from django.shortcuts import render, redirect
+
+from hotel.models import *
 # Own imports
 # from accounts.models import *
 from room.models import *
-from hotel.models import *
 from .forms import *
 
 
@@ -547,6 +543,7 @@ def change_password(request, pk):
         return render(request, path + 'change-password.html', context)
     return render(request, path + 'change-password.html', {'form': form, 'role': role})
 
+
 def login_view(request):
     form = LoginForm(request.POST or None)
 
@@ -593,6 +590,7 @@ def register_user(request):
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
 
+
 @login_required(login_url="login")
 def dashboard(request):
     role = str(request.user.groups.all()[0])
@@ -602,8 +600,8 @@ def dashboard(request):
         employees = Employee.objects.all().exclude(user__groups=4).exclude(user=request.user)
     else:
         employees = Employee.objects.all().exclude(user=request.user)
-    
-    low_stock = Drink.objects.filter(quantity__lt = F('restock_level'))
+
+    low_stock = Drink.objects.filter(quantity__lt=F('restock_level'))
     low_stock_count = low_stock.count()
     out_of_stock = Drink.objects.filter(quantity=0)
     out_of_stock_count = out_of_stock.count()
@@ -615,14 +613,13 @@ def dashboard(request):
         print(sale.amount)
     print(low_stock)
         
-    context = {'segment': 'dashboard', 
-               'role':role, 
-               'low_stock':low_stock, 
+    context = {'segment': 'dashboard',
+               'role': role,
+               'low_stock': low_stock,
                'low_stock_count': low_stock_count,
-               'out_of_stock':out_of_stock,
-               'out_of_stock_count':out_of_stock_count,
+               'out_of_stock': out_of_stock,
+               'out_of_stock_count': out_of_stock_count,
                'sales_total': sales_total}
 
     # html_template = loader.get_template('home/index.html')
     return render(request, 'home/index.html', context)
-
