@@ -72,8 +72,8 @@
                     {% csrf_token %}
                     <!--td><input type="number" step="1" value="{{drink.initial_stock}}" name="initial-stock" class="form-control"></td>
                     <td><input type="number" step="1" value="{{drink.topup_stock}}" name="topup-stock" class="form-control"></td-->
-                    <td style="width:10%"><input type="number" step="1" value="{{drink.price}}" name="price" class="form-control"></td>
-                    <td style="width:10%"><input type="number" step="1" value="{{drink.restock_level}}" name="restock" class="form-control"></td>
+                    <td style="width:10%"><input type="number" step="1" value="{{drink.price}}" name="price" class="form-control" min="0"></td>
+                    <td style="width:10%"><input type="number" step="1" value="{{drink.restock_level}}" name="restock" class="form-control" min="0"></td>
                     <input type="hidden" step="1" value="{{drink.quantity}}" name="quantity">
                     <input type="hidden" step="1" value="{{drink.id}}" name="id">
                     <th><button type="submit" class="btn btn-sm btn-primary w-100" name="save">Save</button></th>
@@ -124,12 +124,12 @@
             <div class="form-group">
                 <label for="drink-price"><b>Price</b></label>
                 <input type="number" class="form-control required" name="price"
-                    id="drink-price">
+                    id="drink-price" min="0">
             </div>
             <div class="form-group">
                 <label for="restock"><b>Restock Level</b></label>
                 <input type="number" class="form-control required" name="restock"
-                    id="restock">
+                    id="restock" min="0">
             </div>
             <button type="submit" class="btn btn-primary px-5 float-right mb-5" name="add">Add</button>
         </form>

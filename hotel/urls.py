@@ -2,7 +2,7 @@ from django.urls import path, include, register_converter, converters
 
 from .views import home, events, announcements, storage, payment, verify, deleteStorage, deleteFoodMenu, food_menu, \
     food_menu_edit, createEvent, deleteEvent, deleteAnnouncement, error, event_profile, event_edit, drinks, deleteDrink, \
-    sales, order, print_receipt, restock, opening_stock, closing_stock, report
+    sales, order, print_receipt, restock, opening_stock, closing_stock, report, frontdesk_check
 
 # register_converter(converters.StringConverter, "yyyy")
 
@@ -13,7 +13,7 @@ urlpatterns = [
     path('events/', events, name="events"),
 
     path('announcements/', announcements, name="announcements"),
-
+    path('backoffice/check/', frontdesk_check, name="frontdesk-check"),
     path('backoffice/storage/', storage, name="storage"),
     path('backoffice/drinks/', drinks, name="drinks"),
     path('backoffice/sales/', sales, name="sales"),

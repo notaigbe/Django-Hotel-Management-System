@@ -29,7 +29,7 @@
                         <input type="number" min="1" class="form-control border border-secondary"
                             id="item-quantity" name="item-quantity">-->
                         {{ form.quantity }}
-                    <button type="submit" name="submit" class="btn btn-outline-primary mt-3" onclick="AddData(event)">Add</button>
+<!--                    <button type="submit" name="submit" class="btn btn-outline-primary mt-3" onclick="AddData(event)">Add</button>-->
                     <button type="submit" name="submit" class="btn btn-outline-success float-right mt-3" id="saveStock">Save</button>
                 </div>
 
@@ -47,26 +47,26 @@
 
         </form>
         <br>
-        <div class="h1 float-right mb-20"><p>N</p></div>
-                    <div id="tab">
-                        <table class="table table-hover table-striped" id="list">
-                            <thead>
-                                <tr>
-                                    <td>Item</td>
-                                    <td>Price</td>
-                                    <td>Quantity</td>
-                                    <td>Total</td>
-                                    </tr>
-                            </thead>
-                            <tbody>
+<!--        <div class="h1 float-right mb-20"><p>N</p></div>-->
+<!--                    <div id="tab">-->
+<!--                        <table class="table table-hover table-striped" id="list">-->
+<!--                            <thead>-->
+<!--                                <tr>-->
+<!--                                    <td>Item</td>-->
+<!--                                    <td>Price</td>-->
+<!--                                    <td>Quantity</td>-->
+<!--                                    <td>Total</td>-->
+<!--                                    </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
 
-                            </tbody>
+<!--                            </tbody>-->
 
-                        </table>
+<!--                        </table>-->
 
-                        <!--button type="submit" name="submit" class="btn btn-outline-success float-right" id="saveButton">Save</button-->
+<!--                        &lt;!&ndash;button type="submit" name="submit" class="btn btn-outline-success float-right" id="saveButton">Save</button&ndash;&gt;-->
 
-                        </div>
+<!--                        </div>-->
     </div>
 </div>
 <script>
@@ -93,6 +93,7 @@
     }
 </script>
 <script>
+
     function total()
     {
     var table = document.getElementById("tab"), sumVal = 0
@@ -133,7 +134,7 @@
                 contentType: "application/json",
                 dataType: 'json',
                 success: function(response) {
-                    // if email exists, alert the user
+                    // if drink exists, alert the user
 
                     if(response['valid']){
                         var orders = response['orders']

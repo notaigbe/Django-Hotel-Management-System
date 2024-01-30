@@ -14,6 +14,7 @@
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -35,9 +36,10 @@
           type="text/css"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <!-- CSS Files -->
-    <link href="/static/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet"/>
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.css" integrity="sha512-V0+DPzYyLzIiMiWCg3nNdY+NyIiK9bED/T1xNBj08CaIUyK3sXRpB26OUCIzujMevxY9TRJFHQIxTwgzb0jVLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />-->
+    <link href="{% static 'assets/css/material-dashboard.css' %}" rel="stylesheet"/>
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="/static/assets/demo/demo.css" rel="stylesheet"/>
+    <link href="{% static 'assets/demo/demo.css' %}" rel="stylesheet"/>
 
     <!-- Specific Page CSS goes HERE  -->
     {% block stylesheets %}{% endblock stylesheets %}

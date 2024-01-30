@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, date, timedelta
 
 from django.contrib import messages
@@ -6,9 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import Group
 from django.db.models import Count, F
+from django.db.models.functions import TruncMonth
 from django.shortcuts import render, redirect
-
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncDate
 from hotel.models import *
+from website.views import check_availability
 # Own imports
 # from accounts.models import *
 from room.models import *
@@ -601,6 +605,41 @@ def dashboard(request):
     else:
         employees = Employee.objects.all().exclude(user=request.user)
 
+    # Get the current week's start and end dates
+    today = timezone.now().date()
+    start_of_week = today - timezone.timedelta(days=today.weekday())
+    end_of_week = start_of_week + timezone.timedelta(days=6)
+
+    daily_sales = Sales.objects.filter(
+        sales_date__date__range=[start_of_week, end_of_week]
+    ).annotate(
+        date=TruncDate('sales_date')
+    ).values('date').annotate(
+        total_sales=Sum('amount'),
+        total_orders=Count('id')
+    ).order_by('date')
+
+    for result in daily_sales:
+        print(result)
+
+    # Get the current year's start and end dates
+    today = timezone.now().date()
+    start_of_year = today.replace(month=1, day=1)
+    end_of_year = today.replace(month=12, day=31)
+
+    monthly_sales = Sales.objects.filter(
+        sales_date__date__range=[start_of_year, end_of_year]
+    ).annotate(
+        month=TruncMonth('sales_date')
+    ).annotate(
+        date=TruncDate('sales_date')
+    ).values('month', 'date').annotate(
+        total_sales=Sum('amount'),
+        total_orders=Count('id')
+    ).order_by('month')
+
+    # for sales in monthly_sales:
+    #     print(sales)
     low_stock = Drink.objects.filter(quantity__lt=F('restock_level'))
     low_stock_count = low_stock.count()
     out_of_stock = Drink.objects.filter(quantity=0)
@@ -610,16 +649,58 @@ def dashboard(request):
     sales_total = 0
     for sale in sales:
         sales_total += sale.amount
-        print(sale.amount)
-    print(low_stock)
-        
+        # print(sale.amount)
+    # print(low_stock)
+    daily_sales_list = []
+
+    monthly_sales_list = []
+
+    # for entry in daily_sales:
+    #     entry_date = entry['date']
+    #     sales = entry['total_sales']
+    #     orders = entry['total_orders']
+
+        # daily_sales_dict[entry_date.strftime('%A')] = sales
+    for data in range(0, 7):
+        # if daily_sales:
+        for entry in daily_sales:
+            if data + 1 == entry['date'].weekday():
+                daily_sales_list.append(entry['total_sales'])
+            else:
+                daily_sales_list.append(0)
+        # else:
+        #     daily_sales_list.append(0)
+
+    for data in range(0, 12):
+        for entry in monthly_sales:
+            if data + 1 == entry['date'].month:
+                monthly_sales_list.append(entry['total_sales']/1000)
+            else:
+                monthly_sales_list.append(0)
+        # entry_date = entry['date'].strftime('%B')
+        # sales = entry['total_sales']/1000
+        # orders = entry['total_orders']
+
+        # monthly_sales_dict[entry_date] = sales
+
+    print(daily_sales_list)
+    # print(monthly_sales_dict)
+
+    available = check_availability(datetime.now(), datetime.now())
+
     context = {'segment': 'dashboard',
                'role': role,
                'low_stock': low_stock,
                'low_stock_count': low_stock_count,
                'out_of_stock': out_of_stock,
                'out_of_stock_count': out_of_stock_count,
-               'sales_total': sales_total}
+               'sales_total': sales_total,
+               'daily_sales': daily_sales,
+               'monthly_sales': monthly_sales,
+               'daily_sales_list': daily_sales_list,
+               'monthly_sales_list': monthly_sales_list,
+               'available_apartments_count': len(available),
+               'available_apartments': available}
 
     # html_template = loader.get_template('home/index.html')
     return render(request, 'home/index.html', context)

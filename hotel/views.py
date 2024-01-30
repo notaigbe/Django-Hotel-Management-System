@@ -12,8 +12,10 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from accounts.models import *
 from room.models import *
+from website.views import check_availability
 # from hotel.models import *
 from .forms import *
+from django.core.serializers import serialize
 
 
 @login_required(login_url='login')
@@ -642,7 +644,8 @@ def order(request):
 
     for item in orders['myRows']:
         drink = Drink.objects.get(brand=item['Item'])
-        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), sales_person=orders['salesPerson'])
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']),
+                             sales_person=orders['salesPerson'])
         sales_order = Sales.objects.last()
 
         receipt_id = uuid.uuid4()
@@ -661,6 +664,7 @@ def order(request):
     # return render(request, path + 'receipt.html', {'orders': orders, 'total': total})
     return HttpResponse(json.dumps({'valid': True, 'orders': orders, 'total': total}), content_type='application/json')
 
+
 @login_required(login_url='login')
 def check_stock(request):
     role = str(request.user.groups.all()[0])
@@ -674,7 +678,8 @@ def check_stock(request):
 
     for item in orders['myRows']:
         drink = Drink.objects.get(brand=item['Item'])
-        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']), sales_person=orders['salesPerson'])
+        Sales.objects.create(item=drink, amount=item['Total'], quantity=int(item['Quantity']),
+                             sales_person=orders['salesPerson'])
         sales_order = Sales.objects.last()
 
         receipt_id = uuid.uuid4()
@@ -861,6 +866,21 @@ def closing_stock(request):
         return render(request, path + "drinks.html", context)
 
     return render(request, path + "stock.html", context)
+
+
+def frontdesk_check(request):
+    # if request.method == 'POST':
+        
+        # enquiry = json.loads(request.body)
+        # print(enquiry)
+    available = check_availability(datetime.strptime(request.GET.get('checkin_date'), '%Y-%m-%d'),
+                                    datetime.strptime(request.GET.get('checkout_date'), '%Y-%m-%d'))
+    serialized_data = serialize('json', available, use_natural_foreign_keys=True)
+    serialized_data = json.loads(serialized_data)
+
+    print(available)
+# return redirect('dashboard')
+    return HttpResponse(json.dumps({'valid': True, 'available': serialized_data}), content_type='application/json')
 
 
 def error_404(request, exception):

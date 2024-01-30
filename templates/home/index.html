@@ -15,7 +15,7 @@
                     <i class="material-icons">content_copy</i>
                 </div>
                 <p class="card-category">Available Apartments</p>
-                <h3 class="card-title">49/50
+                <h3 class="card-title">{{ available_apartments_count }}
                     <small>Apartments</small>
                 </h3>
             </div>
@@ -140,23 +140,23 @@
             <div class="card-header card-header-tabs card-header-primary">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
-                        <span class="nav-tabs-title">Tasks:</span>
+                        <span class="nav-tabs-title">Apartments:</span>
                         <ul class="nav nav-tabs" data-tabs="tabs">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#profile">
-                                    <i class="material-icons">bug_report</i> Bugs
+                                    <i class="material-icons">bed</i> Available
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#messages">
-                                    <i class="material-icons">code</i> Website
+                                    <i class="material-icons">code</i> Reserved
                                     <div class="ripple-container"></div>
                                 </a>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#settings">
-                                    <i class="material-icons">cloud</i> Server
+                                    <i class="material-icons">cloud</i> Enquire
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
@@ -169,29 +169,7 @@
                     <div class="tab-pane active" id="profile">
                         <table class="table">
                             <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input checked class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
+                            {% for apartment in available_apartments %}
                             <tr>
                                 <td>
                                     <div class="form-check">
@@ -203,66 +181,22 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
+                                <td>{{ apartment.name }}</td>
+                                <td>{{ apartment.get_roomType_display }}</td>
+                                <td>{{ apartment.price|intcomma }}</td>
                                 <td class="td-actions text-right">
                                     <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
                                             type="button">
                                         <i class="material-icons">edit</i>
                                     </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
+<!--                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"-->
+<!--                                            type="button">-->
+<!--                                        <i class="material-icons">close</i>-->
+<!--                                    </button>-->
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Flooded: One year later, assessing what was lost and what was found when a ravaging
-                                    rain swept through metro Detroit
-                                </td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input checked class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Create 4 Invisible User Experiences you Never Knew About</td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
+                            {% endfor %}
+
                             </tbody>
                         </table>
                     </div>
@@ -321,7 +255,31 @@
                         </table>
                     </div>
                     <div class="tab-pane" id="settings">
-                        <table class="table">
+                        <form action="" method="post">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6 mb-3 mb-lg-0 col-lg-4">
+                  <label for="checkin_date" class="font-weight-bold text-black">Check In</label>
+                  <div class="field-icon-wrap">
+                    <div class="icon"><span class="icon-calendar"></span></div>
+                    <input type="date" name="checkin_date" id="checkin_date" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3 mb-lg-0 col-lg-4">
+                  <label for="checkout_date" class="font-weight-bold text-black">Check Out</label>
+                  <div class="field-icon-wrap">
+                    <div class="icon"><span class="icon-calendar"></span></div>
+                    <input type="date" name="checkout_date" id="checkout_date" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 align-self-end">
+                  <button class="btn btn-primary btn-block text-white" id="checkButton">Check</button>
+                </div>
+              </div>
+            </form>
+            <div id="availableApartments"></div>
+                        <!-- <table class="table">
                             <tbody>
                             <tr>
                                 <td>
@@ -395,7 +353,7 @@
                                 </td>
                             </tr>
                             </tbody>
-                        </table>
+                        </table> -->
                     </div>
                 </div>
             </div>
@@ -424,24 +382,7 @@
                         <td>{{ stock.quantity }}</td>
                     </tr>
                     {% endfor %}
-                    <!-- <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                    </tr> -->
+                    
                     </tbody>
                 </table>
             </div>
@@ -456,10 +397,67 @@
 
 <script>
     $(document).ready(function() {
+    var daily_sales_data = '{{ daily_sales_list }}';
+    const monthly_sales_data = '{{ monthly_sales_list }}';
+    var jsonmonthlydata = JSON.parse(monthly_sales_data);
+    var jsondailydata = JSON.parse(daily_sales_data);
+    console.log(jsondailydata);
+
+    console.log(jsonmonthlydata);
       // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
+      demo.initDashboardPageCharts(jsonmonthlydata, jsondailydata);
 
     });
 </script>
+<script>
+    var enquiry = {}
 
+            $("#checkButton").click(function(e) {
+                e.preventDefault();
+            var checkinDate = $("#checkin_date").val();
+            var checkoutDate = $("#checkout_date").val();
+
+            console.log(checkoutDate);
+
+            // GET AJAX request
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'frontdesk-check' %}",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                data: {
+                    checkin_date: checkinDate,
+                    checkout_date: checkoutDate
+                },
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(response) {
+                    // if successful, alert the user
+
+                    if(response['valid']){
+                        available = response['available']
+                        console.log(response)
+                        var tableHtml = '<table class="table"><tbody>';
+                        for (var i = 0; i < available.length; i++) {
+                            tableHtml += '<tr><td>' + available[i].fields['name'] + '</td><td>' + available[i].fields['numberOfBeds'] + ' bedroom </td><td>' + available[i].fields['price'] +'</td></tr>';
+                        }
+                        tableHtml += '</tbody></table>';
+                        //PrintElem(orders, total)
+                        $("#availableApartments").html(tableHtml);
+                        //alert('Posted');
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+            // console.log(JSON.stringify(myObj))
+            })
+</script>
+<script>
+    $(document).ready(function() {
+      //init DateTimePickers
+      demo.initFormExtendedDatetimepickers();
+    });
+</script>
 {% endblock javascripts %}
