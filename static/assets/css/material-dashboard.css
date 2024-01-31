@@ -7533,7 +7533,13 @@ a.text-dark:hover, a.text-dark:focus {
         width: 0;
         color: #fff;
         height: 0;
-        box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0 inset;
+        box-shadow: 0 0 0 0,
+ 0 0 0 0,
+ 0 0 0 0,
+ 0 0 0 0,
+ 0 0 0 0,
+ 0 0 0 0,
+ 0 0 0 0 inset;
         animation: checkboxOff 0.3s forwards; }
   .form-check .form-check-input:focus + .form-check-sign .check:after {
     opacity: 0.2; }
@@ -7541,7 +7547,12 @@ a.text-dark:hover, a.text-dark:focus {
     background: #9c27b0; }
   .form-check .form-check-input:checked ~ .form-check-sign .check:before {
     color: #FFFFFF;
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 20px -12px 0 11px;
     animation: checkboxOn 0.3s forwards; }
   .form-check .form-check-input:checked ~ .form-check-sign:before {
     animation: rippleOn 500ms; }
@@ -7569,11 +7580,26 @@ a.text-dark:hover, a.text-dark:focus {
 
 @keyframes checkboxOn {
   0% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px; }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 15px 2px 0 11px; }
   50% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px; }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 20px 2px 0 11px; }
   100% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px; } }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 20px -12px 0 11px; } }
 
 @keyframes rippleOn {
   0% {
@@ -7686,11 +7712,26 @@ a.text-dark:hover, a.text-dark:focus {
 
 @keyframes checkboxOn {
   0% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px; }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 15px 2px 0 11px; }
   50% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px; }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 20px 2px 0 11px; }
   100% {
-    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px; } }
+    box-shadow: 0 0 0 10px,
+ 10px -10px 0 10px,
+ 32px 0 0 20px,
+ 0px 32px 0 20px,
+ -5px 5px 0 10px,
+ 20px -12px 0 11px; } }
 
 @keyframes rippleOn {
   0% {
@@ -12056,6 +12097,42 @@ Copyright (c) 2015 Daniel Eden
 .ct-chart .ct-series-c .ct-area {
   stroke: #ff9800; }
 
+.ct-chart .ct-series-d .ct-point,
+.ct-chart .ct-series-d .ct-line,
+.ct-chart .ct-series-d .ct-bar,
+.ct-chart .ct-series-d .ct-slice-donut,
+.ct-chart .ct-series-d .ct-slice-pie,
+.ct-chart .ct-series-d .ct-slice-donut-solid,
+.ct-chart .ct-series-d .ct-area {
+  stroke: #ffba55; }
+
+.ct-chart .ct-series-e .ct-point,
+.ct-chart .ct-series-e .ct-line,
+.ct-chart .ct-series-e .ct-bar,
+.ct-chart .ct-series-e .ct-slice-donut,
+.ct-chart .ct-series-e .ct-slice-pie,
+.ct-chart .ct-series-e .ct-slice-donut-solid,
+.ct-chart .ct-series-e .ct-area {
+  stroke: #1c75f0; }
+
+.ct-chart .ct-series-f .ct-point,
+.ct-chart .ct-series-f .ct-line,
+.ct-chart .ct-series-f .ct-bar,
+.ct-chart .ct-series-f .ct-slice-donut,
+.ct-chart .ct-series-f .ct-slice-pie,
+.ct-chart .ct-series-f .ct-slice-donut-solid,
+.ct-chart .ct-series-f .ct-area {
+  stroke: #17774b; }
+
+.ct-chart .ct-series-g .ct-point,
+.ct-chart .ct-series-g .ct-line,
+.ct-chart .ct-series-g .ct-bar,
+.ct-chart .ct-series-g .ct-slice-donut,
+.ct-chart .ct-series-g .ct-slice-pie,
+.ct-chart .ct-series-g .ct-slice-donut-solid,
+.ct-chart .ct-series-g .ct-area {
+  stroke: #7d7025; }
+
 .ct-chart .ct-bar {
   fill: none;
   stroke-width: 10px; }
@@ -12099,6 +12176,28 @@ Copyright (c) 2015 Daniel Eden
 .ct-chart .ct-series-c .ct-area {
   fill: #ff9800; }
 
+.ct-chart .ct-series-d .ct-slice-pie,
+.ct-chart .ct-series-d .ct-slice-donut-solid,
+.ct-chart .ct-series-d .ct-area {
+  fill: #ffba55; }
+
+
+.ct-chart .ct-series-e .ct-slice-pie,
+.ct-chart .ct-series-e .ct-slice-donut-solid,
+.ct-chart .ct-series-e .ct-area {
+  fill: #1c75f0; }
+
+
+.ct-chart .ct-series-f .ct-slice-pie,
+.ct-chart .ct-series-f .ct-slice-donut-solid,
+.ct-chart .ct-series-f .ct-area {
+  fill: #17774b; }
+
+
+.ct-chart .ct-series-g .ct-slice-pie,
+.ct-chart .ct-series-g .ct-slice-donut-solid,
+.ct-chart .ct-series-g .ct-area {
+  fill: #7d7025; }
 /* perfect-scrollbar v0.6.13 */
 .ps-container {
   touch-action: auto;

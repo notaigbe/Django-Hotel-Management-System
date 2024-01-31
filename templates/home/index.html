@@ -12,17 +12,17 @@
         <div class="card card-stats">
             <div class="card-header card-header-warning card-header-icon">
                 <div class="card-icon">
-                    <i class="material-icons">content_copy</i>
+                    <i class="material-icons">home</i>
                 </div>
-                <p class="card-category">Available Apartments</p>
+                <p class="card-category">Available</p>
                 <h3 class="card-title">{{ available_apartments_count }}
                     <small>Apartments</small>
                 </h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <i class="material-icons text-danger">warning</i>
-                    <a href="#pablo">Get More Space...</a>
+                    <i class="material-icons">bed</i>
+                    Available apartments
                 </div>
             </div>
         </div>
@@ -47,15 +47,13 @@
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="card card-stats">
-            <div class="card-header card-header-danger card-header-icon">
+            <div class="card-header card-header-info card-header-icon">
                 <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                 </div>
                 <p class="card-category">Low Stock</p>
-                <h3 class="card-title">{{ low_stock_count }}
-                    <!-- {% for stock in low_stock %}
-                    <small>{{stock}}</small>
-                    {% endfor %} -->
+                <h3 class="card-title">Drinks<br><small>{{ low_stock_count }}</small>
+
                 </h3>
             </div>
             <div class="card-footer">
@@ -67,12 +65,12 @@
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="card card-stats">
-            <div class="card-header card-header-info card-header-icon">
+            <div class="card-header card-header-danger card-header-icon">
                 <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                    <i class="material-icons">info</i>
                 </div>
                 <p class="card-category">Out of Stock</p>
-                <h3 class="card-title">{{ out_of_stock_count }}</h3>
+                <h3 class="card-title">Drinks<br><small>{{ out_of_stock_count }}</small></h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -103,7 +101,7 @@
     </div>
     <div class="col-md-4">
         <div class="card card-chart">
-            <div class="card-header card-header-warning">
+            <div class="card-header card-header-rose">
                 <div class="ct-chart" id="websiteViewsChart"></div>
             </div>
             <div class="card-body">
@@ -119,12 +117,12 @@
     </div>
     <div class="col-md-4">
         <div class="card card-chart">
-            <div class="card-header card-header-danger">
+            <div class="card-header card-header-info">
                 <div class="ct-chart" id="completedTasksChart"></div>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Completed Tasks</h4>
-                <p class="card-category">Last Campaign Performance</p>
+                <h4 class="card-title">Revenue Distribution</h4>
+                <p class="card-category">Drink Revenue Distribution by Type</p>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -156,7 +154,7 @@
                             </li> -->
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#settings">
-                                    <i class="material-icons">cloud</i> Enquire
+                                    <i class="material-icons">room</i> Enquire
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
@@ -397,6 +395,8 @@
 
 <script>
     $(document).ready(function() {
+    document.getElementById("checkin_date").min = new Date().toISOString().split("T")[0];
+    document.getElementById("checkout_date").min = new Date().toISOString().split("T")[0];
     var daily_sales_data = '{{ daily_sales_list }}';
     const monthly_sales_data = '{{ monthly_sales_list }}';
     var jsonmonthlydata = JSON.parse(monthly_sales_data);
@@ -405,7 +405,7 @@
 
     console.log(jsonmonthlydata);
       // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts(jsonmonthlydata, jsondailydata);
+      md.initDashboardPageCharts(jsonmonthlydata, jsondailydata);
 
     });
 </script>
@@ -457,7 +457,7 @@
 <script>
     $(document).ready(function() {
       //init DateTimePickers
-      demo.initFormExtendedDatetimepickers();
+      md.initFormExtendedDatetimepickers();
     });
 </script>
 {% endblock javascripts %}

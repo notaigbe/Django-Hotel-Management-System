@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, date, timedelta
 
 from django.contrib import messages
@@ -6,16 +5,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import Group
-from django.db.models import Count, F
-from django.db.models.functions import TruncMonth
-from django.shortcuts import render, redirect
+from django.db.models import F
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncDate
+from django.db.models.functions import TruncMonth
+from django.shortcuts import render, redirect
+
 from hotel.models import *
-from website.views import check_availability
 # Own imports
 # from accounts.models import *
 from room.models import *
+from website.views import check_availability
 from .forms import *
 
 
@@ -675,6 +675,7 @@ def dashboard(request):
         for entry in monthly_sales:
             if data + 1 == entry['date'].month:
                 monthly_sales_list.append(entry['total_sales']/1000)
+                print(monthly_sales_list)
             else:
                 monthly_sales_list.append(0)
         # entry_date = entry['date'].strftime('%B')
@@ -684,7 +685,7 @@ def dashboard(request):
         # monthly_sales_dict[entry_date] = sales
 
     print(daily_sales_list)
-    # print(monthly_sales_dict)
+    print(monthly_sales_list)
 
     available = check_availability(datetime.now(), datetime.now())
 
