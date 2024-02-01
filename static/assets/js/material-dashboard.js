@@ -307,7 +307,7 @@ md = {
     }
   },
 
-  initDashboardPageCharts: function(monthly_sales_data, daily_sales_data) {
+  initDashboardPageCharts: function(monthly_sales_data, daily_sales_data, sales_distribution) {
 
     if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#websiteViewsChart').length != 0) {
       /* ----------==========     Daily Sales Chart initialization    ==========---------- */
@@ -377,8 +377,8 @@ md = {
 
       /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
       var data = {
-          labels: ['Spirit', 'Beer', 'Soft', 'Wine', 'Bitters', 'Fruit Juice', 'Energy Drink'],
-          series: [20, 15, 40, 10, 23, 15, 22]
+          labels: ['Beer', 'Bitters', 'Energy Drink', 'Fruit Juice', 'Soft', 'Spirit', 'Wine',  ],
+          series: sales_distribution
         };
 
         var options = {

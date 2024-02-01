@@ -8,6 +8,7 @@
 {% block content %}
 
 <div class="row">
+    {% if role != 'staff' %}
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="card card-stats">
             <div class="card-header card-header-warning card-header-icon">
@@ -27,6 +28,8 @@
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if role != 'receptionist' %}
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="card card-stats">
             <div class="card-header card-header-success card-header-icon">
@@ -45,6 +48,7 @@
             </div>
         </div>
     </div>
+
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="card card-stats">
             <div class="card-header card-header-info card-header-icon">
@@ -79,7 +83,10 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
+
+{% if role == 'admin' or role == 'manager' %}
 <div class="row">
     <div class="col-md-4">
         <div class="card card-chart">
@@ -132,7 +139,9 @@
         </div>
     </div>
 </div>
+{% endif %}
 <div class="row">
+    {% if role != 'staff' %}
     <div class="col-lg-6 col-md-12">
         <div class="card">
             <div class="card-header card-header-tabs card-header-primary">
@@ -277,115 +286,91 @@
               </div>
             </form>
             <div id="availableApartments"></div>
-                        <!-- <table class="table">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input checked class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Flooded: One year later, assessing what was lost and what was found when a ravaging
-                                    rain swept through metro Detroit
-                                </td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input checked class="form-check-input" type="checkbox" value="">
-                                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                <td class="td-actions text-right">
-                                    <button class="btn btn-primary btn-link btn-sm" rel="tooltip" title="Edit Task"
-                                            type="button">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"
-                                            type="button">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table> -->
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if role != 'receptionist' %}
     <div class="col-lg-6 col-md-12">
         <div class="card">
-            <div class="card-header card-header-warning">
-                <h4 class="card-title">Drinks</h4>
-                <p class="card-category">Drinks needing restocking</p>
+
+            <div class="card-header card-header-tabs card-header-warning">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Drinks:</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#lowstock">
+                                    <i class="material-icons">timer</i> Low Stock
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#emptystock">
+                                    <i class="material-icons">room</i> Out of Stock
+                                    <div class="ripple-container"></div>
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="card-body table-responsive">
-                <table class="table table-hover">
-                    <thead class="text-warning">
-                    <th>ID</th>
-                    <th>Brand</th>
-                    <th>Restock Level</th>
-                    <th>Quantity</th>
-                    </thead>
-                    <tbody>
-                    {% for stock in low_stock %}
-                    <tr>
-                        <td>1</td>
-                        <td>{{ stock.brand }}</td>
-                        <td>{{ stock.restock_level }}</td>
-                        <td>{{ stock.quantity }}</td>
-                    </tr>
-                    {% endfor %}
-                    
-                    </tbody>
-                </table>
+
+
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="lowstock">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                            <th>ID</th>
+                            <th>Brand</th>
+                            <th>Restock Level</th>
+                            <th>Quantity</th>
+                            </thead>
+                            <tbody>
+                            {% for stock in low_stock %}
+                            <tr>
+                                <td>1</td>
+                                <td>{{ stock.brand }}</td>
+                                <td>{{ stock.restock_level }}</td>
+                                <td>{{ stock.quantity }}</td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="emptystock">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                            <th>ID</th>
+                            <th>Brand</th>
+                            <th>Restock Level</th>
+                            <th>Quantity</th>
+                            </thead>
+                            <tbody>
+                            {% for stock in out_of_stock %}
+                            <tr>
+                                <td>1</td>
+                                <td>{{ stock.brand }}</td>
+                                <td>{{ stock.restock_level }}</td>
+                                <td>{{ stock.quantity }}</td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 
 {% endblock content %}
@@ -397,13 +382,16 @@
     $(document).ready(function() {
     document.getElementById("checkin_date").min = new Date().toISOString().split("T")[0];
     document.getElementById("checkout_date").min = new Date().toISOString().split("T")[0];
-    var daily_sales_data = '{{ daily_sales_list }}';
+    const daily_sales_data = '{{ daily_sales_list }}';
     const monthly_sales_data = '{{ monthly_sales_list }}';
+    const sales_distribution_data = '{{ sales_distribution_list }}';
     var jsonmonthlydata = JSON.parse(monthly_sales_data);
     var jsondailydata = JSON.parse(daily_sales_data);
+    var jsonsalesdistribution = JSON.parse(sales_distribution_data)
     console.log(jsondailydata);
 
     console.log(jsonmonthlydata);
+    console.log(jsonsalesdistribution);
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts(jsonmonthlydata, jsondailydata);
 

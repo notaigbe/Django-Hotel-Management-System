@@ -14,7 +14,6 @@ from django.shortcuts import render, redirect
 from hotel.models import *
 # Own imports
 # from accounts.models import *
-from room.models import *
 from website.views import check_availability
 from .forms import *
 
@@ -638,9 +637,14 @@ def dashboard(request):
         total_orders=Count('id')
     ).order_by('month')
 
+    sales_distribution = Sales.objects.filter(
+        sales_date__date__range=[start_of_week, end_of_week]
+    ).values('item__drinkType').annotate(
+        total_sales=Sum('amount')
+    ).order_by('item__drinkType')
     # for sales in monthly_sales:
     #     print(sales)
-    low_stock = Drink.objects.filter(quantity__lt=F('restock_level'))
+    low_stock = Drink.objects.filter(quantity__lt=F('restock_level'), quantity__gt=0)
     low_stock_count = low_stock.count()
     out_of_stock = Drink.objects.filter(quantity=0)
     out_of_stock_count = out_of_stock.count()
@@ -652,7 +656,7 @@ def dashboard(request):
         # print(sale.amount)
     # print(low_stock)
     daily_sales_list = []
-
+    sales_distribution_list = []
     monthly_sales_list = []
 
     # for entry in daily_sales:
@@ -666,25 +670,33 @@ def dashboard(request):
         for entry in daily_sales:
             if data + 1 == entry['date'].weekday():
                 daily_sales_list.append(entry['total_sales'])
-            else:
-                daily_sales_list.append(0)
+            # else:
+            #     daily_sales_list.append(0)
         # else:
         #     daily_sales_list.append(0)
+
+    for data in range(0, 7):
+        # if daily_sales:
+        for entry in sales_distribution:
+            # if data + 1 == entry['date'].weekday():
+            sales_distribution_list.append(entry['total_sales'])
+            # else:
+            #     sales_distribution_list.append(0)
 
     for data in range(0, 12):
         for entry in monthly_sales:
             if data + 1 == entry['date'].month:
-                monthly_sales_list.append(entry['total_sales']/1000)
+                monthly_sales_list.append(entry['total_sales'] / 100)
                 print(monthly_sales_list)
-            else:
-                monthly_sales_list.append(0)
+            # else:
+            #     monthly_sales_list.append(0)
         # entry_date = entry['date'].strftime('%B')
         # sales = entry['total_sales']/1000
         # orders = entry['total_orders']
 
         # monthly_sales_dict[entry_date] = sales
 
-    print(daily_sales_list)
+    print(sales_distribution)
     print(monthly_sales_list)
 
     available = check_availability(datetime.now(), datetime.now())
@@ -700,6 +712,7 @@ def dashboard(request):
                'monthly_sales': monthly_sales,
                'daily_sales_list': daily_sales_list,
                'monthly_sales_list': monthly_sales_list,
+               'sales_distribution_list': sales_distribution_list,
                'available_apartments_count': len(available),
                'available_apartments': available}
 
