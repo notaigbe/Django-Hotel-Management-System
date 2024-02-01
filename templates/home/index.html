@@ -155,12 +155,7 @@
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#messages">
-                                    <i class="material-icons">code</i> Reserved
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li> -->
+
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#settings">
                                     <i class="material-icons">room</i> Enquire
@@ -196,10 +191,7 @@
                                             type="button">
                                         <i class="material-icons">edit</i>
                                     </button>
-<!--                                    <button class="btn btn-danger btn-link btn-sm" rel="tooltip" title="Remove"-->
-<!--                                            type="button">-->
-<!--                                        <i class="material-icons">close</i>-->
-<!--                                    </button>-->
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -296,25 +288,23 @@
     {% if role != 'receptionist' %}
     <div class="col-lg-6 col-md-12">
         <div class="card">
-
             <div class="card-header card-header-tabs card-header-warning">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
                         <span class="nav-tabs-title">Drinks:</span>
                         <ul class="nav nav-tabs" data-tabs="tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#lowstock">
+                                <a class="nav-link active" data-toggle="tab" href="#low">
                                     <i class="material-icons">timer</i> Low Stock
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#emptystock">
+                                <a class="nav-link" data-toggle="tab" href="#empty">
                                     <i class="material-icons">room</i> Out of Stock
                                     <div class="ripple-container"></div>
                                 </a>
-
                             </li>
                         </ul>
                     </div>
@@ -324,7 +314,7 @@
 
             <div class="card-body">
                 <div class="tab-content">
-                    <div class="tab-pane active" id="lowstock">
+                    <div class="tab-pane active" id="low">
                         <table class="table table-hover">
                             <thead class="text-warning">
                             <th>ID</th>
@@ -335,7 +325,7 @@
                             <tbody>
                             {% for stock in low_stock %}
                             <tr>
-                                <td>1</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{ stock.brand }}</td>
                                 <td>{{ stock.restock_level }}</td>
                                 <td>{{ stock.quantity }}</td>
@@ -345,9 +335,9 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane" id="emptystock">
+                    <div class="tab-pane" id="empty">
                         <table class="table table-hover">
-                            <thead class="text-warning">
+                            <thead class="text-danger">
                             <th>ID</th>
                             <th>Brand</th>
                             <th>Restock Level</th>
@@ -356,7 +346,7 @@
                             <tbody>
                             {% for stock in out_of_stock %}
                             <tr>
-                                <td>1</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{ stock.brand }}</td>
                                 <td>{{ stock.restock_level }}</td>
                                 <td>{{ stock.quantity }}</td>
