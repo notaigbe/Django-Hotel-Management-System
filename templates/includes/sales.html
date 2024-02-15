@@ -125,10 +125,10 @@
         var price=item.split(' - ')[1].trim();
         var quantity=document.getElementById("quantity").value;
         diff = stock - quantity;
-        console.log(quantity);
+        console.log(quantity<stock);
         console.log(diff);
 
-        if (quantity > stock){
+        if (quantity < stock){
             var total=price * quantity;
             rowid += 1;
             rows+="<tr id" + "row_"+rowid +"><td>"+rowid+"</td><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td><td><button class='btn btn-sm btn-danger' onclick='RemoveData(event,this,"+total+")'>Remove</button></td></tr>";
