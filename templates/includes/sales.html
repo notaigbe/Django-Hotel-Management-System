@@ -57,14 +57,15 @@
                         </select>
                     </div>-->
 
-                    <button type="submit" name="submit" class="btn btn-outline-primary float-right" onclick="AddData(event)">Add</button>
+                    <button class="btn btn-outline-primary float-right" onclick="addData(event)" type="button">Add
+                    </button>
 
                 </div>
 
             </div>
         </form>
         <br>
-        <div class="h1 float-right mb-20"><p>N</p></div>
+        <div class="h1 float-right mb-20"><p id="sumVal">N</p></div>
                     <div id="tab">
                         <div class="table-responsive">
                             <table class="table" id="list">
@@ -84,12 +85,15 @@
                         </table>
 
                         <button type="submit" name="submit" class="btn btn-primary float-right mb-3" id="printButton" disabled="disabled" onclick="PrintElem()">Print Receipt</button>
-                        <button type="submit" name="submit" class="btn btn-outline-success float-right mr-3 mb-3" disabled="disabled" id="saveButton">Save</button>
+                            <button class="btn btn-outline-success float-right mr-3 mb-3" disabled="disabled" id="saveButton"
+                                    name="submit" onclick="saveData(event)" type="submit">Save
+                            </button>
                         </div>
                     </div>
     </div>
 </div>
-{% block javascript %}
+
+{% block javascripts %}
 <script>
     function updateSecondSelect() {
       // Get the selected index of the first select
@@ -100,8 +104,8 @@
 
     var sumVal = 0
     var rowid = 0
-    function AddData(e)
-    {
+    function addData(e){
+    e.preventDefault();
         if (document.getElementById("quantity").value != ''){
         // Get the selected index of the first select
       var selectedIndex = document.querySelector("select").selectedIndex;
@@ -111,18 +115,22 @@
       var stock = document.querySelectorAll("select")[1][selectedIndex - 1].text
 
       console.log(stock);
-        e.preventDefault();
+
         var rows="";
         var sales=[];
-        var sel = document.querySelector("select")
-        var display_total = document.querySelector("p")
+        var sel = document.querySelector("select");
+        var display_total = document.getElementById("sumVal");
         var item=sel[sel.selectedIndex].text;
         var brand=item.split(' - ')[0].trim();
         var price=item.split(' - ')[1].trim();
         var quantity=document.getElementById("quantity").value;
-        if (quantity <= stock){
+        diff = stock - quantity;
+        console.log(quantity);
+        console.log(diff);
+
+        if (quantity > stock){
             var total=price * quantity;
-            rowid += 1
+            rowid += 1;
             rows+="<tr id" + "row_"+rowid +"><td>"+rowid+"</td><td>"+brand+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+total+"</td><td><button class='btn btn-sm btn-danger' onclick='RemoveData(event,this,"+total+")'>Remove</button></td></tr>";
             $(rows).appendTo("#list tbody");
 
@@ -160,22 +168,21 @@
         }
     });
 
-    function total()
-    {
-    var table = document.getElementById("tab"), sumVal = 0
+    function total(){
+        var table = document.getElementById("tab"), sumVal = 0
 
-    for(var i =1; i< table.rows.length; i++){
+        for(var i =1; i< table.rows.length; i++){
 
-        sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
-    }
-    console.log(sumVal);
+            sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
+        }
+        console.log(sumVal);
     }
 </script>
 
  <script>
             var orders = {}
             var total = 0
-            $("#saveButton").click(function(e) {
+            function saveData(e) {
 
             // get the table data
             var myRows = [];
@@ -222,7 +229,7 @@
             })
             console.log(JSON.stringify(myObj))
             }
-        })
+        }
 
             function PrintElem() {
             const d = new Date();
